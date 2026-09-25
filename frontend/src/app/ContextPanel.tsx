@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
@@ -53,6 +59,15 @@ export function ContextPanel({
 }) {
   const narrow = useSyncExternalStore(subscribeMedia, getNarrow);
   const identity = useIdentity();
+  const content = useRef<HTMLDivElement>(null);
+  const previousKind = useRef(kind);
+  useLayoutEffect(() => {
+    // A panel switch removes its initiating control without closing the dialog.
+    if (previousKind.current && kind && previousKind.current !== kind) {
+      content.current?.focus({ preventScroll: true });
+    }
+    previousKind.current = kind;
+  }, [kind]);
   return (
     <Dialog.Root
       open={kind !== null}
@@ -64,6 +79,7 @@ export function ContextPanel({
       <Dialog.Portal>
         {narrow && <Dialog.Overlay className="workspace-panel-overlay" />}
         <Dialog.Content
+          ref={content}
           className={`workspace-panel dubizzle-panel${inner ? " inner-panel v7-panel" : ""}${kind === "assistant" ? " conversation-shell" : ""}`}
           data-panel-kind={kind ?? undefined}
           onCloseAutoFocus={(event) => {
@@ -131,7 +147,9 @@ export function ContextPanel({
               close={close}
             />
           )}
-          {kind === "help" && <Help inner={inner} />}
+          {kind === "help" && (
+            <Help inner={inner} openIdentity={openIdentity} />
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -384,7 +402,30 @@ function IdentityControls() {
   );
 }
 
-function Help({ inner }: { inner: boolean }) {
+function Help({
+  inner,
+  openIdentity,
+}: {
+  inner: boolean;
+  openIdentity: () => void;
+}) {
+  const browserAccess = (
+    <section>
+      <h3>Your chat and browser access</h3>
+      <p>
+        Chat messages use a hosted AI service. Keep contact details and
+        documents out of chat; use the local enquiry form for optional contact
+        details.
+      </p>
+      <p>
+        Anyone using this browser profile can access its saved cars and private
+        conversations. Ending access does not delete those records.
+      </p>
+      <Button variant="secondary" onClick={openIdentity}>
+        Manage browser access
+      </Button>
+    </section>
+  );
   if (inner)
     return (
       <div className="workspace-form inner-help-sections">
@@ -413,6 +454,7 @@ function Help({ inner }: { inner: boolean }) {
             failed. Keep the original operation reference and check its status.
           </p>
         </section>
+        {browserAccess}
         <p className="inner-panel-simulation">
           No real dealer, calendar, payment or delivery service is connected.
         </p>
@@ -433,6 +475,7 @@ function Help({ inner }: { inner: boolean }) {
         cancelled request does not prove a booking or enquiry failed. Keep the
         original operation reference and check its status.
       </p>
+      {browserAccess}
       <p>No real dealer, calendar, payment or delivery service is connected.</p>
     </div>
   );

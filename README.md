@@ -1,8 +1,8 @@
 # Car Shopping Assistant
 
-A local prototype that searches the supplied car inventory, answers contextual questions, remembers explicitly saved preferences and arranges simulated viewings. The React interface includes browsing, comparison, chat and enquiry review. Product photographs come from the supplied workbook; missing or conflicting facts stay visible.
+My Car Shopping Assistant is a local prototype that searches the supplied car inventory, answers contextual questions, remembers explicitly saved preferences and arranges simulated viewings. I chose React for the browsing, comparison, chat and enquiry review interface. Product photographs come from the supplied workbook; missing or conflicting facts stay visible.
 
-The README follows the assessment requirements first: setup and execution, technical rationale, implementation decisions and future work, then actual conversation evidence. Extra features and measured results follow afterward.
+I've organized this README around the assessment requirements: setup and execution, technical choices, implementation decisions and future work, then the recorded conversations. Extra features and measured results follow afterward.
 
 ## 1. Setup and execution
 
@@ -83,13 +83,13 @@ Open **http://127.0.0.1:5173/__app** for the connected application when using `n
 | State | SQLite and SQLAlchemy | Stores sessions, explicitly saved preferences and simulated transactions locally. |
 | Language | Free Gemini Developer API, `gemini-3.5-flash-lite` | Interprets requests; strict backend validation and services control facts and writes. |
 
-**Frontend decision:** The assessor approved the preferred client approach provided the setup and decision are documented. React replaces the original Notebook/Streamlit options for a richer interface; it adds a Node build step. See the [decision note](delivery/decision-note.md). SQLite is explicitly permitted. An agent framework or vector database is optional and is not required for this dataset. Dependencies are locked in `backend/uv.lock` and `frontend/package-lock.json`.
+**Frontend decision:** I chose React to give the frontend a richer interface than the original Notebook/Streamlit options. I asked whether I could use this approach, and Priya approved it with the condition that I explain the setup and include a decision note. React adds a Node build step; the [decision note](delivery/decision-note.md) explains the choice. SQLite is explicitly permitted by the assessment. I didn't add an agent framework or vector database because both are optional and unnecessary for this dataset. Dependencies are locked in `backend/uv.lock` and `frontend/package-lock.json`.
 
 ## 3. Implementation decisions and future work
 
-The implementation separates retrieval, conversation, persistence and transaction rules. Gemini returns structured intent; the backend validates it and builds grounded replies from listing evidence. Explicit saves distinguish discussion from durable preferences or enquiries. Booking review and original-operation recovery prevent an uncertain response from becoming a duplicate appointment.
+In my implementation, retrieval, conversation, persistence and transaction rules are separate. Gemini returns structured intent; the backend validates it and builds grounded replies from listing evidence. I kept saving explicit so that discussing a preference or enquiry doesn't automatically store it. Booking review and recovery using the original operation prevent an uncertain response from becoming a duplicate appointment.
 
-Future work could improve verified price and availability coverage, multilingual understanding and evaluation across varied buyer language. Smaller frontend bundles, lower API latency and broader accessibility checks remain useful improvements. A shared deployment would require portable storage and locking, authentication and operational changes. These are future directions, not enabled integrations or delivered features.
+For future work, I'd improve verified price and availability coverage, multilingual understanding and evaluation across varied buyer language. I'd also reduce the frontend bundle and API latency and extend the accessibility checks. A shared deployment would require portable storage and locking, authentication and operational changes. These are improvements I'd consider next; they aren't delivered features or enabled integrations.
 
 ## 4. Required conversation demonstrations
 
@@ -97,12 +97,12 @@ The assessment permits screenshots **or terminal logs**. The linked transcripts 
 
 1. Browse the workbook cars. Ask for cars, then ask for the mileage of the first result and whether it has a warranty. The selected car stays the same; an unknown fact remains unknown.
 2. Explicitly ask to remember a preference. Choose **Start a new conversation**, retaining the same browser access, and ask what was remembered without repeating its value. A new browser profile or cleared access cookie represents a different local user.
-3. Select a car enabled for the demo. Gather a cash price range and needs, choose **Save enquiry details**, review the car and slot, then confirm the simulated viewing. Slots are Monday–Saturday, 08:00–20:00 Dubai time, in 30-minute intervals.
+3. Select a car enabled for the demo. Gather a cash price range and needs, choose **Save enquiry details**, review the car and slot, then confirm the simulated viewing. Slots are Monday to Saturday, 08:00 to 20:00 Dubai time, in 30-minute intervals.
 4. Inspect the saved enquiry and its separate CSV export status. Real CSV exports are stored under the selected runtime's `exports` folder. A failed export does not undo a saved enquiry or booking. Preserve an uncertain confirmation and check its original status rather than submitting again.
 
 The [actual inventory transcript](delivery/evidence/multi-turn-conversation.md) and [new-session recall transcript](delivery/evidence/new-session-recall.md) contain the recorded live responses. The [HTTP demo guide](delivery/demo/README.md) explains the reproducible client and evidence limits. The [actual qualified CSV](delivery/evidence/qualified-lead.csv) and [its reviewed scope and limits](delivery/evidence/qualified-enquiry.md) are included. The [clean-setup record](delivery/evidence/clean-setup.md) and [independent required-delivery review](delivery/evidence/release-review.md) describe the fresh-install and connected enquiry/export evidence, setup corrections, source identities and browser timeout limits. Viewing eligibility is explicit simulation policy, not proof of real dealer management or availability. No dealer is contacted or real reservation created.
 
-Historical transcript wording is preserved even where later answer formatting improved. The separate conversation, enquiry/export and booking demonstrations do **not** establish one uninterrupted live-model journey through booking confirmation and physical CSV publication.
+I've kept the historical transcript wording even where later answer formatting improved. The separate conversation, enquiry/export and booking demonstrations do **not** establish one uninterrupted live-model journey through booking confirmation and physical CSV publication.
 
 ## 5. Extra features
 
@@ -113,7 +113,7 @@ Historical transcript wording is preserved even where later answer formatting im
 - Expandable source details and clear treatment of absent or conflicting listing facts.
 - Explicit preference saving, viewing review, enquiry correction and recovery for uncertain requests or failed CSV publication.
 
-These are implemented features; their presence is separate from complete browser, accessibility or production acceptance.
+These features are implemented. Their presence alone doesn't establish complete browser, accessibility or production acceptance.
 
 ## 6. Verification and measured performance
 
@@ -121,16 +121,16 @@ The [verification summary](delivery/evidence/verification-summary.md) records th
 
 | Check | Recorded result |
 | --- | --- |
-| Current frontend suite | **346 passed**, 27 test files, no failures or skips. |
+| Current frontend suite | **357 passed**, 28 test files, no failures or skips. |
 | Focused backend answer-readability checks | **183 passed**; not the entire backend suite. |
-| Frontend types, lint and production build | Passed; **8 lint warnings** and a large-chunk warning remain. |
+| Frontend types and production build | Passed. Scoped lint passed with one existing warning; the earlier full lint run reported **8 warnings**. A large-chunk warning remains. |
 | Responsive checks | **215** earlier controlled checks; separate chat reviews passed **49**, **7** and **7** checks with synthetic conversation fixtures. |
 | Broader live AI run | **34/38 selected cases passed; 4 provider timeouts**. |
 | Later targeted live AI run | **5 cases, 11 steps, 116 assertions passed**; separate from the earlier run, not a replacement for its failures. |
 | Local API pilot | **200/200 valid responses**, zero request errors/timeouts, up to three overlapping requests. |
 | Local API latency | Median **641 ms**, p95 **1,026 ms**, p99 **1,261 ms**. The project's **500 ms p95 target was not met**. |
 
-The latency pilot used the provider-disabled local API, not live AI responses or an internet deployment. The 500 ms target is an additional project goal, not a PDF requirement. The frontend build reported 824.84 kB minified / 137.75 kB gzip for the warned chunk. No passing performance target, complete security audit or universal mobile compatibility is claimed.
+The latency pilot used the provider-disabled local API, not live AI responses or an internet deployment. The 500 ms target is an additional project goal, not a PDF requirement. The final mobile tray correction passed 13 targeted tests and application/test TypeScript checks after the 357-test run. The latest frontend build reported 829.15 kB minified / 138.84 kB gzip for the warned chunk. The performance target remains unmet; a complete security audit and universal mobile compatibility haven't been established.
 
 ## Repository guide
 
@@ -143,4 +143,4 @@ The latency pilot used the provider-disabled local API, not live AI responses or
 | `scripts/`, `fixtures/`, selected `Records/` | Bootstrap inputs, simulation configuration and operator tools needed to run the app. |
 | `delivery/` | Setup and decision notes, demonstrations and verification evidence. |
 
-This is an assessment prototype, not an official dubizzle service. Branding and asset provenance are documented in `References/`; inclusion does not claim affiliation. Credentials, personal conversations, runtime databases and private operational exports are excluded. The sample lead evidence uses synthetic buyer inputs.
+This is my assessment prototype, not an official dubizzle service. Branding and asset provenance are documented in `References/`; their use doesn't imply affiliation. Credentials, personal conversations, runtime databases and private operational exports are excluded. The sample lead evidence uses synthetic buyer inputs.

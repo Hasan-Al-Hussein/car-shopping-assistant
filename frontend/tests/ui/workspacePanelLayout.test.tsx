@@ -10,6 +10,7 @@ import { BrowserServices } from "../../src/app/BrowserServices";
 import { ProductionApp } from "../../src/app/ProductionApp";
 import type { Schema } from "../../src/shared/api/contracts";
 import {
+  config,
   identity,
   listingDetail,
   meta,
@@ -34,6 +35,7 @@ const flush = async () => {
 
 async function mountWorkspace(
   lifecycle: "isolated" | "anonymous" | "recognized" = "isolated",
+  narrow = false,
 ) {
   vi.stubGlobal(
     "ResizeObserver",
@@ -43,7 +45,7 @@ async function mountWorkspace(
     },
   );
   vi.stubGlobal("matchMedia", () => ({
-    matches: false,
+    matches: narrow,
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
   }));
@@ -79,6 +81,8 @@ async function mountWorkspace(
             ? identity()
             : { state: "anonymous", notice_version: "DEMO-POLICY-1" },
       };
+    } else if (path === "/api/v1/config") {
+      payload = config();
     } else if (path === "/api/v1/health") {
       const capability = { state: "ready", reason: null };
       payload = {
@@ -130,10 +134,13 @@ async function mountWorkspace(
   history.replaceState(null, "", "/__app/cars");
   render(<ProductionApp services={service} />);
   await flush();
-  const opener = screen.getByRole("button", { name: "Help" });
-  opener.focus();
-  fireEvent.click(opener);
+  const menu = narrow ? screen.getByRole("button", { name: "Menu" }) : null;
+  if (menu) fireEvent.click(menu);
+  const help = screen.getByRole("button", { name: "Help" });
+  help.focus();
+  fireEvent.click(help);
   await flush();
+  const opener = menu ?? help;
   return {
     opener,
     mutate,
@@ -146,6 +153,36 @@ async function mountWorkspace(
 }
 
 describe("Workspace nonmodal panel integration; painted layout needs browser proof", () => {
+  test.each([false, true])(
+    "recognized user can manage access without starting chat and keeps transition focus: narrow=%s",
+    async (narrow) => {
+      const { opener, service, mutate } = await mountWorkspace(
+        "recognized",
+        narrow,
+      );
+      expect(service.getSnapshot().session).toBeNull();
+      const manage = screen.getByRole("button", {
+        name: "Manage browser access",
+      });
+      manage.focus();
+      fireEvent.click(manage);
+      await flush();
+      const dialog = screen.getByRole("dialog", {
+        name: "Your browser access",
+      });
+      expect(dialog).toHaveFocus();
+      expect(
+        screen.getByRole("button", { name: "End browser access" }),
+      ).toBeDisabled();
+      expect(service.getSnapshot().session).toBeNull();
+      expect(mutate).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByRole("button", { name: "Close" }));
+      await flush();
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      expect(opener).toHaveFocus();
+    },
+  );
+
   test("public comparison remains usable with the panel open; close restores the opener and releases reserved space", async () => {
     const { opener, mutate } = await mountWorkspace();
     const dialog = screen.getByRole("dialog", {

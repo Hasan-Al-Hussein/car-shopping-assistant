@@ -3,9 +3,9 @@
 Studio S0, 23 September 2026. Use the workbook's per-car photo URL as the primary image. No external replacement photos or generated cars were sourced.
 
 - [Listing-photo manifest](listing_photo_manifest.json): all 100 cleaned mappings, with the 100 raw rows isolated as audit evidence. Exact source hash, sheet, ID, row/cells, unchanged URL, syntax check, limited network observations and provenance limits are recorded separately.
-- [Frontend integration guidance](frontend_integration.md): safe mapping, rendering/fallback states and concrete source fixtures.
-- [Audit and completion evidence](../../Records/build/studio/S0_report.md): checks performed, source/artifact identity and outstanding proof.
-- [Independent review](../../Records/build/studio/independent_photo_review.md).
+- Frontend integration guidance (internal development note, not included): safe mapping, rendering/fallback states and concrete source fixtures.
+- Audit and completion evidence (internal development report, not included): checks performed, source/artifact identity and outstanding proof.
+- Independent review (internal development report, not included).
 
 The current Brain decision DEMO-POLICY-1 selects the cleaned sheet; raw remains audit-only. This source-evidence manifest is not a shared API schema, live inventory activation or card acceptance. Platform/Inventory own the backend InventoryRef mapping; Frontend owns components.
 

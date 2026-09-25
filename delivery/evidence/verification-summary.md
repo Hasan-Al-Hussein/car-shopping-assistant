@@ -12,8 +12,12 @@ The [clean-setup record](clean-setup.md) and [required-delivery review](release-
 
 ## Automated and visual checks
 
+The final mobile comparison-tray correction passed 13 targeted tests, application and test TypeScript checks, and a production build at 17:12 UTC on 25 September. The latest warned JavaScript chunk is 829.15 kB minified / 138.84 kB gzip. The 357-test run below preceded this small correction; it was not rerun in full afterward.
+
 | Check and snapshot date | Observed result | What it establishes—and its limit |
 |---|---|---|
+| Updated frontend suite, 25 Sep, completed 16:20 UTC | **357 passed**, 0 failed, 0 skipped; 28 test files | Covers the approved card, comparison-tray, loading/error and Help/browser-access refinements. Includes known/unknown/conflicting prices, immutable car references, single-car removal and desktop/mobile focus transitions. Synthetic tests do not establish live model or persistence behavior. |
+| Updated frontend build, 25 Sep, completed 16:20 UTC | Application TypeScript and production build passed; scoped lint had 0 errors and 1 existing Fast Refresh warning | The latest large chunk is **829.01 kB minified, 138.79 kB gzip**. The earlier full lint report below is retained. |
 | Full frontend suite, 25 Sep, completed 11:40 UTC | **346 passed**, 0 failed, 0 skipped; 27 test files | Unit/component/service coverage including recovery when chat reopens after cached unavailable health. It does not itself establish live model behavior or hosted deployment correctness. |
 | Frontend validation, 25 Sep, completed 11:43 UTC | Application and test TypeScript checks, lint and production build passed | Lint retained **8 warnings**. Vite retained a large-chunk warning: **824.84 kB minified, 137.75 kB gzip**. No bundle-performance improvement is claimed. |
 | Backend answer-readability regression, 25 Sep, 10:23 UTC | **183 passed**, 0 failed/error/skipped | Grounded answer formatting, ordered results, qualifiers, conflicting/unknown facts, reference and evidence handling. This was a focused backend selection, not the complete backend suite or a new provider run. |

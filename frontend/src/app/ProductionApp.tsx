@@ -2,7 +2,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import {
   BrowserRouter,
-  Link,
   Navigate,
   Route,
   Routes,
@@ -15,6 +14,7 @@ import { ServicesProvider, useServices } from "./ServicesProvider";
 import { ContextPanel, type PanelKind } from "./ContextPanel";
 import { CinemaHeader } from "../shared/ui/CinemaHeader";
 import { AboutRoute } from "../features/about/AboutRoute";
+import { ComparisonTray } from "../features/inventory/ComparisonTray";
 import { useScrollReveal } from "../shared/ui/useScrollReveal";
 import { ShortlistNotice } from "../features/shortlist/ShortlistActions";
 import {
@@ -51,6 +51,7 @@ import "../styles/inner-panels.css";
 import "../styles/dubizzle.css";
 import "../styles/context-panel-layout.css";
 import "../styles/feedback.css";
+import "../styles/inventory-polish.css";
 
 const browserServices = new BrowserServices();
 export function ProductionApp({
@@ -153,16 +154,21 @@ function Workspace() {
   useLayoutEffect(() => {
     const element = tray.current;
     if (!element) return;
-    const update = () =>
+    const update = () => {
+      const height = element.getBoundingClientRect().height;
       document.documentElement.style.setProperty(
         "--comparison-tray-height",
-        `${element.getBoundingClientRect().height}px`,
+        `${height}px`,
       );
+      element.dataset.tall = String(height > window.innerHeight * 0.45);
+    };
     const observer = new ResizeObserver(update);
     observer.observe(element);
+    window.addEventListener("resize", update);
     update();
     return () => {
       observer.disconnect();
+      window.removeEventListener("resize", update);
       document.documentElement.style.removeProperty("--comparison-tray-height");
     };
   }, [refs.length, location.pathname]);
@@ -313,25 +319,13 @@ function Workspace() {
         </QueryGuard>
       </main>
       {showTray && (
-        <aside
-          ref={tray}
-          className="proof-selection"
-          aria-label="Comparison selection"
-        >
-          <span>{refs.length} of 3 selected</span>
-          <Link
-            className="folio-button folio-button--primary"
-            to={comparisonPath(refs)}
-            state={{ browseKey }}
-          >
-            Compare cars →
-          </Link>
-          {warning && (
-            <p className="proof-selection-warning" role="status">
-              {warning}
-            </p>
-          )}
-        </aside>
+        <ComparisonTray
+          refs={refs}
+          trayRef={tray}
+          browseKey={browseKey}
+          warning={warning}
+          remove={toggle}
+        />
       )}
       <ContextPanel
         kind={panel}

@@ -10,4 +10,4 @@ Use this **complete lockup instead of the existing text wordmark**. It already c
 - Static passive-content check passed. Actual browser rendering/resizing remains Frontend's proof. Original nonstandard `view-box` and `fillRule` attributes are preserved; do not mistake static inspection for a tested responsive render.
 - Prefer an ordinary external image with one accessible name, such as `alt="dubizzle"`, preserving its proportions and colors. Do not crop, stretch, recolor, redraw or use only the red path as a guessed replacement symbol.
 
-Source authenticity does not establish a reuse license. Permission status and the official terms reference are retained in [asset.json](asset.json); complete evidence is in [brand-source.md](../../../../Records/build/studio/header-set/brand-source.md). Frontend alone owns application integration.
+Source authenticity does not establish a reuse license. Permission status and the official terms reference are retained in [asset.json](asset.json); the complete internal source-inspection report is retained outside this public package. Frontend alone owns application integration.

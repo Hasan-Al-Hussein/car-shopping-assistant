@@ -460,7 +460,7 @@ describe("authoritative route states through synthetic typed HTTP; not backend o
     show(service, `/viewings/new/${encodeRef(viewingDraft().ref)}`);
     await flush();
     expect(
-      screen.getByRole("heading", { name: "Unable to load this view" }),
+      screen.getByRole("heading", { name: "We couldn’t load these details." }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "Return to this car →" }),
@@ -469,13 +469,13 @@ describe("authoritative route states through synthetic typed HTTP; not backend o
       screen.queryByRole("region", { name: "Viewing times" }),
     ).not.toBeInTheDocument();
     expect(transport).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByRole("button", { name: "Check again" }));
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
     await flush();
     expect(
-      screen.getByRole("heading", { name: "Unable to load this view" }),
+      screen.getByRole("heading", { name: "We couldn’t load these details." }),
     ).toBeInTheDocument();
     expect(screen.getAllByRole("button")).toEqual([
-      screen.getByRole("button", { name: "Check again" }),
+      screen.getByRole("button", { name: "Try again" }),
     ]);
     expect(transport).toHaveBeenCalledTimes(2);
     for (const [input, init] of transport.mock.calls) {

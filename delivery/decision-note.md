@@ -1,7 +1,7 @@
-# Client interface decision
+# Frontend decision
 
-The assessment specifies a FastAPI backend with either a Jupyter Notebook or Streamlit client. The assessor subsequently approved the candidate's preferred alternative, on condition that the setup is clear and a decision note is included.
+The assessment specifies a FastAPI backend with either a Jupyter Notebook or Streamlit frontend. I asked Priya whether I could use React instead to improve the design and overall experience. She approved that approach and asked me to explain the setup clearly and include a decision note.
 
-This submission uses **React, TypeScript and Vite** for the client while retaining **FastAPI** for the backend. React supports the combined inventory, comparison, shortlist and conversational workflows, along with the responsive visual design requested for the prototype. The tradeoff is an additional Node/npm installation and a separate development server. Both are documented in the root README.
+I chose **React, TypeScript and Vite** for the frontend and kept **FastAPI** for the backend. I wanted inventory browsing, comparison, a shortlist and conversation in one responsive interface. The tradeoff is an additional Node/npm installation and a separate development server, both explained in the root README.
 
-This approval concerns the client technology. It does not waive the remaining assessment requirements, imply acceptance of the implementation, or authorize claims of production readiness. The private approval correspondence is retained outside this public repository.
+The approval covers my frontend choice; the remaining assessment requirements still apply. It doesn't mean the implementation has been accepted or is ready for production. I've kept the private approval correspondence outside this public repository.

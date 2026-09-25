@@ -12,7 +12,13 @@ vi.mock("../../src/app/ServicesProvider", () => ({
   },
 }));
 
-function Fixture({ showOpener = true, revision = 0, mobileHeader = false }) {
+function Fixture({
+  showOpener = true,
+  revision = 0,
+  mobileHeader = false,
+  inner = true,
+  openIdentity = () => {},
+}) {
   const [open, setOpen] = useState(false);
   const original = useRef<HTMLElement | null>(null);
   return (
@@ -46,8 +52,8 @@ function Fixture({ showOpener = true, revision = 0, mobileHeader = false }) {
         kind={open ? "help" : null}
         close={() => setOpen(false)}
         opener={() => original.current}
-        inner
-        openIdentity={() => {}}
+        inner={inner}
+        openIdentity={openIdentity}
       />
     </>
   );
@@ -79,6 +85,32 @@ async function openPanel(narrow: boolean) {
 }
 
 describe("ContextPanel focus regression; native traversal needs browser proof", () => {
+  test.each([false, true])(
+    "Help exposes browser access without a chat session or service call: inner=%s",
+    async (inner) => {
+      vi.stubGlobal(
+        "matchMedia",
+        vi.fn(() => ({
+          matches: false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      );
+      const openIdentity = vi.fn();
+      render(<Fixture inner={inner} openIdentity={openIdentity} />);
+      fireEvent.click(screen.getByRole("button", { name: "Open help" }));
+      await flush();
+      expect(
+        screen.getByText(/Chat messages use a hosted AI service/),
+      ).toBeVisible();
+      expect(screen.getByText(/Ending access does not delete/)).toBeVisible();
+      fireEvent.click(
+        screen.getByRole("button", { name: "Manage browser access" }),
+      );
+      expect(openIdentity).toHaveBeenCalledTimes(1);
+    },
+  );
+
   test.each(["Close", "Escape"])(
     "mobile Help keeps the visible Menu as the %s return target",
     async (method) => {
@@ -122,10 +154,14 @@ describe("ContextPanel focus regression; native traversal needs browser proof", 
     "Tab defaults are preserved wide and trapped narrow: narrow=%s",
     async (narrow) => {
       const { close } = await openPanel(narrow);
-      // The help panel has one tabbable control, so both edges are exercised.
-      expect(fireEvent.keyDown(close, { key: "Tab", code: "Tab" })).toBe(
+      const lastControl = screen.getByRole("button", {
+        name: "Manage browser access",
+      });
+      lastControl.focus();
+      expect(fireEvent.keyDown(lastControl, { key: "Tab", code: "Tab" })).toBe(
         !narrow,
       );
+      close.focus();
       expect(
         fireEvent.keyDown(close, { key: "Tab", code: "Tab", shiftKey: true }),
       ).toBe(!narrow);

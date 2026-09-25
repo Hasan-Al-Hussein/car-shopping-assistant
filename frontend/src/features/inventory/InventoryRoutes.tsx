@@ -15,6 +15,7 @@ import { VehicleSummaryCard } from "../../shared/ui/inner/VehicleSummaryCard";
 import { ListingDetails } from "../../shared/ui/inner/ListingDetails";
 import { failureMessage } from "../../app/BrowserServices";
 import { InventoryFilters } from "./InventoryFilters";
+import { InventorySkeleton } from "./InventorySkeleton";
 import { readInventoryCatalog } from "./inventoryCatalog";
 import { suggestInventoryQuery } from "./inventoryFacets";
 import { validateRequestBody } from "../../../../contracts/generated/runtime";
@@ -53,40 +54,57 @@ const name = (fact: Schema<"ListingSummary">["make"]) =>
 export function ReadFailure({
   error,
   retry,
+  retrying = false,
 }: {
   error: unknown;
   retry?: () => void;
+  retrying?: boolean;
 }) {
   const location = useLocation();
   const fields = criteriaErrorLabels(error);
+  const browsing = ["/", "/cars"].includes(location.pathname);
+  const title = browsing
+    ? "We couldn’t load the cars."
+    : "We couldn’t load these details.";
+  const action = retry && (
+    <Button onClick={retry} disabled={retrying}>
+      {retrying ? "Trying again…" : "Try again"}
+    </Button>
+  );
   if (location.pathname === "/")
     return (
       <div className="cinema-empty" role="status">
-        <h2>Unable to load this view</h2>
+        <h2>{title}</h2>
         <p>{failureMessage(error)}</p>
+        <p>
+          Your search is still here. Try again when the connection is available.
+        </p>
         {fields.length > 0 && (
           <p>
             Check these search fields: {fields.join(", ")}. Your entered
             criteria are retained.
           </p>
         )}
-        {retry && <Button onClick={retry}>Check again</Button>}{" "}
-        <Link to="/cars">Browse cars</Link>
+        {action}
       </div>
     );
   return (
     <TaskState
-      title="Unable to load this view"
-      eyebrow="Try the original request again"
+      title={title}
       tone="warning"
       actions={
         <>
-          {retry && <Button onClick={retry}>Check again</Button>}
-          <Link to="/cars">Browse cars</Link>
+          {action}
+          {!browsing && <Link to="/cars">Browse cars</Link>}
         </>
       }
     >
       <p>{failureMessage(error)}</p>
+      {browsing && (
+        <p>
+          Your search is still here. Try again when the connection is available.
+        </p>
+      )}
       {fields.length > 0 && (
         <p>
           Check these search fields: {fields.join(", ")}. Your entered criteria
@@ -223,7 +241,7 @@ export function InventoryCard({
     );
   return (
     <article
-      className="cinema-car"
+      className="cinema-car inventory-polish-card"
       data-reveal={refKey(listing.ref)}
       aria-label={`Listing ${listing.ref.source_id}`}
     >
@@ -240,29 +258,53 @@ export function InventoryCard({
             <bdi>{name(listing.model)}</bdi>
           </Link>
         </h3>
-        <div className="cinema-car-facts">
-          <span>
-            Model year <Fact fact={listing.year} />
-          </span>
-          <span>
-            Trim <Fact fact={listing.trim} />
-          </span>
-        </div>
-        <div className="cinema-car-price">
+        <div
+          className="cinema-car-price"
+          data-price-state={listing.cash_price.status}
+        >
           <span>Cash price</span>
           <strong>
             <Fact fact={listing.cash_price} />
           </strong>
         </div>
-        {listing.evidence_warnings?.length ? (
-          <p className="cinema-warning">
-            {listing.evidence_warnings.join(" · ")}
+        <dl className="cinema-car-facts">
+          <div>
+            <dt>Year</dt>
+            <dd>
+              <Fact fact={listing.year} />
+            </dd>
+          </div>
+          <div>
+            <dt>Trim</dt>
+            <dd>
+              <Fact fact={listing.trim} />
+            </dd>
+          </div>
+        </dl>
+        <details
+          className="inventory-card-source"
+          data-warning={!!listing.evidence_warnings?.length}
+        >
+          <summary>
+            {listing.evidence_warnings?.length
+              ? "Details to check"
+              : "Source details"}
+          </summary>
+          <p dir="auto">
+            <bdi>{listing.title}</bdi>
           </p>
-        ) : (
-          <p className="cinema-claim-note">
-            Listing claims · not independently verified
+          {!!listing.evidence_warnings?.length && (
+            <ul>
+              {listing.evidence_warnings.map((warning, index) => (
+                <li key={index}>{warning}</li>
+              ))}
+            </ul>
+          )}
+          <p>
+            Listing claims, not independently verified. Current availability is
+            unknown.
           </p>
-        )}
+        </details>
         <div className="cinema-card-actions">
           <CompareButton listing={listing} selection={selection} />
           <Link
@@ -453,8 +495,8 @@ function BrowseResults({
               questions worth asking.
             </p>
             <p className="cinema-sample-note">
-              Source listing claims. Missing and conflicting facts remain
-              visible; current availability is not implied.
+              Details come from the original listings. Check current
+              availability before making plans.
             </p>
           </div>
         ) : (
@@ -541,62 +583,63 @@ function BrowseResults({
               }
             >
               <p>
-                The in-memory criteria for this cursor are unavailable. No
-                different search has been substituted.
+                This saved page no longer has its search details. Start a new
+                search to choose your filters again.
               </p>
             </TaskState>
           ) : result.isPending ? (
-            home ? (
-              <p role="status">Loading inventory…</p>
-            ) : (
-              <TaskState
-                title="Loading the inventory…"
-                eyebrow="Your search"
-                busy
-              >
-                <p>Checking the source listings for this request.</p>
-              </TaskState>
-            )
+            <InventorySkeleton home={home} />
           ) : result.isError ? (
             <ReadFailure
               error={result.error}
               retry={() => void result.refetch()}
+              retrying={result.isFetching}
             />
           ) : (
             <>
               <p className="cinema-result-count" role="status">
-                {result.data.data.supported_total} supported listings ·{" "}
-                {result.data.data.items.length} on this page
+                <strong>
+                  {result.data.data.supported_total}{" "}
+                  {result.data.data.supported_total === 1 ? "car" : "cars"}{" "}
+                  found
+                </strong>
+                {result.data.data.supported_total >
+                  result.data.data.items.length && (
+                  <span> · {result.data.data.items.length} on this page</span>
+                )}
               </p>
               {!!result.data.data.unsupported_constraints?.length && (
                 <p className="cinema-warning">
-                  Unsupported conditions:{" "}
+                  We couldn’t check these conditions:{" "}
                   {result.data.data.unsupported_constraints.join(" · ")}. These
-                  have not been silently relaxed.
+                  have not been removed from your search.
                 </p>
               )}
-              {!home && (
-                <details className="inner-search-evidence">
-                  <summary>Applied criteria and source coverage</summary>
-                  <ul>
-                    {describeCriteria(result.data.data.applied_criteria).map(
-                      (value, index) => (
-                        <li key={index}>{value}</li>
-                      ),
-                    )}
-                  </ul>
-                  {result.data.data.evidence_coverage.map((coverage) => (
-                    <p key={coverage.attribute}>
-                      {coverage.attribute.replaceAll("_", " ")}:{" "}
-                      {coverage.supported} of {coverage.source_total} listings
-                      have usable evidence; {coverage.excluded_unknown} unknown,{" "}
-                      {coverage.excluded_conflicting} conflicting,{" "}
-                      {coverage.excluded_unsupported_qualifier} unsupported
-                      qualifiers excluded.
-                    </p>
-                  ))}
-                </details>
-              )}
+              <details className="inner-search-evidence inventory-search-evidence">
+                <summary>Search and source details</summary>
+                <p>
+                  Results use the original listing claims. Missing or
+                  conflicting information stays visible; current availability is
+                  unknown.
+                </p>
+                <ul>
+                  {describeCriteria(result.data.data.applied_criteria).map(
+                    (value, index) => (
+                      <li key={index}>{value}</li>
+                    ),
+                  )}
+                </ul>
+                {result.data.data.evidence_coverage.map((coverage) => (
+                  <p key={coverage.attribute}>
+                    {coverage.attribute.replaceAll("_", " ")}:{" "}
+                    {coverage.supported} of {coverage.source_total} listings
+                    have usable evidence; {coverage.excluded_unknown} unknown,{" "}
+                    {coverage.excluded_conflicting} conflicting,{" "}
+                    {coverage.excluded_unsupported_qualifier} unsupported
+                    qualifiers excluded.
+                  </p>
+                ))}
+              </details>
               <div className={home ? "cinema-cards" : "inner-inventory-grid"}>
                 {result.data.data.items.map((listing, index) => (
                   <InventoryCard
@@ -614,7 +657,7 @@ function BrowseResults({
               {result.data.data.items.length === 0 &&
                 (home ? (
                   <div className="cinema-empty">
-                    <h2>No supported matches</h2>
+                    <h2>No cars found</h2>
                     <p>
                       Try a different search or explicitly clear your filters.
                     </p>
@@ -625,7 +668,7 @@ function BrowseResults({
                   </div>
                 ) : (
                   <TaskState
-                    title="No supported matches."
+                    title="No cars found."
                     actions={
                       <>
                         <Button onClick={() => applySearch("")}>
@@ -636,8 +679,9 @@ function BrowseResults({
                     }
                   >
                     <p>
-                      Try a different search or explicitly clear your filters.
-                      Unknown facts have not been treated as matches.
+                      Try a different search or explicitly clear your filters. A
+                      car only matches when the listing has enough information
+                      to check your filters.
                     </p>
                   </TaskState>
                 ))}

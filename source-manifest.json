@@ -1,7 +1,7 @@
 {
   "format": "CSA-GITHUB-SOURCE-1",
   "scope": "Public local assessment source; not a deployment or full release acceptance.",
-  "source_manifest_sha256": "3b2db7a661ca01473150b92173a09ce99df9858bca6296f5ee38a81316119496",
+  "source_manifest_sha256": "e874e897c62114d664e985a383580b13f49b8c24312d84b299b2921fd9b7bcff",
   "files": [
     {
       "path": ".gitignore",
@@ -10,8 +10,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 12683,
-      "sha256": "5c19913625e328bfd6429f97128472ea5f6476d8123cd5844510f8f8a0dc5ea9"
+      "bytes": 13102,
+      "sha256": "289d66e0c5d01d99692dedcf4ed7c70725b0d405448f32474675fb49177caec7"
     },
     {
       "path": "Records/build/BE-04/evidence/accepted-inventory-integrity.json",
@@ -80,8 +80,8 @@
     },
     {
       "path": "References/product-assets/README.md",
-      "bytes": 2490,
-      "sha256": "6aa8a22435a978910f08ddd7c9a1eaaf9be9534202639d615828666d622c9c48"
+      "bytes": 2492,
+      "sha256": "e3a12191da07fe7e2731d89832ec64880ddb6b92424cc4d4ce589ae89c3a3ec0"
     },
     {
       "path": "References/product-assets/header-set/README.md",
@@ -90,8 +90,8 @@
     },
     {
       "path": "References/product-assets/header-set/brand/README.md",
-      "bytes": 1603,
-      "sha256": "1e1f5822bea1c3aecebcd6fc5efb8b4bd906656be526974b6b434fb8bf3091d3"
+      "bytes": 1587,
+      "sha256": "80d508e6cd087abcb3809e3de34a86583eed4f1b0d07fe08af5394d277403de8"
     },
     {
       "path": "References/product-assets/header-set/brand/asset.json",
@@ -1150,8 +1150,8 @@
     },
     {
       "path": "delivery/decision-note.md",
-      "bytes": 937,
-      "sha256": "67b59946df2953096b5c6ed8e5bab71accb4ae23b8d4bae9d0021080ca5daefc"
+      "bytes": 877,
+      "sha256": "74686d50cc172c43850eb8fe2c94a93cae8c8f6726a39ccc6dcfc72b5396d02a"
     },
     {
       "path": "delivery/demo/README.md",
@@ -1195,8 +1195,8 @@
     },
     {
       "path": "delivery/evidence/verification-summary.md",
-      "bytes": 7116,
-      "sha256": "7b74c85a8e3845d03497a4ac939ddccabf78c98fb18be254d1fd80b1fcf92080"
+      "bytes": 8133,
+      "sha256": "3702bd1ba474147c8b3e557d834557a5f309e2724592d8cdce860eabe2242a08"
     },
     {
       "path": "delivery/operator-setup.md",
@@ -1335,8 +1335,8 @@
     },
     {
       "path": "frontend/src/app/ContextPanel.tsx",
-      "bytes": 15578,
-      "sha256": "c022dd53d97a3a87f56769f39afa9756b52ad8c4c2995a1ddc63f5b6311e9e52"
+      "bytes": 16719,
+      "sha256": "b45516d9517d132c1e47f4155317aac2aab7bc50db5b171fddcea7fd81000bff"
     },
     {
       "path": "frontend/src/app/OwnedRoutes.tsx",
@@ -1345,8 +1345,8 @@
     },
     {
       "path": "frontend/src/app/ProductionApp.tsx",
-      "bytes": 11484,
-      "sha256": "b43c3f565a28f084d400d29a3d18eb34ca35a093756ed2722bb60ff8966702fb"
+      "bytes": 11420,
+      "sha256": "1d8142cf42c9c69d55e44a1c4eb67e271f32f3b155fff5aff4e0802715a5296e"
     },
     {
       "path": "frontend/src/app/ServicesProvider.tsx",
@@ -1469,14 +1469,24 @@
       "sha256": "a8c9c053b98d78eb63276e1f4d54da11bfab1f30e8ec8c0f02c7169f60b17f3e"
     },
     {
+      "path": "frontend/src/features/inventory/ComparisonTray.tsx",
+      "bytes": 4394,
+      "sha256": "a4d9eb63a8c37d1f49c3d18bd9e2f9f3d4c30f49c72e49b33d80bfb6c398b59a"
+    },
+    {
       "path": "frontend/src/features/inventory/InventoryFilters.tsx",
       "bytes": 6596,
       "sha256": "e75e292716751ce31c72c9de0afc16263cedb36e5f474e9f3039475a0243b8f4"
     },
     {
       "path": "frontend/src/features/inventory/InventoryRoutes.tsx",
-      "bytes": 28721,
-      "sha256": "c1342204e81d54c1356e1ae46278ad7fa0f2083e81ffe6fc81803f10676cd145"
+      "bytes": 30030,
+      "sha256": "10fa43daa3252dec02358faf6ac354fddece6f6d74831543a4d2eea1a58d38d6"
+    },
+    {
+      "path": "frontend/src/features/inventory/InventorySkeleton.tsx",
+      "bytes": 947,
+      "sha256": "746ff31db771025330cc48372a25d72f9cf3da2ff641620ea038cd2e360d6617"
     },
     {
       "path": "frontend/src/features/inventory/criteria.ts",
@@ -1660,8 +1670,8 @@
     },
     {
       "path": "frontend/src/shared/ui/inner/VehicleSummaryCard.tsx",
-      "bytes": 4075,
-      "sha256": "5e768148a7cc76daf7d10ef3e8afe09456353749ce8093a5ae78084f8f4c00fa"
+      "bytes": 4275,
+      "sha256": "8bbfb5699241231e746c1d54954e1a10278e0d2af255a56b37fb557e178f7107"
     },
     {
       "path": "frontend/src/shared/ui/scrollReveal.ts",
@@ -1719,6 +1729,11 @@
       "sha256": "7cc712fa8ce3c39b1e37a85ff61aedf37dc1febd9675dd068085caa6502cb090"
     },
     {
+      "path": "frontend/src/styles/inventory-polish.css",
+      "bytes": 9664,
+      "sha256": "0ed4c5465827052eba1ea3ecbb5dcc6db71ffaced7ae8d3249553c3309c5141d"
+    },
+    {
       "path": "frontend/src/styles/primitives.css",
       "bytes": 5044,
       "sha256": "434aaf24cb00770deca1ffdeb0aba99c5fd8fe2498ebc569afd67f49d9994f27"
@@ -1754,14 +1769,19 @@
       "sha256": "8c242716d14ab9e89f548fa3dbfddf85fe63dd494aca2876eef0ca8d55eae127"
     },
     {
+      "path": "frontend/tests/ui/approvedInventoryPolish.test.tsx",
+      "bytes": 9110,
+      "sha256": "735fa386eeff5ec35d9f7ed7f59eb9f824187456ef8f5c5fb3f516ffcded5a40"
+    },
+    {
       "path": "frontend/tests/ui/association.test.ts",
       "bytes": 9840,
       "sha256": "3245bd1ce4daaf614f089e3c03d9d38bbf0078d1b5cfb1aabd735c80d3cb2f9d"
     },
     {
       "path": "frontend/tests/ui/authoritativeStates.test.tsx",
-      "bytes": 17348,
-      "sha256": "4170edf3b15882f0fde4236e47ab328a2b090d0f1b94937c1f24168ac6f851aa"
+      "bytes": 17362,
+      "sha256": "5e1f5013c6760c06ac0cab98ed461d6b6e1b34a1b6a0bd297a57c3544146fe11"
     },
     {
       "path": "frontend/tests/ui/browserServices.test.ts",
@@ -1775,8 +1795,8 @@
     },
     {
       "path": "frontend/tests/ui/contextPanelFocus.test.tsx",
-      "bytes": 5450,
-      "sha256": "c1daa0e4567ff09145ba0629ad97f10ffabe493adc03e0a6418a4e93fec32116"
+      "bytes": 6469,
+      "sha256": "dcb53d53fc85beef54b9fba6503cce3fc09fe9085995c7b6f7d4f21d0d42dae2"
     },
     {
       "path": "frontend/tests/ui/conversationContent.test.tsx",
@@ -1890,8 +1910,8 @@
     },
     {
       "path": "frontend/tests/ui/workspacePanelLayout.test.tsx",
-      "bytes": 10276,
-      "sha256": "8caed65fa4e7a9a87620d3d33d25bee126c37e794b18370f3079cdc33df0161e"
+      "bytes": 11553,
+      "sha256": "fd661a44e5c8dd372a9f26c31feda9b6284ffa6618bfcca4c68d8e53ac392cb0"
     },
     {
       "path": "frontend/tsconfig.app.json",

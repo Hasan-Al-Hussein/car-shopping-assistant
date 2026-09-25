@@ -43,7 +43,7 @@ export function VehicleSummaryCard({
   const warnings = listing.evidence_warnings ?? [];
   return (
     <article
-      className="cinema-car inner-vehicle-card"
+      className="cinema-car inner-vehicle-card inventory-polish-card"
       data-reveal={JSON.stringify(listing.ref)}
       aria-label={`Listing ${ref.source_id}`}
     >
@@ -75,9 +75,16 @@ export function VehicleSummaryCard({
             Historical snapshot · current availability is unknown.
           </p>
         )}
+        <div
+          className="inner-vehicle-price"
+          data-price-state={listing.cash_price.status}
+        >
+          <span>Cash price</span>
+          <ComparisonFact fact={listing.cash_price} showSources={false} />
+        </div>
         <dl className="inner-vehicle-facts">
           <div>
-            <dt>Model year</dt>
+            <dt>Year</dt>
             <dd>
               <ComparisonFact fact={listing.year} showSources={false} />
             </dd>
@@ -89,15 +96,12 @@ export function VehicleSummaryCard({
             </dd>
           </div>
         </dl>
-        <div className="inner-vehicle-price">
-          <span>Cash price</span>
-          <ComparisonFact fact={listing.cash_price} showSources={false} />
-        </div>
-        <details className="inner-card-source">
+        <details
+          className="inner-card-source inventory-card-source"
+          data-warning={warnings.length > 0}
+        >
           <summary>
-            {warnings.length
-              ? "Source details to check"
-              : "Original listing details"}
+            {warnings.length ? "Details to check" : "Source details"}
           </summary>
           <p dir="auto">
             <bdi>{listing.title}</bdi>
@@ -109,7 +113,10 @@ export function VehicleSummaryCard({
               ))}
             </ul>
           )}
-          <p>Listing claims, not independently verified.</p>
+          <p>
+            Listing claims, not independently verified. Current availability is
+            unknown.
+          </p>
         </details>
         <div className="inner-vehicle-actions">
           <Link
