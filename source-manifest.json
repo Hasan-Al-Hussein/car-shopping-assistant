@@ -1,7 +1,7 @@
 {
   "format": "CSA-GITHUB-SOURCE-1",
   "scope": "Public local assessment source; not a deployment or full release acceptance.",
-  "source_manifest_sha256": "d91aa9d1dc24a22b90d8d04eaded62a8fd28b5b89f1cdda4638f503b7d6419e2",
+  "source_manifest_sha256": "3ad0e00000c29ba85817f47d88ca0027a5bce3ab63563d865508e175b4d8075b",
   "files": [
     {
       "path": ".gitignore",
@@ -10,8 +10,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 13382,
-      "sha256": "7ea563881453a6409844aba87141406ef3b4db036b7254ac7c5a6a96d8d7b642"
+      "bytes": 19511,
+      "sha256": "428e7cbf4d59a329c4885334290b830b1d8012172aeb13e1216befab97ac9431"
     },
     {
       "path": "Records/build/BE-04/evidence/accepted-inventory-integrity.json",
@@ -325,8 +325,8 @@
     },
     {
       "path": "backend/app/assistant/intent.py",
-      "bytes": 24503,
-      "sha256": "062ed4e66934863eb7cc4fb11c10ded03d8fb74350e8c4e03d9a0c706f78702d"
+      "bytes": 26035,
+      "sha256": "4a3344ce55d0b07cfd34e952d5bd8e79e085126054ea58265425fda98e93ea5f"
     },
     {
       "path": "backend/app/assistant/interpretation.py",
@@ -1069,6 +1069,11 @@
       "sha256": "324367ca41b863f7df3e04d13ce9c7d95d3ee8464813ea1a0dfcb547e7981105"
     },
     {
+      "path": "backend/tests/assistant/test_intent.py",
+      "bytes": 15725,
+      "sha256": "e82d605b166f7314f68d083613edcfa1f595eb569c3578a7dca2fec4aea278b6"
+    },
+    {
       "path": "backend/tests/assistant/test_output_policy.py",
       "bytes": 7971,
       "sha256": "409592fa112d6e05f6676ff4004de88e4bdca9c3713919b66826dd0187ccd1e5"
@@ -1199,6 +1204,11 @@
       "sha256": "da0ab95afa34d0f3f27f14ee68bbc4da473baa2ec80028941e6104b523648dc1"
     },
     {
+      "path": "delivery/INSTALL.md",
+      "bytes": 9652,
+      "sha256": "cd1b2eb4cbed2432df5bb149d6e843932bddcf469724e044757491843b41caef"
+    },
+    {
       "path": "delivery/decision-note.md",
       "bytes": 877,
       "sha256": "74686d50cc172c43850eb8fe2c94a93cae8c8f6726a39ccc6dcfc72b5396d02a"
@@ -1222,6 +1232,11 @@
       "path": "delivery/evidence/competitor-output-check.md",
       "bytes": 1505,
       "sha256": "5c29a08d8aa70cd784a0f71b5637e0c5c93776f569193f92ffec2d5745c32dfd"
+    },
+    {
+      "path": "delivery/evidence/final-website-check.md",
+      "bytes": 2383,
+      "sha256": "3dba89bd60fd4e7c69ebfa03dc3bdbdfb842bfad5aa7ecf10ed17eb708c1c94f"
     },
     {
       "path": "delivery/evidence/multi-turn-conversation.md",
@@ -1249,6 +1264,16 @@
       "sha256": "f8547c5d4eda7ca36abb4777868dd0c9fd3242bd70a1f377e4623411d451d246"
     },
     {
+      "path": "delivery/evidence/screenshots/final-desktop-compare.png",
+      "bytes": 565901,
+      "sha256": "ed8b7d2eea390b97a4e0646631491feb0299f638e91199991cfa0bb7b1931448"
+    },
+    {
+      "path": "delivery/evidence/screenshots/final-mobile-home.png",
+      "bytes": 235770,
+      "sha256": "7f80e37d25071a02c0cc0b205a25ba4786f6b85a9b217d229b997c61749d212c"
+    },
+    {
       "path": "delivery/evidence/verification-summary.md",
       "bytes": 8133,
       "sha256": "3702bd1ba474147c8b3e557d834557a5f309e2724592d8cdce860eabe2242a08"
@@ -1262,6 +1287,61 @@
       "path": "delivery/release-readiness.json",
       "bytes": 1781,
       "sha256": "4441ec569ec235643db84ad48a0cf2ec92ce56bf812cf93c8154986833565d84"
+    },
+    {
+      "path": "delivery/screenshots/01-home-desktop.png",
+      "bytes": 866259,
+      "sha256": "e1fcaa7c986b77a251bee4fdc158be1bf674c64347c3f761c5ab2064e464c41c"
+    },
+    {
+      "path": "delivery/screenshots/02-nissan-search.png",
+      "bytes": 855431,
+      "sha256": "2a9518c9031a582c15f94105615bb793b7bd45b376e24d9d2961c0320d7bcee0"
+    },
+    {
+      "path": "delivery/screenshots/03-compare-desktop.png",
+      "bytes": 565901,
+      "sha256": "ed8b7d2eea390b97a4e0646631491feb0299f638e91199991cfa0bb7b1931448"
+    },
+    {
+      "path": "delivery/screenshots/04-car-detail.png",
+      "bytes": 571128,
+      "sha256": "7eec474a9048864d98897f395daea447ff3a201c3f8fee87c81c45e3302b7973"
+    },
+    {
+      "path": "delivery/screenshots/05-about.png",
+      "bytes": 550302,
+      "sha256": "40858193e489c9f5b659434734abc1d827fae3a0ee7e3def46c52290c8ea9348"
+    },
+    {
+      "path": "delivery/screenshots/06-shortlist-first-use.png",
+      "bytes": 103773,
+      "sha256": "1fc3eb22e008467cbf4cfcd3199db900e914e1b1f7f1c404ae6ab674cd4c4075"
+    },
+    {
+      "path": "delivery/screenshots/07-help.png",
+      "bytes": 850387,
+      "sha256": "a828ace0ada80d6813bea018d1f68f74819a1a2a89c880af4d73a5d335465904"
+    },
+    {
+      "path": "delivery/screenshots/08-assistant-example.png",
+      "bytes": 478089,
+      "sha256": "63bf98c38a7b2eca00129ba7b315e7517c91c59bc3040d28df1448b24aca3123"
+    },
+    {
+      "path": "delivery/screenshots/09-mobile-home.png",
+      "bytes": 235770,
+      "sha256": "7f80e37d25071a02c0cc0b205a25ba4786f6b85a9b217d229b997c61749d212c"
+    },
+    {
+      "path": "delivery/screenshots/10-mobile-inventory.png",
+      "bytes": 148888,
+      "sha256": "86dc6ff52b71169f4b83a40f93196d1daa65b0c140b45033ad746e62163df2c2"
+    },
+    {
+      "path": "delivery/screenshots/11-mobile-chat-example.png",
+      "bytes": 63603,
+      "sha256": "f8d0eff9b10c4f0d48f92bd8e018c8473a173ff4c3f9a2fb9a9f9d18064e78db"
     },
     {
       "path": "fixtures/assistant/evaluation/corpus-v1.json",

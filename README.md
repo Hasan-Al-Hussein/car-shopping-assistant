@@ -1,10 +1,16 @@
 # Car Shopping Assistant
 
-My Car Shopping Assistant is a local prototype that searches the supplied car inventory, answers contextual questions, remembers explicitly saved preferences and arranges simulated viewings. I chose React for the browsing, comparison, chat and enquiry review interface. Product photographs come from the supplied workbook; missing or conflicting facts stay visible.
+I built this assessment prototype to help someone find a car, ask follow-up questions, save their preferences and arrange a simulated viewing. It uses the supplied inventory and keeps missing listing facts visible.
 
-I've organized this README around the assessment requirements: setup and execution, technical choices, implementation decisions and future work, then the recorded conversations. Extra features and measured results follow afterward.
+**[Download the submission ZIP](https://github.com/Hasan-Al-Hussein/car-shopping-assistant/releases/download/assessment-submission-2026-09-25/Car-Shopping-Assistant-Submission.zip)** · [Run locally](#1-assessment-requirements) · [Extra features](#2-extra-features) · [Results](#3-verification-and-performance) · [Screenshot walkthrough](#4-screenshot-walkthrough)
 
-## 1. Setup and execution
+## 1. Assessment requirements
+
+This section follows the requested README points: setup, technical choices, two paragraphs on implementation and future work, and recorded multi-turn/new-session demonstrations. The original brief is included in `sources/`.
+
+### Setup and execution
+
+**New installation? Follow the [step-by-step ZIP installation guide](delivery/INSTALL.md): download, extract, install dependencies, initialize, activate, enter your key and open the website.**
 
 Use Windows PowerShell with **Python 3.13.3**, **uv**, **Node 24.13+ within 24.x** and **npm 11.6.2+ within 11.x**. Python must already be installed; automatic Python downloads are disabled. A Google AI Studio project with confirmed free-tier access is needed for live chat. No paid fallback is configured.
 
@@ -72,7 +78,7 @@ npm run dev
 
 Open **http://127.0.0.1:5173/__app** for the connected application when using `npm run dev`. Vite proxies `/api` to the FastAPI backend at `http://127.0.0.1:8000`; both ports must be free. Use these exact loopback addresses. Root `main.py` launches the complete application; `app.main:app` alone is only the foundation app. Interactive API docs are disabled; `/api/v1/health` reports capabilities. Keep credentials out of source, screenshots and frontend variables. Stop both processes with Ctrl+C when finished.
 
-## 2. Technical choices and rationale
+### Why I chose this setup
 
 | Part | Choice | Reason |
 | --- | --- | --- |
@@ -85,37 +91,86 @@ Open **http://127.0.0.1:5173/__app** for the connected application when using `n
 
 **Frontend decision:** I chose React to give the frontend a richer interface than the original Notebook/Streamlit options. I asked whether I could use this approach, and Priya approved it with the condition that I explain the setup and include a decision note. React adds a Node build step; the [decision note](delivery/decision-note.md) explains the choice. SQLite is explicitly permitted by the assessment. I didn't add an agent framework or vector database because both are optional and unnecessary for this dataset. Dependencies are locked in `backend/uv.lock` and `frontend/package-lock.json`.
 
-## 3. Implementation decisions and future work
+### Implementation decisions and future work
 
 In my implementation, retrieval, conversation, persistence and transaction rules are separate. Gemini returns structured intent; the backend validates it and builds grounded replies from listing evidence. I kept saving explicit so that discussing a preference or enquiry doesn't automatically store it. Booking review and recovery using the original operation prevent an uncertain response from becoming a duplicate appointment.
 
 For future work, I'd improve verified price and availability coverage, multilingual understanding and evaluation across varied buyer language. I'd also reduce the frontend bundle and API latency and extend the accessibility checks. A shared deployment would require portable storage and locking, authentication and operational changes. These are improvements I'd consider next; they aren't delivered features or enabled integrations.
 
-## 4. Required conversation demonstrations
+### Recorded conversation demonstrations
 
-The assessment permits screenshots **or terminal logs**. The linked transcripts contain actual live HTTP responses rather than illustrative conversations.
+These excerpts come from actual FastAPI and Gemini runs. The full logs retain the original responses and session details. The response wording in those historical logs predates the current, shorter chat formatting.
 
-1. Browse the workbook cars. Ask for cars, then ask for the mileage of the first result and whether it has a warranty. The selected car stays the same; an unknown fact remains unknown.
-2. Explicitly ask to remember a preference. Choose **Start a new conversation**, retaining the same browser access, and ask what was remembered without repeating its value. A new browser profile or cleared access cookie represents a different local user.
-3. Select a car enabled for the demo. Gather a cash price range and needs, choose **Save enquiry details**, review the car and slot, then confirm the simulated viewing. Slots are Monday to Saturday, 08:00 to 20:00 Dubai time, in 30-minute intervals.
-4. Inspect the saved enquiry and its separate CSV export status. Real CSV exports are stored under the selected runtime's `exports` folder. A failed export does not undo a saved enquiry or booking. Preserve an uncertain confirmation and check its original status rather than submitting again.
+**Exploring the inventory in one conversation**
 
-The [actual inventory transcript](delivery/evidence/multi-turn-conversation.md) and [new-session recall transcript](delivery/evidence/new-session-recall.md) contain the recorded live responses. The [HTTP demo guide](delivery/demo/README.md) explains the reproducible client and evidence limits. The [actual qualified CSV](delivery/evidence/qualified-lead.csv) and [its reviewed scope and limits](delivery/evidence/qualified-enquiry.md) are included. The [clean-setup record](delivery/evidence/clean-setup.md) and [independent required-delivery review](delivery/evidence/release-review.md) describe the fresh-install and connected enquiry/export evidence, setup corrections, source identities and browser timeout limits. Viewing eligibility is explicit simulation policy, not proof of real dealer management or availability. No dealer is contacted or real reservation created.
+The first result was the supplied Ford Explorer listing. Both follow-up questions kept that same car as context:
 
-I've kept the historical transcript wording even where later answer formatting improved. The separate conversation, enquiry/export and booking demonstrations do **not** establish one uninterrupted live-model journey through booking confirmation and physical CSV publication.
+```text
+User: Show me cars from the supplied inventory.
+Assistant (excerpt): The inventory reports 100 supported matches; this page contains 20.
 
-## 5. Extra features
+User: What is the mileage on the first car you just showed me?
+Assistant (excerpt): The odometer mileage is not stated in the supplied evidence.
 
-- Consistent red, white and charcoal interface with responsive layouts, hover/focus feedback, scroll reveals and reduced-motion support.
-- A floating AI conversation panel with readable answers, car-result cards and one conversation scroll area.
-- Car comparison, a saved shortlist, structured filters with removable selections, and spelling suggestions for inventory searches.
-- Original workbook photographs for product listings, with separate decorative artwork for page headers.
-- Expandable source details and clear treatment of absent or conflicting listing facts.
-- Explicit preference saving, viewing review, enquiry correction and recovery for uncertain requests or failed CSV publication.
+User: Is there a warranty on it?
+Assistant (excerpt): The warranty is not stated in the supplied evidence.
+```
 
-These features are implemented. Their presence alone doesn't establish complete browser, accessibility or production acceptance.
+[Read the full multi-turn conversation](delivery/evidence/multi-turn-conversation.md).
 
-## 6. Verification and measured performance
+**Remembering preferences in a completely new session**
+
+```text
+Session A
+User: Please explicitly remember these two soft requirements for future conversations:
+      "quiet cabin" and "space for a folding bicycle". Save these preferences now.
+Assistant: Your preference update is recorded.
+
+Session B, using the same local user identity
+User: What requirements did I ask you to remember in my earlier conversation?
+      Tell me the saved values.
+Assistant (excerpt): You saved requirements in another session (soft preference):
+           "quiet cabin", "space for a folding bicycle".
+```
+
+[Read the new-session recall log](delivery/evidence/new-session-recall.md).
+
+### Required capabilities and where to see them
+
+| Requirement | Implementation and evidence |
+| --- | --- |
+| FastAPI chat, inventory and state endpoints | Root `main.py` starts the complete backend. The React interface calls its REST API. |
+| Natural-language search over the supplied inventory | Gemini interprets requests; validated SQL/lexical retrieval searches the 100 supplied listings. [Conversation log](delivery/evidence/multi-turn-conversation.md). |
+| Contextual follow-ups | The selected car and original result order persist within a session, as the mileage/warranty example shows. |
+| Persistent preferences | SQLite stores explicitly saved preferences. [New-session recall](delivery/evidence/new-session-recall.md). |
+| Simulated viewing slots | Monday to Saturday, 08:00 to 20:00 Dubai time, using 30-minute slots and an explicit review/confirmation step. [Setup and demo](delivery/demo/README.md). |
+| Qualified leads saved to a local CSV | The enquiry flow records budget and needs. [Actual sample CSV](delivery/evidence/qualified-lead.csv) and [export evidence](delivery/evidence/qualified-enquiry.md). |
+| Automotive scope and competitor restrictions | Fixed scope replies and validated output controls. [Competitor checks and coverage](delivery/evidence/competitor-output-check.md). |
+| Free Google AI Studio access | The backend uses the configured free Gemini API. There is no paid fallback. |
+
+To try the full flow, browse a car, open the assistant, give your budget and needs, save the enquiry, then review and confirm a simulated viewing. CSV exports are written to the runtime's `exports` folder. Viewing eligibility is a demo policy; no dealer is contacted and no real reservation is made.
+
+The [HTTP demo guide](delivery/demo/README.md), [clean-install record](delivery/evidence/clean-setup.md) and [delivery evidence](delivery/evidence/release-review.md) explain the recorded execution. The conversation, booking and CSV demonstrations are separate runs; they do not establish one uninterrupted live chat-to-booking-to-CSV journey. A new browser identity represents a different local user.
+
+## 2. Extra features
+
+I added these to make the prototype useful beyond a basic chat window:
+
+| Feature | What it adds |
+| --- | --- |
+| Compare up to three cars | View listing facts side by side and remove individual selections from the comparison tray. |
+| Saved shortlist | Keep cars for later using the same local browser identity. |
+| Filters with counts | Choose makes, models, trims and years from the supplied inventory; remove applied filters individually. |
+| Spelling suggestions | Recover from searches such as `nisan` with a suggested inventory term. |
+| Source details | Expand the evidence behind a fact and see missing or conflicting information. |
+| Responsive interface | Desktop and mobile layouts, consistent navigation, keyboard focus and reduced-motion support. |
+| Readable assistant panel | One conversation scroll area, clear replies and linked car results alongside the page. |
+| Natural budget wording | `My budget is 20k dirhams` means an AED 20,000 purchase limit; ambiguous payment amounts still get a clarification. |
+| Recovery for interrupted actions | Review the original operation or export status instead of accidentally creating a duplicate enquiry or viewing. |
+
+I used the workbook's real car photos for listings. Page headers use separate decorative artwork. The interface has a consistent red, white and charcoal palette, hover feedback and subtle scroll entrances.
+
+## 3. Verification and performance
 
 The [verification summary](delivery/evidence/verification-summary.md) records the scope, dates and remaining limits of the executed checks.
 
@@ -134,7 +189,81 @@ The latency pilot used the provider-disabled local API, not live AI responses or
 
 The final [competitor-output check](delivery/evidence/competitor-output-check.md) passed **386 focused offline tests** after correcting an evidence/recall edge case. This checks the reviewed names and variants; it is not an exhaustive guarantee for every platform.
 
-## Repository guide
+My final [website and budget-language check](delivery/evidence/final-website-check.md) passed **279 focused backend tests** and **25 live local browser checks**. The exact phrase "my budget 20k dirhams" was also verified through the live interpreter and correctly applied an **AED 20,000 maximum**, without clarification. The linked record includes actual desktop/mobile screenshots and the scope of those checks.
+
+## 4. Screenshot walkthrough
+
+The screenshots below show the interface and the main browsing flow. Each caption identifies first-use or illustrative screens where relevant. The live conversation evidence is in section 1.
+
+### 1. Homepage — search the supplied inventory from the cinematic landing page.
+
+![Homepage — search the supplied inventory from the cinematic landing page.](delivery/screenshots/01-home-desktop.png)
+
+*actual public UI.*
+
+### 2. Find a car — five Nissan matches with removable search criteria and original listing photos.
+
+![Find a car — five Nissan matches with removable search criteria and original listing photos.](delivery/screenshots/02-nissan-search.png)
+
+*actual public UI.*
+
+### 3. Compare — Nissan Altima and X-Trail side by side.
+
+![Compare — Nissan Altima and X-Trail side by side.](delivery/screenshots/03-compare-desktop.png)
+
+*actual public UI.*
+
+### 4. Car details — the original listing photograph and available facts.
+
+![Car details — the original listing photograph and available facts.](delivery/screenshots/04-car-detail.png)
+
+*actual public UI, fresh capture.*
+
+### 5. About — a brief introduction and return to the inventory.
+
+![About — a brief introduction and return to the inventory.](delivery/screenshots/05-about.png)
+
+*actual public UI.*
+
+### 6. Shortlist — first-use browser access before saving private selections.
+
+![Shortlist — first-use browser access before saving private selections.](delivery/screenshots/06-shortlist-first-use.png)
+
+*actual first-use access state, not a populated shortlist.*
+
+### 7. Help — guidance and browser access controls.
+
+![Help — guidance and browser access controls.](delivery/screenshots/07-help.png)
+
+*actual public UI, fresh capture.*
+
+### 8. Assistant — a readable car-results conversation, illustrated with synthetic fixture data.
+
+![Assistant — a readable car-results conversation, illustrated with synthetic fixture data.](delivery/screenshots/08-assistant-example.png)
+
+*historical synthetic fixture UI render; not live provider proof.*
+
+### 9. Mobile homepage — compact navigation and responsive car discovery.
+
+<img src="delivery/screenshots/09-mobile-home.png" alt="Mobile homepage — compact navigation and responsive car discovery." width="320">
+
+*actual public UI.*
+
+### 10. Mobile inventory — search and filters sized for a small screen.
+
+<img src="delivery/screenshots/10-mobile-inventory.png" alt="Mobile inventory — search and filters sized for a small screen." width="320">
+
+*actual public UI.*
+
+### 11. Mobile assistant — the same conversation layout on a phone; synthetic example.
+
+<img src="delivery/screenshots/11-mobile-chat-example.png" alt="Mobile assistant — the same conversation layout on a phone; synthetic example." width="320">
+
+*historical synthetic fixture UI render; not live provider proof.*
+
+## 5. Download and repository guide
+
+**[Download the complete submission ZIP](https://github.com/Hasan-Al-Hussein/car-shopping-assistant/releases/download/assessment-submission-2026-09-25/Car-Shopping-Assistant-Submission.zip)**. It contains the source, setup instructions, supplied inputs and the evidence shown here. Install the dependencies and provide your own free-tier key using the instructions above.
 
 | Path | Contents |
 | --- | --- |

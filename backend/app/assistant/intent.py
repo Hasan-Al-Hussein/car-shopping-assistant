@@ -128,7 +128,7 @@ class TurnIntent(FrozenSettings):
 
     Browse without a questionnaire. Keep unspecified criteria. Correct/replace only explicit
     corrections; refine tighter numeric bounds; clear only explicit removals. Keep numeric
-    tokens verbatim and mark exclusive bounds. Currency/cash basis must be cited or established.
+    tokens verbatim, exclusive bounds. Dhs/dirhams=AED; car budgets=purchase unless finance/payment.
     Subjective wishes stay soft; unsupported hard search requirements and competing references
     need clarification. Distinguish hypothetical/session/durable intent. Enquiry/viewing uses
     collection; other writes use deferred. Never provide facts, answer prose,
@@ -234,10 +234,35 @@ _CUES: dict[str, tuple[str, ...]] = {
     "transmissions": ("transmission", "gearbox"),
     "soft_preferences": ("preference", "nice to have"),
 }
+_AED_CUE = re.compile(r"\b(?:AED|Dhs|(?:UAE\s+)?dirhams?)\b", re.I)
+_FOREIGN_CUE = re.compile(
+    r"\b(?:USD|EUR|GBP|SAR|QAR|KWD|BHD|OMR|MAD|CAD|AUD|INR|PKR|JPY|CHF|"
+    r"Morocc\w*|dollars?|euros?|pounds?|rupees?|riyals?|dinars?|yen)\b", re.I,
+)
+_PAYMENT_CUE = re.compile(
+    r"\b(?:month(?:ly)?|instalments?|installments?|down\s*payment|deposit|"
+    r"financ\w*|payments?|weekly|annual|loan|interest|apr)\b", re.I,
+)
+_CURRENCY_TOKEN = r"(?:[A-Za-z]{3}|(?:UAE\s+)?dirhams?)"
+
+
+def _purchase_budget(quote: str, message: str) -> bool:
+    return bool(
+        re.search(r"\b(?:cash|total|purchase price)\b|\bbudget(?=\b|\d)", quote, re.I)
+        or (
+            re.search(r"\b(?:cars?|vehicles?|buy|buying|shopping)\b", message, re.I)
+            and re.search(r"\b(?:under|below|within|up to|at most|at least|from|over|above)\b",
+                          quote, re.I)
+        )
+    )
 
 
 def issue(target: Target, reason: str = "conflict") -> Clarification:
-    if reason in {"currency", "basis"}:
+    if reason == "basis":
+        return Clarification(
+            "budget", "Is this the total vehicle purchase budget or a payment amount?"
+        )
+    if reason == "currency":
         return Clarification(
             "budget", "Which currency and total cash amount should the budget use?"
         )
@@ -288,13 +313,13 @@ def _bound_cited(patch: RangePatch, token: NumberToken, *, lower: bool) -> bool:
     quote = re.sub(r"\bno less than\b", "at least", quote, flags=re.I)
     if re.search(r"\b(?:not|no|never|don't)\b", quote, re.I):
         return False
-    amount = r"(?:[A-Za-z]{3}\s+)?" + number + r"(?!\w)"
+    amount = rf"(?:{_CURRENCY_TOKEN}\s+)?" + number + r"(?!\w)"
     prefix = (
         r"(?<!\w)(?:"
         + (
             r"at least|from|minimum(?: of)?|>="
             if lower
-            else r"at most|up to|maximum(?: of)?|<=|budget(?: of)?"
+            else r"at most|up to|within|maximum(?: of)?|<=|budget(?: of)?"
         )
         + r")\s*"
         + amount
@@ -320,9 +345,9 @@ def _bound_cited(patch: RangePatch, token: NumberToken, *, lower: bool) -> bool:
     strict = bool(re.search(exclusive, quote, re.I))
     if patch.minimum is not None and patch.maximum is not None:
         interval = (
-            r"(?<!\w)(?:[A-Za-z]{3}\s+)?"
+            rf"(?<!\w)(?:{_CURRENCY_TOKEN}\s+)?"
             + re.escape(patch.minimum.text)
-            + r"\s*(?:to|and|[-–])\s*(?:[A-Za-z]{3}\s+)?"
+            + rf"\s*(?:to|and|[-–])\s*(?:{_CURRENCY_TOKEN}\s+)?"
             + re.escape(patch.maximum.text)
             + r"(?!\w)"
         )
@@ -331,7 +356,10 @@ def _bound_cited(patch: RangePatch, token: NumberToken, *, lower: bool) -> bool:
 
 
 def _number(token: NumberToken, quote: str, *, cash: bool, lower: bool) -> int:
-    if not _NUMBER.fullmatch(token.text) or not _contains(token.text, quote):
+    cited = _contains(token.text, quote) or (cash and re.search(
+        r"\bbudget" + re.escape(token.text) + r"(?!\w)", quote, re.I,
+    ))
+    if not _NUMBER.fullmatch(token.text) or not cited:
         raise ValueError("UNSUPPORTED_NUMBER")
     value = token.text.replace(",", "").replace(" ", "").lower()
     try:
@@ -394,7 +422,7 @@ def _text(values: dict[str, object], patch: TextPatch) -> None:
         ]
 
 
-def _range(values: dict[str, object], patch: RangePatch) -> None:
+def _range(values: dict[str, object], patch: RangePatch, message: str) -> None:
     if _VETO.search(patch.quote):
         raise ValueError("NEGATED_CHANGE")
     filters = values["filters"]
@@ -411,22 +439,20 @@ def _range(values: dict[str, object], patch: RangePatch) -> None:
         raise ValueError("UNCONFIRMED_CORRECTION")
     result = dict(old) if isinstance(old, dict) else {}
     if patch.field == "budget":
-        if patch.basis == "monthly_finance" or re.search(
-            r"\b(month|monthly|instalment|installment)\b", patch.quote, re.I
-        ):
+        if patch.basis == "monthly_finance" or _PAYMENT_CUE.search(message):
             raise ValueError("BUDGET_BASIS")
-        currency = patch.currency or result.get("currency")
-        if currency is None or (
-            currency != result.get("currency") and not _contains(str(currency), patch.quote)
+        aed_cited = _AED_CUE.search(patch.quote) is not None
+        if aed_cited and (
+            _FOREIGN_CUE.search(message) or patch.currency not in {None, "AED"}
         ):
             raise ValueError("BUDGET_CURRENCY")
-        if patch.basis != "cash" and result.get("basis") != "cash":
-            raise ValueError("BUDGET_BASIS")
-        if (
-            patch.basis == "cash"
-            and result.get("basis") != "cash"
-            and not re.search(r"\b(cash|total|purchase price)\b", patch.quote, re.I)
+        currency = patch.currency or ("AED" if aed_cited else result.get("currency"))
+        if currency is None or (
+            currency != result.get("currency")
+            and not (_contains(str(currency), patch.quote) or (currency == "AED" and aed_cited))
         ):
+            raise ValueError("BUDGET_CURRENCY")
+        if result.get("basis") != "cash" and not _purchase_budget(patch.quote, message):
             raise ValueError("BUDGET_BASIS")
         if old and currency != result.get("currency") and patch.operation != "correct":
             raise ValueError("BUDGET_CURRENCY")
@@ -466,7 +492,13 @@ def _range(values: dict[str, object], patch: RangePatch) -> None:
 def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> CriteriaTransition:
     """Only supported, cited changes apply; unresolved edits cannot erase accepted criteria."""
     effective = SearchCriteria.model_validate(current.model_dump(mode="json"))
-    problem = issue(intent.problem_target, intent.problem) if intent.problem else None
+    budget_hint = intent.problem in {"currency", "basis"} and intent.problem_target == "budget"
+    budget_hint = budget_hint and any(
+        isinstance(patch, RangePatch) and patch.field == "budget" for patch in intent.patches
+    )
+    problem = (
+        issue(intent.problem_target, intent.problem) if intent.problem and not budget_hint else None
+    )
     if intent.patches and _VETO.search(message):
         # The model cannot omit negation by citing only the positive suffix.
         return CriteriaTransition(current, current, issue("query"))
@@ -549,6 +581,7 @@ def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> C
         if (
             intent.problem in {"currency", "basis", "conflict", "unsupported_attribute"}
             and intent.problem_target == target
+            and not budget_hint
         ):
             continue
         values = effective.model_dump(mode="json")
@@ -560,7 +593,7 @@ def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> C
             elif isinstance(patch, TextPatch):
                 _text(values, patch)
             else:
-                _range(values, patch)
+                _range(values, patch, message)
             effective = SearchCriteria.model_validate(values)
         except (ValueError, ValidationError) as error:
             reason = {
