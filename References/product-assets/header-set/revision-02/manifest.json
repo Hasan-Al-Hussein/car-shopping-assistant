@@ -1,0 +1,302 @@
+{
+  "schema_version": 2,
+  "revision": "02",
+  "created_at_utc": "2026-09-24T06:21:48.610847+00:00",
+  "canonical_root": "${PROJECT_ROOT}",
+  "status": "SOURCE_READY_AWAITING_BRAIN_FRONTEND_RENDER_ACCEPTANCE",
+  "reason": "Brain requested recognizable landscape cabin and parked-car context instead of prior abstract macro/facade; exact official UAE App Store icon lead also checked.",
+  "supersedes_mapping_only": "References/product-assets/header-set/manifest.json detail, arrival and brand-symbol guidance; all older bytes and evidence remain unchanged",
+  "assets": [
+    {
+      "id": "discovery",
+      "path": "References/product-assets/header-set/discovery-road.jpg",
+      "routes": [
+        "browse"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 1067,
+      "bytes": 379865,
+      "sha256": "e507657c54aa868b7dd5d64f39443cd32bc84fc821f4f187e0329a835f559e12",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/winding-mountain-road-bathed-in-golden-hour-light-zHRtKTttbKg",
+      "photographer": "Grianghraf",
+      "photographer_profile": "https://unsplash.com/@grianghraf",
+      "download_url": "https://images.unsplash.com/photo-1768935452457-bee8051f8267?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:09.862751+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Empty winding road through warm rocky hills; retain the lower road bend.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 68%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 68%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Keep the road bend visible; do not let the left fade obscure all road detail.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED",
+      "revision_02_status": "RETAINED_BY_BRAIN_SUBJECT_TO_CROP_PROOF"
+    },
+    {
+      "id": "detail-cabin",
+      "photographer": "Agentseed",
+      "profile": "https://unsplash.com/@agentseed",
+      "source_page": "https://unsplash.com/photos/the-interior-of-a-car-with-a-steering-wheel-and-dashboard-0KJlYHZhPWs",
+      "observed_image_link_cdn": "https://images.unsplash.com/photo-1734299071795-076cf066d10a",
+      "license_url": "https://unsplash.com/license",
+      "source_license_observation": "Free to use under the Unsplash License",
+      "download_url": "https://images.unsplash.com/photo-1734299071795-076cf066d10a?fm=jpg&fit=max&w=1600&q=82",
+      "resolved_url": "https://images.unsplash.com/photo-1734299071795-076cf066d10a?fm=jpg&fit=max&w=1600&q=82",
+      "http_status": 200,
+      "retrieved_at_utc": "2026-09-24T06:18:34.624078+00:00",
+      "content_type": "image/jpeg",
+      "format": "JPEG",
+      "width": 1600,
+      "height": 1067,
+      "bytes": 187913,
+      "sha256": "ebe9deb22c8a7319c120136d1cb69fc6767bf8712661eca1cbbc58ac454ff623",
+      "path": "References/product-assets/header-set/revision-02/detail-cabin.jpg",
+      "transformations": "No local retouch/crop/re-encoding; source CDN served bounded-width JPEG.",
+      "selected_at_utc": "2026-09-24T06:19:39.027981+00:00",
+      "classification": "editorial_decoration_not_selected_listing_interior_or_specification",
+      "selection_reason": "Landscape source with steering wheel in right half plus dashboard and center console; recognizable automotive scene in a shallow banner.",
+      "visual_inspection": "Full local image inspected with view_image; no discernible person/face; Subaru emblem and WRX badge visible; gauge needles and blurred readouts retained.",
+      "object_fit": "cover",
+      "object_position": "50% 65%",
+      "target_art_aspect_ratios": [
+        "3.3:1 desktop",
+        "3.2:1 mobile"
+      ],
+      "analytical_source_crop_y": {
+        "3.3:1": [
+          378.4,
+          863.2
+        ],
+        "3.2:1": [
+          368.6,
+          868.6
+        ]
+      },
+      "crop_notes": "Retains upper wheel, hub and dashboard; lower wheel rim/WRX badge may fall below crop. Keep title fade mainly within left20% of image area. Recheck if image area becomes substantially wider than3.5:1.",
+      "decorative_alt": "",
+      "browser_crop_render_status": "NOT_RUN",
+      "rights_limits": "Unsplash free license observed on the exact source page; no claim that vehicle marks or displayed equipment imply affiliation or belong to a listing. No independent third-party release verification.",
+      "proof": {
+        "candidate_bytes_preserved": true,
+        "jpeg_verify": "PASS",
+        "dimensions": "PASS",
+        "hash": "PASS"
+      },
+      "rejected_candidate": {
+        "id": "luke-miller",
+        "reason": "Portrait source; less suitable for the requested shallow landscape header",
+        "path": "Records/build/studio/header-set/revision-02/cabin-candidates/luke-miller.jpg"
+      },
+      "routes": [
+        "listing-detail"
+      ],
+      "lead_visual_review": "Actual final full image inspected independently of its sourcing author; recognizable steering wheel, gauges and cabin context. Decorative only; visible source badges/readouts are not listing facts.",
+      "status": "REPLACEMENT_PROPOSED_FOR_RENDER_PROOF"
+    },
+    {
+      "path": "References/product-assets/header-set/revision-02/viewing-parked-car.jpg",
+      "source_page": "https://unsplash.com/photos/a-car-parked-on-a-road-8kcsgLDAETg",
+      "photographer": "Hyundai Motor Group",
+      "profile": "https://unsplash.com/@hyundaimotorgroup",
+      "source_description": "Hyundai Palisade standing on the road in the sunset",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "observed_cdn_base": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0",
+      "download_url": "https://images.unsplash.com/photo-1650959818516-03d68079f9a0?fm=jpg&fit=max&w=1600&q=82",
+      "content_type": "image/jpeg",
+      "retrieved_at_utc": "2026-09-24T06:17:53.811050+00:00",
+      "width": 1600,
+      "height": 1013,
+      "bytes": 239253,
+      "sha256": "a7a7030ae9ba29020b9f10117cf434bd56a293c846392e6dc497f3a3e13db740",
+      "transformations": "None locally. Observed source CDN served width-limited JPEG, original aspect ratio preserved.",
+      "classification": "editorial_decoration_not_a_selected_listing_or_actual_viewing_venue",
+      "visual_inspection": "Actual full image inspected by lead and separate reviewer; complete prominent SUV on a road in warm evening light, no people; visible Hyundai emblem retained.",
+      "id": "viewing-parked-car",
+      "routes": [
+        "viewing-preparation",
+        "viewing-review"
+      ],
+      "object_fit": "cover",
+      "object_position": "50% 80%",
+      "decorative_alt": "",
+      "art_aspect_ratio_limit": "At or below approximately 4:1 to preserve full car; actual breakpoint proof required",
+      "fade_guidance": "Keep white fade within approximately left20% of the art region; do not wash over vehicle",
+      "status": "REPLACEMENT_PROPOSED_FOR_RENDER_PROOF"
+    },
+    {
+      "id": "horizon",
+      "path": "References/product-assets/header-set/outcome-horizon.jpg",
+      "routes": [
+        "outcome"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 2400,
+      "bytes": 899098,
+      "sha256": "cbc533172e565d729a87d93de411b6decfbd2ee7076833207522f946b087fd4c",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/winding-road-in-the-mountains-during-sunset-nDIVpMiDfiw",
+      "photographer": "Venti Views",
+      "photographer_profile": "https://unsplash.com/@ventiviews",
+      "download_url": "https://images.unsplash.com/photo-1750801321923-a93fd5e5bf21?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:22.991936+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Distant mountains and warm evening light framed by trees.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 24%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 24%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Use the upper horizon crop. Full source contains a tiny runner on the lower road; the proposed shallow crop excludes that region. Do not switch to an uncropped portrait presentation.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED",
+      "revision_02_status": "RETAINED_BY_BRAIN_SUBJECT_TO_CROP_PROOF"
+    }
+  ],
+  "not_selected": [
+    {
+      "path": "References/product-assets/header-set/detail-material.jpg",
+      "reason": "Brain: too abstract in shallow crop"
+    },
+    {
+      "path": "References/product-assets/header-set/viewing-arrival.jpg",
+      "reason": "Brain: architecture-only repeats building-looking header weakness"
+    }
+  ],
+  "brand_icon": {
+    "path": "References/product-assets/header-set/revision-02/dubizzle-uae-app-icon.webp",
+    "source_page": "https://apps.apple.com/ph/app/dubizzle/id892172848",
+    "developer_page": "https://apps.apple.com/us/developer/dubizzle/id739642972",
+    "app_name": "dubizzle",
+    "app_id": "892172848",
+    "developer": "dubizzle",
+    "subtitle_observed": "Buy & Sell in the UAE",
+    "identity_scope": "UAE app, not Saudi/Egypt regional brand",
+    "source_chain": "Web listing identity plus the first 200px app-artwork picture's actual 400w srcset URL in preserved listing HTML.",
+    "download_url": "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/f0/af/0b/f0af0b0c-b6d1-c592-956f-72ba59dff2b0/Placeholder.mill/400x400bb-75.webp",
+    "retrieved_at_utc": "2026-09-24T06:19:32.006029+00:00",
+    "content_type": "image/webp",
+    "format": "WEBP",
+    "width": 400,
+    "height": 400,
+    "bytes": 11422,
+    "sha256": "f98a8e64ecaad2f411dd97ec938d244fa416696338ec478ebb1b93d0334845c5",
+    "transformations": "None; exact source response bytes preserved",
+    "visual_inspection": "Lead inspected exact downloaded icon: red flame/black circular motif on original white rounded app tile; no embedded wordmark.",
+    "third_party_reuse_permission": "NOT_ESTABLISHED_BY_SOURCE_RETRIEVAL",
+    "not_claimed": [
+      "brand-kit standalone vector symbol",
+      "transparent asset",
+      "public-use license or endorsement"
+    ],
+    "proposed_usage": "Whole square app icon before existing dubizzle wordmark, 28–32px square; preserve original tile and proportions, no tracing/cropping/recoloring",
+    "accessible_name": "Use one overall linked brand name; icon may be decorative when adjacent name supplies the label",
+    "status": "OFFICIAL_UAE_APP_ICON_FOUND_AWAITING_HEADER_RENDER_PROOF"
+  },
+  "complete_official_lockup_fallback": {
+    "asset_id": "dubizzle-official-lockup",
+    "asset_path": "References/product-assets/header-set/brand/dubizzle-official-lockup.svg",
+    "asset_kind": "official_complete_lockup",
+    "source_page_url": "https://www.dubizzle.com/",
+    "source_asset_url": "https://static.dubizzle.com/static_assets/dubizzleLogo.svg",
+    "association_evidence": "Official homepage web retrieval exposes the image labelled Dubizzle with this exact static.dubizzle.com target.",
+    "retrieved_at_utc": "2026-09-24T06:05:16.744086+00:00",
+    "http_status": 200,
+    "content_type": "image/svg+xml",
+    "sha256": "5830b4ca4f7aef9c5a9b245d3099bc1ec1c83f63135f7c018122c1c007f8b9e9",
+    "size_bytes": 4575,
+    "intrinsic_dimensions": {
+      "width": 111,
+      "height": 36,
+      "aspect_ratio": "37:12"
+    },
+    "source_colors": [
+      "#1B1D1B",
+      "#E00000"
+    ],
+    "transformations": "none; exact official response bytes preserved",
+    "symbol_only_asset": null,
+    "symbol_only_reason": "No independently verified complete-symbol asset found in the bounded link check; person/letterform and wordmark share a single path, so no extraction or tracing was performed.",
+    "frontend_usage": "Use the complete lockup in place of the existing dubizzle wordmark. Do not display an additional dubizzle name beside it. Preserve proportions and official colors.",
+    "source_quirks": [
+      "view-box is nonstandard; standard viewBox is absent",
+      "fillRule is nonstandard; source bytes deliberately unchanged"
+    ],
+    "static_svg_check": "PASS_STATIC_PASSIVE_CONTENT_CHECK",
+    "browser_render_status": "NOT_RUN",
+    "rights": {
+      "official_source": true,
+      "reuse_permission": "NOT_ESTABLISHED",
+      "license": null,
+      "terms_source": "https://www.dubizzle.com/legalhub/terms/",
+      "note": "Official terms require prior written consent for use of displayed marks. Download availability and user direction are not recorded as a third-party license; no public deployment or publication was performed."
+    },
+    "evidence": [
+      "Records/build/studio/header-set/brand-source.md",
+      "Records/build/studio/header-set/brand-retrieval.json",
+      "Records/build/studio/header-set/brand-verification.json",
+      "Records/build/studio/header-set/brand-icon-discovery.json"
+    ]
+  },
+  "generation_check": {
+    "task": "Using Images In ChatGPT",
+    "task_id": "6aaf56c0-5f2c-83ed-85f4-b241ee3b8281",
+    "checks_in_this_correction": 1,
+    "observed_status": "idle",
+    "result": "Submitted request visible; no new assistant image artifact exposed. No repeated request or alternate generation."
+  },
+  "layout_guidance": {
+    "desktop": "Right44% art within approximately160–200px header; preserve title and actions",
+    "mobile": "Separate approximately112px strip above title",
+    "caveat": "Per-image proposed crops need actual responsive proof; do not preload all assets"
+  },
+  "preserve": [
+    "approved homepage composition and image",
+    "approved comparison header",
+    "all actual workbook listing photos and their listing identity",
+    "approved page bodies and behavior"
+  ],
+  "production_files_modified": false,
+  "heavy_or_browser_job_run": false,
+  "verification": {
+    "all_referenced_local_image_hashes_and_dimensions": "PASS",
+    "prior_four_images_and_full_logo_unchanged": true,
+    "lead_actual_new_photo_and_icon_inspection": "COMPLETE",
+    "separate_viewing_review": "Records/build/studio/header-set/revision-02/independent_viewing_review.md",
+    "cabin_independent_selection_review": "Lead viewed sourcing specialist's actual final JPEG",
+    "actual_responsive_render": "NOT_RUN"
+  }
+}

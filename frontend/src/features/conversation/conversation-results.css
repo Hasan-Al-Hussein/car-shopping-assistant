@@ -1,0 +1,111 @@
+/* Readable result rows inherit the chat's single scroll surface. */
+.conversation-answer .conversation-results {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.conversation-answer .conversation-results h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 650;
+}
+.conversation-answer .chat-car-results {
+  padding-inline-start: 1.6rem;
+  margin: 0;
+}
+.conversation-answer .chat-car-results > li {
+  margin: 0;
+  padding: 0.5rem 0 0.6rem 0.25rem;
+  border-bottom: 1px solid var(--inner-line, #414450);
+}
+.conversation-answer .chat-car-results > li::marker {
+  color: #ffadb3;
+  font-weight: 650;
+}
+.conversation-answer .chat-car-results h5 {
+  font:
+    650 1.0625rem/1.4 "DM Sans",
+    sans-serif;
+  color: inherit;
+  margin: 0 0 0.25rem;
+  overflow-wrap: anywhere;
+}
+.chat-result-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.05rem 0.4rem;
+}
+.chat-result-price > :last-child {
+  min-width: 0;
+}
+.chat-result-price > span:first-child,
+.chat-results-note,
+.chat-result-missing,
+.chat-result-source,
+.chat-search-details,
+.conversation-original-answer {
+  font-size: 0.875rem;
+}
+.chat-result-price > span:first-child,
+.chat-results-note,
+.chat-result-source,
+.chat-search-details {
+  color: var(--chat-muted, inherit);
+}
+.chat-result-price .proof-fact-value {
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.chat-result-price .proof-unknown,
+.chat-result-missing .proof-unknown {
+  color: inherit;
+}
+.chat-result-missing {
+  margin-top: 0.3rem;
+}
+.chat-result-conflict {
+  display: grid;
+  gap: 0.15rem;
+}
+.chat-result-conflict > span {
+  color: #ffc48f;
+  font-size: 0.875rem;
+}
+.chat-result-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-block: 0.35rem 0.15rem;
+}
+.chat-result-actions > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #687083;
+  border-radius: 9px;
+}
+.conversation-answer .chat-result-actions .folio-button {
+  margin: 0;
+}
+.chat-result-source p,
+.chat-search-details p {
+  margin-block: 0.6rem;
+}
+.chat-result-source summary,
+.chat-search-details summary,
+.conversation-original-answer summary {
+  padding-block: 0.5rem;
+  cursor: pointer;
+}
+.chat-result-source summary {
+  padding-block: 0.2rem;
+}
+.conversation-original-answer > .conversation-text {
+  margin-top: 0.7rem;
+}

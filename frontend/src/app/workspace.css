@@ -1,0 +1,157 @@
+.workspace.inner-workspace .cinema-header nav {
+  gap: 1rem;
+}
+.workspace.inner-workspace .cinema-header nav button,
+.workspace-access {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  min-height: 44px;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.workspace-access {
+  font-size: 0.75rem;
+}
+.workspace .cinema-collection:not(:first-child) {
+  scroll-margin-top: 1rem;
+}
+.workspace-capability {
+  font-size: 0.875rem;
+  padding-block: 0.6rem;
+}
+.workspace-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(32 33 36 / 45%);
+  z-index: 80;
+}
+.workspace-panel {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  bottom: 1rem;
+  width: min(26rem, calc(100vw - 2rem));
+  overflow: auto;
+  z-index: 81;
+  padding: 1.5rem;
+  background: var(--brand-white);
+  color: var(--brand-ink);
+  border: 1px solid var(--brand-control-line);
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgb(32 33 36 / 18%);
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+}
+.workspace-panel h2,
+.workspace-panel h3 {
+  font-family: "DM Serif Display", Georgia, serif;
+  font-weight: 400;
+}
+.workspace-panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  justify-content: space-between;
+  position: sticky;
+  top: -1.5rem;
+  background: var(--brand-white);
+  padding-block: 0.5rem;
+  z-index: 1;
+}
+.workspace-panel-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+.workspace-panel .folio-button {
+  white-space: normal;
+}
+.workspace-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.workspace-form p {
+  margin: 0;
+  line-height: 1.6;
+}
+.workspace-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.5;
+}
+.workspace-check input {
+  margin-top: 0.25rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+}
+.workspace-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2rem;
+  margin-block: 1.5rem;
+}
+.workspace-detail .folio-photo {
+  aspect-ratio: 4 / 3;
+}
+.workspace-facts {
+  margin-block: 1rem;
+}
+.workspace-facts > div {
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--brand-line);
+}
+.workspace-facts dt {
+  font-size: 0.75rem;
+  color: var(--brand-muted);
+}
+.workspace-facts dd {
+  margin: 0.3rem 0 0;
+}
+.workspace-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.workspace .proof-table .folio-photo {
+  height: 10rem;
+  margin-bottom: 0.75rem;
+}
+@media (max-width: 959px) {
+  .workspace-panel {
+    inset: 0;
+    width: 100%;
+    border-radius: 0;
+    padding: 1.25rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+  .workspace-panel-header {
+    top: -1.25rem;
+  }
+  .workspace-detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .workspace.inner-workspace .cinema-header {
+    flex-wrap: wrap;
+  }
+  .workspace-access {
+    width: 100%;
+    min-height: 36px;
+    text-align: left;
+    padding-inline: 0;
+  }
+  .workspace.inner-workspace .cinema-header nav button {
+    text-align: left;
+    font-size: 0.875rem;
+  }
+  .workspace .cinema-detail h1,
+  .workspace .cinema-collection h1 {
+    font-size: 2.1rem;
+  }
+  .workspace .workspace-detail .folio-photo {
+    height: 12rem;
+    aspect-ratio: auto;
+  }
+}

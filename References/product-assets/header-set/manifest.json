@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "phase": "S19_HEADER_ASSET_HANDOFF",
+  "canonical_root": "${PROJECT_ROOT}",
+  "created_at_utc": "2026-09-24T06:12:14.885436+00:00",
+  "status": "SOURCE_READY_AWAITING_FRONTEND_RENDER_ACCEPTANCE",
+  "production_owner": "Frontend",
+  "production_files_modified": false,
+  "preserve": [
+    "approved homepage composition and image",
+    "approved comparison header",
+    "all actual workbook listing photos and their listing identity",
+    "approved page bodies and behavior"
+  ],
+  "assets": [
+    {
+      "id": "discovery",
+      "path": "References/product-assets/header-set/discovery-road.jpg",
+      "routes": [
+        "browse"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 1067,
+      "bytes": 379865,
+      "sha256": "e507657c54aa868b7dd5d64f39443cd32bc84fc821f4f187e0329a835f559e12",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/winding-mountain-road-bathed-in-golden-hour-light-zHRtKTttbKg",
+      "photographer": "Grianghraf",
+      "photographer_profile": "https://unsplash.com/@grianghraf",
+      "download_url": "https://images.unsplash.com/photo-1768935452457-bee8051f8267?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:09.862751+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Empty winding road through warm rocky hills; retain the lower road bend.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 68%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 68%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Keep the road bend visible; do not let the left fade obscure all road detail.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED"
+    },
+    {
+      "id": "detail",
+      "path": "References/product-assets/header-set/detail-material.jpg",
+      "routes": [
+        "listing-detail"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 2404,
+      "bytes": 530890,
+      "sha256": "3d09db30f0db29002394ec0ad9c4b5736ec1d502ec4985c59c6e4bf3e211868f",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/close-up-of-a-luxury-cars-leather-stitched-steering-wheel-4k3gjWxkCvU",
+      "photographer": "Lu",
+      "photographer_profile": "https://unsplash.com/@lucaakalu",
+      "download_url": "https://images.unsplash.com/photo-1777211352920-9f7dd9dd017e?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:14.515691+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Close study of dark steering-wheel leather and warm stitching, without a visible brand mark.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 42%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 42%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Treat as an abstract material study. It must remain separate from the selected car's photo gallery or specifications.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED"
+    },
+    {
+      "id": "arrival",
+      "path": "References/product-assets/header-set/viewing-arrival.jpg",
+      "routes": [
+        "viewing-preparation",
+        "viewing-review"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 2400,
+      "bytes": 659959,
+      "sha256": "5c693cfd50fa273304cbd6cf2d7848244b648b08cc6f2bdcc9e0cd0334946e6f",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/modern-glass-building-reflecting-the-sky-at-sunset-AZ1ObEayTUk",
+      "photographer": "Jason Sung",
+      "photographer_profile": "https://unsplash.com/@jasonsung",
+      "download_url": "https://images.unsplash.com/photo-1768223894450-69d95f87f842?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:18.816578+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Warm light on a geometric glass facade; architecture only, not a dealership or booking venue claim.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 40%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 40%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Favor the warm diagonal facade and sky; keep the dark ground out of the shallow strip. Do not label it as the viewing location.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED"
+    },
+    {
+      "id": "horizon",
+      "path": "References/product-assets/header-set/outcome-horizon.jpg",
+      "routes": [
+        "outcome"
+      ],
+      "format": "JPEG",
+      "content_type": "image/jpeg",
+      "width": 1600,
+      "height": 2400,
+      "bytes": 899098,
+      "sha256": "cbc533172e565d729a87d93de411b6decfbd2ee7076833207522f946b087fd4c",
+      "classification": "sourced_editorial_decoration_not_inventory_or_venue_evidence",
+      "source_page": "https://unsplash.com/photos/winding-road-in-the-mountains-during-sunset-nDIVpMiDfiw",
+      "photographer": "Venti Views",
+      "photographer_profile": "https://unsplash.com/@ventiviews",
+      "download_url": "https://images.unsplash.com/photo-1750801321923-a93fd5e5bf21?fm=jpg&fit=max&w=1600&q=85",
+      "retrieved_at_utc": "2026-09-24T06:08:22.991936+00:00",
+      "license_url": "https://unsplash.com/license",
+      "source_license_label": "Free to use under the Unsplash License",
+      "transformations": "None locally; source CDN served width-limited JPEG, aspect ratio preserved.",
+      "visual_observation": "Distant mountains and warm evening light framed by trees.",
+      "decorative_alt": "",
+      "object_fit": "cover",
+      "desktop": {
+        "object_position": "50% 24%",
+        "art_width_percent": 44,
+        "header_height_px": [
+          160,
+          200
+        ],
+        "approximate_art_aspect_ratio": "3.3:1"
+      },
+      "mobile": {
+        "object_position": "50% 24%",
+        "strip_height_px": 112,
+        "placement": "separate strip above readable title",
+        "approximate_art_aspect_ratio": "3.2:1"
+      },
+      "crop_guidance": "Use the upper horizon crop. Full source contains a tiny runner on the lower road; the proposed shallow crop excludes that region. Do not switch to an uncropped portrait presentation.",
+      "crop_render_status": "PROPOSED_NOT_APP_RENDERED"
+    }
+  ],
+  "brand": {
+    "asset_id": "dubizzle-official-lockup",
+    "asset_path": "References/product-assets/header-set/brand/dubizzle-official-lockup.svg",
+    "asset_kind": "official_complete_lockup",
+    "source_page_url": "https://www.dubizzle.com/",
+    "source_asset_url": "https://static.dubizzle.com/static_assets/dubizzleLogo.svg",
+    "association_evidence": "Official homepage web retrieval exposes the image labelled Dubizzle with this exact static.dubizzle.com target.",
+    "retrieved_at_utc": "2026-09-24T06:05:16.744086+00:00",
+    "http_status": 200,
+    "content_type": "image/svg+xml",
+    "sha256": "5830b4ca4f7aef9c5a9b245d3099bc1ec1c83f63135f7c018122c1c007f8b9e9",
+    "size_bytes": 4575,
+    "intrinsic_dimensions": {
+      "width": 111,
+      "height": 36,
+      "aspect_ratio": "37:12"
+    },
+    "source_colors": [
+      "#1B1D1B",
+      "#E00000"
+    ],
+    "transformations": "none; exact official response bytes preserved",
+    "symbol_only_asset": null,
+    "symbol_only_reason": "No independently verified complete-symbol asset found in the bounded link check; person/letterform and wordmark share a single path, so no extraction or tracing was performed.",
+    "frontend_usage": "Use the complete lockup in place of the existing dubizzle wordmark. Do not display an additional dubizzle name beside it. Preserve proportions and official colors.",
+    "source_quirks": [
+      "view-box is nonstandard; standard viewBox is absent",
+      "fillRule is nonstandard; source bytes deliberately unchanged"
+    ],
+    "static_svg_check": "PASS_STATIC_PASSIVE_CONTENT_CHECK",
+    "browser_render_status": "NOT_RUN",
+    "rights": {
+      "official_source": true,
+      "reuse_permission": "NOT_ESTABLISHED",
+      "license": null,
+      "terms_source": "https://www.dubizzle.com/legalhub/terms/",
+      "note": "Official terms require prior written consent for use of displayed marks. Download availability and user direction are not recorded as a third-party license; no public deployment or publication was performed."
+    },
+    "evidence": [
+      "Records/build/studio/header-set/brand-source.md",
+      "Records/build/studio/header-set/brand-retrieval.json",
+      "Records/build/studio/header-set/brand-verification.json",
+      "Records/build/studio/header-set/brand-icon-discovery.json"
+    ]
+  },
+  "generation_route": {
+    "task_id": "6aaf56c0-5f2c-83ed-85f4-b241ee3b8281",
+    "task_title": "Using Images In ChatGPT",
+    "request": "Three separate text-free discovery, cabin-material and arrival editorial images.",
+    "observed_result": "Request visible; no assistant image response or usable new generated artifact exposed at final bounded check.",
+    "delivered_images_generated": false,
+    "fallback": "Authorized sourced editorial photographs, saved locally with provenance."
+  },
+  "acceptance_remaining": [
+    "Representative laptop and mobile header renders by Frontend under the scheduled heavy slot",
+    "Final object-position and fade checked against readable titles and action controls",
+    "Original logo rendered at intended sizes without clipping or duplicate wordmark",
+    "Request only the relevant route image; do not preload all four header files",
+    "Verify decoration cannot be confused with listing photographs or a real venue"
+  ]
+}

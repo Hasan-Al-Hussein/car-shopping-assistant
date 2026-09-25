@@ -1,0 +1,25 @@
+{
+  "selected_hero": "editorial/user-supplied-generated-hero.png",
+  "role": "Illustrative editorial photography only, never listing evidence",
+  "inspected_utc": "2026-09-23T21:34:50.676064Z",
+  "license_url": "https://unsplash.com/license",
+  "assets": [
+    {
+      "sha256": "E664BB35C8EBF2C4A1DAA506644C886563D0CDE378438CB5F46A6E6BA67EFACE",
+      "file": "alpine-parked.jpg",
+      "bytes": 411271
+    },
+    {
+      "sha256": "CB053F60AF1E302B85C69A1C1BE45E9782DC94AD126BE837E407BE84D355E771",
+      "file": "alpine-road.jpg",
+      "bytes": 277547
+    }
+  ],
+  "source_pages": [
+    "https://unsplash.com/photos/a-grey-sports-car-parked-in-front-of-a-mountain-PQDrl3QD0Gg",
+    "https://unsplash.com/photos/a-sports-car-driving-on-a-mountain-road-J0dc7lwxfpU"
+  ],
+  "photographer": "Zieben VH",
+  "secondary": "editorial/alpine-road.jpg",
+  "selected_hero_provenance": "user-supplied-generated-hero.json; prior Unsplash source/license/photographer metadata below applies only to the two legacy real editorial photos, not this generated asset"
+}

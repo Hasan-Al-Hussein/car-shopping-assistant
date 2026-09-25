@@ -1,0 +1,1518 @@
+{
+  "baselines": {
+    "OperationRejected": {
+      "state": "rejected",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "review_id": "00000000-0000-4000-8000-000000000010",
+      "original_store_generation": "00000000-0000-4000-8000-000000000013",
+      "terminal_at": "2026-09-23T18:00:01Z",
+      "replay_valid_until": "2026-12-22T18:00:01Z",
+      "rejection_code": "CAPACITY_UNAVAILABLE",
+      "booking": {
+        "state": "not_created"
+      },
+      "lead": {
+        "state": "not_requested"
+      },
+      "csv": {
+        "state": "not_requested"
+      }
+    },
+    "ShortlistItem": {
+      "ref": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "one"
+      },
+      "state": "current",
+      "listing": {
+        "ref": {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        },
+        "title": "Synthetic listing",
+        "make": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "model": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "trim": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "year": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "cash_price": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "mileage_km": {
+          "status": "unknown",
+          "reason": "not_stated"
+        },
+        "photo": {
+          "state": "missing",
+          "url": null,
+          "alt": "No supplied photo"
+        }
+      },
+      "added_at": "2026-09-23T18:00:00Z",
+      "expires_at": "2026-10-23T18:00:00Z"
+    },
+    "ShortlistResult": {
+      "revision": 1,
+      "items": [
+        {
+          "ref": {
+            "namespace": "synthetic",
+            "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_id": "one"
+          },
+          "state": "current",
+          "listing": {
+            "ref": {
+              "namespace": "synthetic",
+              "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "source_id": "one"
+            },
+            "title": "Synthetic listing",
+            "make": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "model": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "trim": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "year": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "cash_price": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "mileage_km": {
+              "status": "unknown",
+              "reason": "not_stated"
+            },
+            "photo": {
+              "state": "missing",
+              "url": null,
+              "alt": "No supplied photo"
+            }
+          },
+          "added_at": "2026-09-23T18:00:00Z",
+          "expires_at": "2026-10-23T18:00:00Z"
+        }
+      ],
+      "total": 101,
+      "next_cursor": "opaque-next"
+    },
+    "HandoffSummary": {
+      "selected_ref": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "one"
+      },
+      "listing": {
+        "state": "missing",
+        "ref": {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        }
+      },
+      "expressed_criteria": {},
+      "fit_reasons": [],
+      "unresolved_questions": []
+    },
+    "BookingReview": {
+      "review_id": "00000000-0000-4000-8000-000000000010",
+      "draft_id": "00000000-0000-4000-8000-000000000011",
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "draft_revision": 1,
+      "ref": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "one"
+      },
+      "resource_id": "00000000-0000-4000-8000-000000000012",
+      "starts_at_utc": "2026-09-24T06:00:00Z",
+      "ends_at_utc": "2026-09-24T06:30:00Z",
+      "local_start": "2026-09-24T10:00:00+04:00",
+      "timezone": "Asia/Dubai",
+      "venue_label": "Simulated local viewing — no real venue or reservation.",
+      "rules_version": "DEMO-POLICY-1",
+      "eligibility_version": "demo-1",
+      "store_generation": "00000000-0000-4000-8000-000000000013",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "issued_at": "2026-09-23T18:00:00Z",
+      "expires_at": "2026-09-23T18:05:00Z",
+      "lead_change": {
+        "mode": "preserve_existing",
+        "lead_id": "00000000-0000-4000-8000-000000000014",
+        "expected_revision": 0
+      },
+      "state": "valid"
+    },
+    "BookingDraft": {
+      "draft_id": "00000000-0000-4000-8000-000000000011",
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "revision": 1,
+      "ref": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "one"
+      },
+      "appointment": {
+        "starts_at_utc": "2026-09-24T06:00:00Z"
+      },
+      "state": "reviewable",
+      "expires_at": "2026-09-23T18:30:00Z",
+      "required_fields": [],
+      "review": {
+        "review_id": "00000000-0000-4000-8000-000000000010",
+        "draft_id": "00000000-0000-4000-8000-000000000011",
+        "session_id": "00000000-0000-4000-8000-000000000001",
+        "draft_revision": 1,
+        "ref": {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        },
+        "resource_id": "00000000-0000-4000-8000-000000000012",
+        "starts_at_utc": "2026-09-24T06:00:00Z",
+        "ends_at_utc": "2026-09-24T06:30:00Z",
+        "local_start": "2026-09-24T10:00:00+04:00",
+        "timezone": "Asia/Dubai",
+        "venue_label": "Simulated local viewing — no real venue or reservation.",
+        "rules_version": "DEMO-POLICY-1",
+        "eligibility_version": "demo-1",
+        "store_generation": "00000000-0000-4000-8000-000000000013",
+        "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "issued_at": "2026-09-23T18:00:00Z",
+        "expires_at": "2026-09-23T18:05:00Z",
+        "lead_change": {
+          "mode": "preserve_existing",
+          "lead_id": "00000000-0000-4000-8000-000000000014",
+          "expected_revision": 0
+        },
+        "state": "valid"
+      }
+    },
+    "OperationSucceeded": {
+      "state": "succeeded",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "review_id": "00000000-0000-4000-8000-000000000010",
+      "original_store_generation": "00000000-0000-4000-8000-000000000013",
+      "terminal_at": "2026-09-23T18:00:01Z",
+      "replay_valid_until": "2026-12-22T18:00:01Z",
+      "booking": {
+        "state": "confirmed_simulated",
+        "booking_id": "00000000-0000-4000-8000-000000000015",
+        "review": {
+          "review_id": "00000000-0000-4000-8000-000000000010",
+          "draft_id": "00000000-0000-4000-8000-000000000011",
+          "session_id": "00000000-0000-4000-8000-000000000001",
+          "draft_revision": 1,
+          "ref": {
+            "namespace": "synthetic",
+            "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_id": "one"
+          },
+          "resource_id": "00000000-0000-4000-8000-000000000012",
+          "starts_at_utc": "2026-09-24T06:00:00Z",
+          "ends_at_utc": "2026-09-24T06:30:00Z",
+          "local_start": "2026-09-24T10:00:00+04:00",
+          "timezone": "Asia/Dubai",
+          "venue_label": "Simulated local viewing — no real venue or reservation.",
+          "rules_version": "DEMO-POLICY-1",
+          "eligibility_version": "demo-1",
+          "store_generation": "00000000-0000-4000-8000-000000000013",
+          "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "issued_at": "2026-09-23T18:00:00Z",
+          "expires_at": "2026-09-23T18:05:00Z",
+          "lead_change": {
+            "mode": "preserve_existing",
+            "lead_id": "00000000-0000-4000-8000-000000000014",
+            "expected_revision": 0
+          },
+          "state": "consumed"
+        },
+        "confirmed_at": "2026-09-23T18:00:01Z"
+      },
+      "lead": {
+        "state": "saved",
+        "lead_id": "00000000-0000-4000-8000-000000000014",
+        "revision": 1
+      },
+      "csv": {
+        "state": "pending",
+        "store_generation": "00000000-0000-4000-8000-000000000013",
+        "observed_at": "2026-09-23T18:00:01Z",
+        "canonical_version": 1,
+        "exported_version": 0,
+        "code": null
+      }
+    },
+    "PresentationProof": {
+      "presentation_id": "00000000-0000-4000-8000-000000000020",
+      "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ordered_refs": [
+        {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        }
+      ],
+      "criteria_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "issued_at": "2026-09-23T18:00:00Z",
+      "expires_at": "2026-09-23T18:30:00Z",
+      "signature": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "ConstraintCoverage": {
+      "attribute": "cash_price",
+      "source_total": 100,
+      "supported": 50,
+      "excluded_unknown": 45,
+      "excluded_conflicting": 4,
+      "excluded_unsupported_qualifier": 1
+    },
+    "ViewingSlot": {
+      "starts_at_utc": "2026-09-24T06:00:00Z",
+      "ends_at_utc": "2026-09-24T06:30:00Z"
+    },
+    "ViewingOptions": {
+      "ref": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "one"
+      },
+      "state": "available",
+      "rules_version": "DEMO-POLICY-1",
+      "eligibility_version": "demo-1",
+      "calculated_at": "2026-09-23T18:00:00Z",
+      "slots": [
+        {
+          "starts_at_utc": "2026-09-24T06:00:00Z",
+          "ends_at_utc": "2026-09-24T06:30:00Z"
+        }
+      ]
+    },
+    "PreferenceRecord": {
+      "entries": [
+        {
+          "preference": {
+            "key": "budget",
+            "value": {
+              "maximum": 2000000,
+              "currency": "AED"
+            },
+            "strength": "hard"
+          },
+          "source_session_id": "00000000-0000-4000-8000-000000000001",
+          "source_action_id": "00000000-0000-4000-8000-000000000002",
+          "confirmed_at": "2026-09-20T18:00:00Z",
+          "expires_at": "2026-10-20T18:00:00Z",
+          "applicability": "confirmed"
+        },
+        {
+          "preference": {
+            "key": "makes",
+            "value": [
+              "Synthetic"
+            ],
+            "strength": "soft"
+          },
+          "source_session_id": "00000000-0000-4000-8000-000000000003",
+          "source_action_id": "00000000-0000-4000-8000-000000000004",
+          "confirmed_at": "2026-09-23T18:00:00Z",
+          "expires_at": "2026-10-23T18:00:00Z",
+          "applicability": "confirmed"
+        }
+      ],
+      "revision": 2,
+      "collection_mode": "explicit_save"
+    },
+    "PreferencesUpdate": {
+      "expected_revision": 2,
+      "session_id": "00000000-0000-4000-8000-000000000003",
+      "client_action_id": "00000000-0000-4000-8000-000000000004",
+      "scope": "durable",
+      "intent": "correct",
+      "changes": [
+        {
+          "key": "makes",
+          "value": [
+            "Synthetic"
+          ],
+          "strength": "soft"
+        }
+      ]
+    },
+    "ClarificationIntent": {
+      "kind": "clarification",
+      "intent_id": "00000000-0000-4000-8000-000000000030",
+      "created_revision": 2,
+      "purpose": "search_criteria",
+      "targets": [
+        "budget"
+      ],
+      "question": "What maximum cash budget applies?"
+    },
+    "SessionState": {
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "journey_id": "00000000-0000-4000-8000-000000000005",
+      "revision": 2,
+      "criteria": {
+        "query": "comfortable",
+        "filters": {
+          "budget": {
+            "maximum": 2000000,
+            "currency": "AED"
+          }
+        },
+        "soft_preferences": [
+          "quiet cabin"
+        ]
+      },
+      "selected_ref": null,
+      "active_presentation_id": null,
+      "current_draft_id": null,
+      "pending_intent": {
+        "kind": "clarification",
+        "intent_id": "00000000-0000-4000-8000-000000000030",
+        "created_revision": 2,
+        "purpose": "search_criteria",
+        "targets": [
+          "budget"
+        ],
+        "question": "What maximum cash budget applies?"
+      },
+      "recalled_preferences": {
+        "entries": [
+          {
+            "preference": {
+              "key": "budget",
+              "value": {
+                "maximum": 2000000,
+                "currency": "AED"
+              },
+              "strength": "hard"
+            },
+            "source_session_id": "00000000-0000-4000-8000-000000000001",
+            "source_action_id": "00000000-0000-4000-8000-000000000002",
+            "confirmed_at": "2026-09-20T18:00:00Z",
+            "expires_at": "2026-10-20T18:00:00Z",
+            "applicability": "confirmed"
+          },
+          {
+            "preference": {
+              "key": "makes",
+              "value": [
+                "Synthetic"
+              ],
+              "strength": "soft"
+            },
+            "source_session_id": "00000000-0000-4000-8000-000000000003",
+            "source_action_id": "00000000-0000-4000-8000-000000000004",
+            "confirmed_at": "2026-09-23T18:00:00Z",
+            "expires_at": "2026-10-23T18:00:00Z",
+            "applicability": "confirmed"
+          }
+        ],
+        "revision": 2,
+        "collection_mode": "explicit_save"
+      }
+    },
+    "TranscriptPage": {
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "observed_revision": 2,
+      "items": [
+        {
+          "message_id": "00000000-0000-4000-8000-000000000032",
+          "client_message_id": "00000000-0000-4000-8000-000000000031",
+          "session_id": "00000000-0000-4000-8000-000000000001",
+          "accepted_revision": 2,
+          "accepted_at": "2026-09-23T18:00:00Z",
+          "user_text": "Remember a quiet cabin",
+          "state": "completed",
+          "assistant_result": {
+            "client_message_id": "00000000-0000-4000-8000-000000000031",
+            "session_id": "00000000-0000-4000-8000-000000000001",
+            "turn_revision": 2,
+            "current_revision": 2,
+            "state": "clarification",
+            "text": "What maximum cash budget applies?",
+            "pending_intent": {
+              "kind": "clarification",
+              "intent_id": "00000000-0000-4000-8000-000000000030",
+              "created_revision": 2,
+              "purpose": "search_criteria",
+              "targets": [
+                "budget"
+              ],
+              "question": "What maximum cash budget applies?"
+            },
+            "persistence": "saved",
+            "provider_state": "not_used"
+          }
+        }
+      ],
+      "next_cursor": null
+    },
+    "SearchResult": {
+      "client_request_id": "00000000-0000-4000-8000-000000000040",
+      "state": "matches",
+      "items": [
+        {
+          "ref": {
+            "namespace": "synthetic",
+            "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_id": "one"
+          },
+          "title": "Synthetic listing",
+          "make": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "model": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "trim": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "year": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "cash_price": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "mileage_km": {
+            "status": "unknown",
+            "reason": "not_stated"
+          },
+          "photo": {
+            "state": "missing",
+            "url": null,
+            "alt": "No supplied photo"
+          }
+        }
+      ],
+      "supported_total": 1,
+      "next_cursor": null,
+      "presentation": {
+        "presentation_id": "00000000-0000-4000-8000-000000000020",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "ordered_refs": [
+          {
+            "namespace": "synthetic",
+            "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_id": "one"
+          }
+        ],
+        "criteria_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "issued_at": "2026-09-23T18:00:00Z",
+        "expires_at": "2026-09-23T18:30:00Z",
+        "signature": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "applied_criteria": {},
+      "evidence_coverage": [
+        {
+          "attribute": "cash_price",
+          "source_total": 100,
+          "supported": 50,
+          "excluded_unknown": 45,
+          "excluded_conflicting": 4,
+          "excluded_unsupported_qualifier": 1
+        }
+      ]
+    },
+    "BookingReceipt": {
+      "state": "confirmed_simulated",
+      "booking_id": "00000000-0000-4000-8000-000000000015",
+      "review": {
+        "review_id": "00000000-0000-4000-8000-000000000010",
+        "draft_id": "00000000-0000-4000-8000-000000000011",
+        "session_id": "00000000-0000-4000-8000-000000000001",
+        "draft_revision": 1,
+        "ref": {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        },
+        "resource_id": "00000000-0000-4000-8000-000000000012",
+        "starts_at_utc": "2026-09-24T06:00:00Z",
+        "ends_at_utc": "2026-09-24T06:30:00Z",
+        "local_start": "2026-09-24T10:00:00+04:00",
+        "timezone": "Asia/Dubai",
+        "venue_label": "Simulated local viewing — no real venue or reservation.",
+        "rules_version": "DEMO-POLICY-1",
+        "eligibility_version": "demo-1",
+        "store_generation": "00000000-0000-4000-8000-000000000013",
+        "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "issued_at": "2026-09-23T18:00:00Z",
+        "expires_at": "2026-09-23T18:05:00Z",
+        "lead_change": {
+          "mode": "preserve_existing",
+          "lead_id": "00000000-0000-4000-8000-000000000014",
+          "expected_revision": 0
+        },
+        "state": "consumed"
+      },
+      "confirmed_at": "2026-09-23T18:00:01Z",
+      "lead": {
+        "state": "saved",
+        "lead_id": "00000000-0000-4000-8000-000000000014",
+        "revision": 1
+      },
+      "csv": {
+        "state": "pending",
+        "store_generation": "00000000-0000-4000-8000-000000000013",
+        "observed_at": "2026-09-23T18:00:01Z",
+        "canonical_version": 1,
+        "exported_version": 0,
+        "code": null
+      }
+    },
+    "MessageActionResults": {
+      "preferences": {
+        "state": "succeeded",
+        "client_action_id": "00000000-0000-4000-8000-000000000004",
+        "result": {
+          "entries": [
+            {
+              "preference": {
+                "key": "budget",
+                "value": {
+                  "maximum": 2000000,
+                  "currency": "AED"
+                },
+                "strength": "hard"
+              },
+              "source_session_id": "00000000-0000-4000-8000-000000000001",
+              "source_action_id": "00000000-0000-4000-8000-000000000002",
+              "confirmed_at": "2026-09-20T18:00:00Z",
+              "expires_at": "2026-10-20T18:00:00Z",
+              "applicability": "confirmed"
+            },
+            {
+              "preference": {
+                "key": "makes",
+                "value": [
+                  "Synthetic"
+                ],
+                "strength": "soft"
+              },
+              "source_session_id": "00000000-0000-4000-8000-000000000003",
+              "source_action_id": "00000000-0000-4000-8000-000000000004",
+              "confirmed_at": "2026-09-23T18:00:00Z",
+              "expires_at": "2026-10-23T18:00:00Z",
+              "applicability": "confirmed"
+            }
+          ],
+          "revision": 2,
+          "collection_mode": "explicit_save"
+        }
+      },
+      "shortlist": {
+        "state": "succeeded",
+        "client_action_id": "00000000-0000-4000-8000-000000000040",
+        "result": {
+          "ref": {
+            "namespace": "synthetic",
+            "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "source_id": "one"
+          },
+          "client_action_id": "00000000-0000-4000-8000-000000000040",
+          "saved": true,
+          "changed_at_apply": true,
+          "replayed": false,
+          "applied_revision": 1,
+          "current_revision": 1,
+          "reference_state": "current"
+        }
+      },
+      "lead": {
+        "state": "succeeded",
+        "client_action_id": "00000000-0000-4000-8000-000000000041",
+        "result": {
+          "lead": {
+            "lead_id": "00000000-0000-4000-8000-000000000014",
+            "journey_id": "00000000-0000-4000-8000-000000000005",
+            "revision": 1,
+            "stage": "interested",
+            "values": {
+              "budget": {
+                "state": "missing"
+              },
+              "requirements": [],
+              "selected_refs": [
+                {
+                  "namespace": "synthetic",
+                  "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "source_id": "one"
+                }
+              ],
+              "email": {
+                "state": "declined"
+              },
+              "phone": {
+                "state": "missing"
+              }
+            },
+            "booking_ids": [],
+            "updated_at": "2026-09-23T18:00:00Z",
+            "expires_at": "2026-12-22T18:00:00Z",
+            "csv": {
+              "state": "pending",
+              "store_generation": "00000000-0000-4000-8000-000000000013",
+              "observed_at": "2026-09-23T18:00:01Z",
+              "canonical_version": 1,
+              "exported_version": 0,
+              "code": null
+            }
+          },
+          "replayed": false
+        }
+      }
+    },
+    "ActionUnresolved": {
+      "state": "unresolved",
+      "client_action_id": "00000000-0000-4000-8000-000000000004",
+      "submitted_store_generation": "00000000-0000-4000-8000-000000000013",
+      "recovery": "read_current_state"
+    },
+    "MessageResult": {
+      "client_message_id": "00000000-0000-4000-8000-000000000031",
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "turn_revision": 2,
+      "current_revision": 2,
+      "state": "clarification",
+      "text": "What maximum cash budget applies?",
+      "pending_intent": {
+        "kind": "clarification",
+        "intent_id": "00000000-0000-4000-8000-000000000030",
+        "created_revision": 2,
+        "purpose": "search_criteria",
+        "targets": [
+          "budget"
+        ],
+        "question": "What maximum cash budget applies?"
+      },
+      "persistence": "saved",
+      "provider_state": "not_used",
+      "comparison": {
+        "items": [
+          {
+            "state": "missing",
+            "ref": {
+              "namespace": "synthetic",
+              "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "source_id": "one"
+            }
+          },
+          {
+            "state": "missing",
+            "ref": {
+              "namespace": "synthetic",
+              "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "source_id": "two"
+            }
+          }
+        ]
+      },
+      "actions": {
+        "preferences": {
+          "state": "unresolved",
+          "client_action_id": "00000000-0000-4000-8000-000000000004",
+          "submitted_store_generation": "00000000-0000-4000-8000-000000000013",
+          "recovery": "read_current_state"
+        },
+        "shortlist": {
+          "state": "not_requested"
+        },
+        "lead": {
+          "state": "rejected",
+          "client_action_id": "00000000-0000-4000-8000-000000000041",
+          "code": "LEAD_EXISTS"
+        }
+      }
+    }
+  },
+  "mutations": [
+    {
+      "id": "OperationRejected-rejection_code-0",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "STORE_UNAVAILABLE",
+      "marker": "Input should be"
+    },
+    {
+      "id": "OperationRejected-rejection_code-1",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "STORE_BUSY",
+      "marker": "Input should be"
+    },
+    {
+      "id": "OperationRejected-rejection_code-2",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "PROVIDER_TIMEOUT",
+      "marker": "Input should be"
+    },
+    {
+      "id": "OperationRejected-rejection_code-3",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "IDENTITY_REQUIRED",
+      "marker": "Input should be"
+    },
+    {
+      "id": "OperationRejected-rejection_code-4",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "CSRF_DENIED",
+      "marker": "Input should be"
+    },
+    {
+      "id": "OperationRejected-rejection_code-5",
+      "model": "OperationRejected",
+      "path": [
+        "rejection_code"
+      ],
+      "value": "STORE_GENERATION_CHANGED",
+      "marker": "Input should be"
+    },
+    {
+      "id": "ShortlistItem-listing-ref-source_id-6",
+      "model": "ShortlistItem",
+      "path": [
+        "listing",
+        "ref",
+        "source_id"
+      ],
+      "value": "two",
+      "marker": "same exact reference"
+    },
+    {
+      "id": "ShortlistItem-state-7",
+      "model": "ShortlistItem",
+      "path": [
+        "state"
+      ],
+      "value": "missing",
+      "marker": "Only a missing"
+    },
+    {
+      "id": "ShortlistItem-listing-8",
+      "model": "ShortlistItem",
+      "path": [
+        "listing"
+      ],
+      "value": null,
+      "marker": "Only a missing"
+    },
+    {
+      "id": "ShortlistResult-total-9",
+      "model": "ShortlistResult",
+      "path": [
+        "total"
+      ],
+      "value": 0,
+      "marker": "agree with its total"
+    },
+    {
+      "id": "HandoffSummary-selected_ref-source_id-10",
+      "model": "HandoffSummary",
+      "path": [
+        "selected_ref",
+        "source_id"
+      ],
+      "value": "two",
+      "marker": "exact selected listing"
+    },
+    {
+      "id": "BookingDraft-draft_id-11",
+      "model": "BookingDraft",
+      "path": [
+        "draft_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact draft version"
+    },
+    {
+      "id": "BookingDraft-session_id-12",
+      "model": "BookingDraft",
+      "path": [
+        "session_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact draft version"
+    },
+    {
+      "id": "BookingDraft-revision-13",
+      "model": "BookingDraft",
+      "path": [
+        "revision"
+      ],
+      "value": 2,
+      "marker": "exact draft version"
+    },
+    {
+      "id": "BookingDraft-ref-14",
+      "model": "BookingDraft",
+      "path": [
+        "ref"
+      ],
+      "value": {
+        "namespace": "synthetic",
+        "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "two"
+      },
+      "marker": "exact draft version"
+    },
+    {
+      "id": "BookingDraft-review-15",
+      "model": "BookingDraft",
+      "path": [
+        "review"
+      ],
+      "value": null,
+      "marker": "complete details"
+    },
+    {
+      "id": "BookingDraft-state-16",
+      "model": "BookingDraft",
+      "path": [
+        "state"
+      ],
+      "value": "suspended",
+      "marker": "Only a reviewable"
+    },
+    {
+      "id": "BookingDraft-appointment-starts_at_utc-17",
+      "model": "BookingDraft",
+      "path": [
+        "appointment",
+        "starts_at_utc"
+      ],
+      "value": "2026-09-24T07:00:00Z",
+      "marker": "must agree"
+    },
+    {
+      "id": "OperationSucceeded-review_id-18",
+      "model": "OperationSucceeded",
+      "path": [
+        "review_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact committed review"
+    },
+    {
+      "id": "OperationSucceeded-operation_key-19",
+      "model": "OperationSucceeded",
+      "path": [
+        "operation_key"
+      ],
+      "value": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+      "marker": "exact committed review"
+    },
+    {
+      "id": "OperationSucceeded-original_store_generation-20",
+      "model": "OperationSucceeded",
+      "path": [
+        "original_store_generation"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact committed review"
+    },
+    {
+      "id": "PresentationProof-expires_at-21",
+      "model": "PresentationProof",
+      "path": [
+        "expires_at"
+      ],
+      "value": "2026-09-23T17:00:00Z",
+      "marker": "expiry must follow"
+    },
+    {
+      "id": "PresentationProof-snapshot_id-22",
+      "model": "PresentationProof",
+      "path": [
+        "snapshot_id"
+      ],
+      "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "marker": "named snapshot"
+    },
+    {
+      "id": "PresentationProof-ordered_refs-23",
+      "model": "PresentationProof",
+      "path": [
+        "ordered_refs"
+      ],
+      "value": [
+        {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        },
+        {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "one"
+        }
+      ],
+      "marker": "duplicate references"
+    },
+    {
+      "id": "SearchResult-state-24",
+      "model": "SearchResult",
+      "path": [
+        "state"
+      ],
+      "value": "no_supported_matches",
+      "marker": "empty result"
+    },
+    {
+      "id": "SearchResult-supported_total-25",
+      "model": "SearchResult",
+      "path": [
+        "supported_total"
+      ],
+      "value": 0,
+      "marker": "sufficient supported total"
+    },
+    {
+      "id": "SearchResult-presentation-ordered_refs-26",
+      "model": "SearchResult",
+      "path": [
+        "presentation",
+        "ordered_refs"
+      ],
+      "value": [
+        {
+          "namespace": "synthetic",
+          "snapshot_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "source_id": "two"
+        }
+      ],
+      "marker": "exactly the returned"
+    },
+    {
+      "id": "SearchResult-unsupported_constraints-27",
+      "model": "SearchResult",
+      "path": [
+        "unsupported_constraints"
+      ],
+      "value": [
+        "must have verified sunroof"
+      ],
+      "marker": "Unsupported hard constraints"
+    },
+    {
+      "id": "ConstraintCoverage-supported-28",
+      "model": "ConstraintCoverage",
+      "path": [
+        "supported"
+      ],
+      "value": 101,
+      "marker": "Disjoint evidence categories"
+    },
+    {
+      "id": "BookingReview-ends_at_utc-29",
+      "model": "BookingReview",
+      "path": [
+        "ends_at_utc"
+      ],
+      "value": "2026-09-24T06:00:00Z",
+      "marker": "end must follow"
+    },
+    {
+      "id": "BookingReview-local_start-30",
+      "model": "BookingReview",
+      "path": [
+        "local_start"
+      ],
+      "value": "2026-09-24T11:00:00+04:00",
+      "marker": "authoritative instant"
+    },
+    {
+      "id": "BookingReview-local_start-31",
+      "model": "BookingReview",
+      "path": [
+        "local_start"
+      ],
+      "value": "2026-09-24T06:00:00+00:00",
+      "marker": "authoritative instant"
+    },
+    {
+      "id": "BookingReview-local_start-32",
+      "model": "BookingReview",
+      "path": [
+        "local_start"
+      ],
+      "value": "2026-09-24T10:00:00",
+      "marker": "authoritative instant"
+    },
+    {
+      "id": "BookingReview-expires_at-33",
+      "model": "BookingReview",
+      "path": [
+        "expires_at"
+      ],
+      "value": "2026-09-23T18:00:00Z",
+      "marker": "expiry must follow"
+    },
+    {
+      "id": "ViewingSlot-ends_at_utc-34",
+      "model": "ViewingSlot",
+      "path": [
+        "ends_at_utc"
+      ],
+      "value": "2026-09-24T06:00:00Z",
+      "marker": "end must follow"
+    },
+    {
+      "id": "ViewingOptions-slots-35",
+      "model": "ViewingOptions",
+      "path": [
+        "slots"
+      ],
+      "value": [],
+      "marker": "Only available"
+    },
+    {
+      "id": "ViewingOptions-state-36",
+      "model": "ViewingOptions",
+      "path": [
+        "state"
+      ],
+      "value": "unconfigured",
+      "marker": "Only available"
+    },
+    {
+      "id": "ViewingOptions-rules_version-37",
+      "model": "ViewingOptions",
+      "path": [
+        "rules_version"
+      ],
+      "value": null,
+      "marker": "identify their rule"
+    },
+    {
+      "id": "PreferenceRecord-entries-0-expires_at-38",
+      "model": "PreferenceRecord",
+      "path": [
+        "entries",
+        0,
+        "expires_at"
+      ],
+      "value": "2026-09-19T18:00:00Z",
+      "marker": "own confirmation"
+    },
+    {
+      "id": "PreferenceRecord-entries-0-preference-value-39",
+      "model": "PreferenceRecord",
+      "path": [
+        "entries",
+        0,
+        "preference",
+        "value"
+      ],
+      "value": null,
+      "marker": "removes its entry"
+    },
+    {
+      "id": "PreferenceRecord-entries-40",
+      "model": "PreferenceRecord",
+      "path": [
+        "entries"
+      ],
+      "value": [
+        {
+          "preference": {
+            "key": "budget",
+            "value": {
+              "maximum": 2000000,
+              "currency": "AED"
+            },
+            "strength": "hard"
+          },
+          "source_session_id": "00000000-0000-4000-8000-000000000001",
+          "source_action_id": "00000000-0000-4000-8000-000000000002",
+          "confirmed_at": "2026-09-20T18:00:00Z",
+          "expires_at": "2026-10-20T18:00:00Z",
+          "applicability": "confirmed"
+        },
+        {
+          "preference": {
+            "key": "budget",
+            "value": {
+              "maximum": 2000000,
+              "currency": "AED"
+            },
+            "strength": "hard"
+          },
+          "source_session_id": "00000000-0000-4000-8000-000000000001",
+          "source_action_id": "00000000-0000-4000-8000-000000000002",
+          "confirmed_at": "2026-09-20T18:00:00Z",
+          "expires_at": "2026-10-20T18:00:00Z",
+          "applicability": "confirmed"
+        }
+      ],
+      "marker": "unique provenance"
+    },
+    {
+      "id": "PreferencesUpdate-changes-41",
+      "model": "PreferencesUpdate",
+      "path": [
+        "changes"
+      ],
+      "value": [],
+      "marker": "at least 1"
+    },
+    {
+      "id": "PreferencesUpdate-changes-42",
+      "model": "PreferencesUpdate",
+      "path": [
+        "changes"
+      ],
+      "value": [
+        {
+          "key": "makes",
+          "value": [
+            "Synthetic"
+          ],
+          "strength": "soft"
+        },
+        {
+          "key": "makes",
+          "value": [
+            "Synthetic"
+          ],
+          "strength": "soft"
+        }
+      ],
+      "marker": "once per command"
+    },
+    {
+      "id": "PreferencesUpdate-changes-0-strength-43",
+      "model": "PreferencesUpdate",
+      "path": [
+        "changes",
+        0,
+        "strength"
+      ],
+      "value": "inferred",
+      "marker": "Input should be"
+    },
+    {
+      "id": "ClarificationIntent-purpose-44",
+      "model": "ClarificationIntent",
+      "path": [
+        "purpose"
+      ],
+      "value": "viewing_details",
+      "marker": "match their purpose"
+    },
+    {
+      "id": "SessionState-revision-45",
+      "model": "SessionState",
+      "path": [
+        "revision"
+      ],
+      "value": 1,
+      "marker": "future revision"
+    },
+    {
+      "id": "TranscriptPage-items-0-assistant_result-client_message_id-46",
+      "model": "TranscriptPage",
+      "path": [
+        "items",
+        0,
+        "assistant_result",
+        "client_message_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact original turn"
+    },
+    {
+      "id": "TranscriptPage-items-0-assistant_result-47",
+      "model": "TranscriptPage",
+      "path": [
+        "items",
+        0,
+        "assistant_result"
+      ],
+      "value": null,
+      "marker": "Only a completed"
+    },
+    {
+      "id": "TranscriptPage-items-0-state-48",
+      "model": "TranscriptPage",
+      "path": [
+        "items",
+        0,
+        "state"
+      ],
+      "value": "interrupted",
+      "marker": "Only a completed"
+    },
+    {
+      "id": "TranscriptPage-session_id-49",
+      "model": "TranscriptPage",
+      "path": [
+        "session_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "retain its session"
+    },
+    {
+      "id": "TranscriptPage-observed_revision-50",
+      "model": "TranscriptPage",
+      "path": [
+        "observed_revision"
+      ],
+      "value": 1,
+      "marker": "observed revision boundary"
+    },
+    {
+      "id": "TranscriptPage-items-51",
+      "model": "TranscriptPage",
+      "path": [
+        "items"
+      ],
+      "value": [
+        {
+          "message_id": "00000000-0000-4000-8000-000000000032",
+          "client_message_id": "00000000-0000-4000-8000-000000000031",
+          "session_id": "00000000-0000-4000-8000-000000000001",
+          "accepted_revision": 2,
+          "accepted_at": "2026-09-23T18:00:00Z",
+          "user_text": "Remember a quiet cabin",
+          "state": "completed",
+          "assistant_result": {
+            "client_message_id": "00000000-0000-4000-8000-000000000031",
+            "session_id": "00000000-0000-4000-8000-000000000001",
+            "turn_revision": 2,
+            "current_revision": 2,
+            "state": "clarification",
+            "text": "What maximum cash budget applies?",
+            "pending_intent": {
+              "kind": "clarification",
+              "intent_id": "00000000-0000-4000-8000-000000000030",
+              "created_revision": 2,
+              "purpose": "search_criteria",
+              "targets": [
+                "budget"
+              ],
+              "question": "What maximum cash budget applies?"
+            },
+            "persistence": "saved",
+            "provider_state": "not_used"
+          }
+        },
+        {
+          "message_id": "00000000-0000-4000-8000-000000000032",
+          "client_message_id": "00000000-0000-4000-8000-000000000031",
+          "session_id": "00000000-0000-4000-8000-000000000001",
+          "accepted_revision": 2,
+          "accepted_at": "2026-09-23T18:00:00Z",
+          "user_text": "Remember a quiet cabin",
+          "state": "completed",
+          "assistant_result": {
+            "client_message_id": "00000000-0000-4000-8000-000000000031",
+            "session_id": "00000000-0000-4000-8000-000000000001",
+            "turn_revision": 2,
+            "current_revision": 2,
+            "state": "clarification",
+            "text": "What maximum cash budget applies?",
+            "pending_intent": {
+              "kind": "clarification",
+              "intent_id": "00000000-0000-4000-8000-000000000030",
+              "created_revision": 2,
+              "purpose": "search_criteria",
+              "targets": [
+                "budget"
+              ],
+              "question": "What maximum cash budget applies?"
+            },
+            "persistence": "saved",
+            "provider_state": "not_used"
+          }
+        }
+      ],
+      "marker": "increasing accepted revision"
+    },
+    {
+      "path": [
+        "lead",
+        "state"
+      ],
+      "marker": "Input should be",
+      "id": "OperationSucceeded-lead-not-saved",
+      "value": "not_saved",
+      "model": "OperationSucceeded"
+    },
+    {
+      "path": [
+        "lead",
+        "state"
+      ],
+      "marker": "Input should be",
+      "id": "OperationSucceeded-lead-not-requested",
+      "value": "not_requested",
+      "model": "OperationSucceeded"
+    },
+    {
+      "path": [
+        "lead",
+        "lead_id"
+      ],
+      "marker": "reviewed lead identity",
+      "id": "OperationSucceeded-wrong-reviewed-lead",
+      "value": "00000000-0000-4000-8000-000000000099",
+      "model": "OperationSucceeded"
+    },
+    {
+      "path": [
+        "lead",
+        "revision"
+      ],
+      "marker": "reviewed lead identity",
+      "id": "OperationSucceeded-later-lead-revision",
+      "value": 2,
+      "model": "OperationSucceeded"
+    },
+    {
+      "path": [
+        "csv",
+        "state"
+      ],
+      "marker": "does not match any of the expected tags",
+      "id": "OperationSucceeded-csv-not-requested",
+      "value": "not_requested",
+      "model": "OperationSucceeded"
+    },
+    {
+      "path": [
+        "lead",
+        "state"
+      ],
+      "marker": "Input should be",
+      "id": "BookingReceipt-lead-not-saved",
+      "value": "not_saved",
+      "model": "BookingReceipt"
+    },
+    {
+      "path": [
+        "lead",
+        "state"
+      ],
+      "marker": "Input should be",
+      "id": "BookingReceipt-lead-not-requested",
+      "value": "not_requested",
+      "model": "BookingReceipt"
+    },
+    {
+      "path": [
+        "lead",
+        "lead_id"
+      ],
+      "marker": "reviewed lead identity",
+      "id": "BookingReceipt-wrong-reviewed-lead",
+      "value": "00000000-0000-4000-8000-000000000099",
+      "model": "BookingReceipt"
+    },
+    {
+      "path": [
+        "lead",
+        "revision"
+      ],
+      "marker": "reviewed lead identity",
+      "id": "BookingReceipt-later-lead-revision",
+      "value": 2,
+      "model": "BookingReceipt"
+    },
+    {
+      "path": [
+        "csv",
+        "state"
+      ],
+      "marker": "does not match any of the expected tags",
+      "id": "BookingReceipt-csv-not-requested",
+      "value": "not_requested",
+      "model": "BookingReceipt"
+    },
+    {
+      "id": "chat-shortlist-wrong-action-id",
+      "model": "MessageActionResults",
+      "path": [
+        "shortlist",
+        "client_action_id"
+      ],
+      "value": "00000000-0000-4000-8000-000000000099",
+      "marker": "exact membership command"
+    },
+    {
+      "id": "chat-lead-csv-not-requested",
+      "model": "MessageActionResults",
+      "path": [
+        "lead",
+        "result",
+        "lead",
+        "csv",
+        "state"
+      ],
+      "value": "not_requested",
+      "marker": "does not match any of the expected tags"
+    },
+    {
+      "id": "chat-unknown-new-action-retry",
+      "model": "ActionUnresolved",
+      "path": [
+        "recovery"
+      ],
+      "value": "retry_new_action",
+      "marker": "Input should be"
+    },
+    {
+      "id": "chat-transient-not-known-rejection",
+      "model": "MessageResult",
+      "path": [
+        "actions",
+        "lead",
+        "code"
+      ],
+      "value": "STORE_UNAVAILABLE",
+      "marker": "Input should be"
+    }
+  ]
+}

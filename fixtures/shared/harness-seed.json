@@ -1,0 +1,15 @@
+{
+  "schema_version": "harness-seed-1",
+  "classification": "Synthetic owners, dates, IDs and snapshot; adopted demo rules are labelled separately.",
+  "clock_utc": "2026-09-24T04:00:00Z",
+  "owners": [
+    {"owner_id": "10000000-0000-4000-8000-000000000001", "context_id": "20000000-0000-4000-8000-000000000001", "display_name": "Synthetic Buyer"},
+    {"owner_id": "10000000-0000-4000-8000-000000000002", "context_id": "20000000-0000-4000-8000-000000000002", "display_name": "Synthetic Buyer"}
+  ],
+  "synthetic_snapshot": {"namespace": "synthetic-fixtures", "snapshot_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "source_id": "synthetic-001"},
+  "synthetic_generations": ["30000000-0000-4000-8000-000000000001", "30000000-0000-4000-8000-000000000002"],
+  "revisions": {"old": 1, "current": 2},
+  "rule_version": "DEMO-POLICY-1",
+  "rule_origin": "Execution/demo_policy.json; adopted local simulation policy, not seller availability.",
+  "runtime_root": "C:\\Users\\example\\AppData\\Local\\CarShoppingAssistant\\runtime"
+}

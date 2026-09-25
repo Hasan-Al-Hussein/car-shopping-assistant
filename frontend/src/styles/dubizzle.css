@@ -1,0 +1,904 @@
+/* Current visual system. Existing styles retain responsive layout contracts. */
+.proof.cinematic,
+.workspace-panel.dubizzle-panel {
+  --folio-canvas: var(--brand-canvas);
+  --folio-paper: var(--brand-white);
+  --folio-ink: var(--brand-ink);
+  --folio-text-secondary: var(--brand-muted);
+  --folio-accent: var(--brand-red);
+  --folio-focus: var(--brand-red-hover);
+  --folio-boundary: var(--brand-control-line);
+  --folio-rule: var(--brand-line);
+  --cinema-surface-quiet: var(--brand-white);
+  --inner-canvas: var(--brand-canvas);
+  --inner-paper: var(--brand-white);
+  --inner-sage: var(--brand-rose);
+  --inner-ink: var(--brand-ink);
+  --inner-secondary: var(--brand-muted);
+  --inner-line: var(--brand-line);
+  --inner-forest: var(--brand-red);
+  --inner-copper: var(--brand-red-hover);
+  color: var(--brand-ink);
+  background: var(--brand-canvas);
+}
+
+.proof.cinematic .cinema-header {
+  position: relative;
+  gap: 1.25rem;
+  min-height: 96px;
+  padding-block: 1rem;
+  background: var(--brand-white);
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0 0 100vmax var(--brand-white);
+  clip-path: inset(0 -100vmax);
+}
+.proof.cinematic .cinema-brand {
+  flex: 0 0 auto;
+  font:
+    700 clamp(2.1rem, 2.8vw, 2.7rem)/0.94 "DM Sans",
+    sans-serif;
+  letter-spacing: -0.065em;
+  color: var(--brand-red);
+}
+.proof.cinematic .cinema-brand span {
+  margin-top: 0.65rem;
+  color: var(--brand-muted);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+}
+.proof.cinematic .cinema-header nav {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.proof.cinematic .cinema-header :is(nav a, nav button, .workspace-access),
+.proof.cinematic .cinema-mobile-tools :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid var(--brand-control-line);
+  border-radius: 999px;
+  background: var(--brand-white);
+  color: var(--brand-ink);
+  font:
+    600 0.875rem/1.3 "DM Sans",
+    sans-serif;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.proof.cinematic .cinema-header nav [aria-current="page"] {
+  color: var(--brand-white);
+  background: var(--brand-red);
+  border-color: var(--brand-red);
+  box-shadow:
+    inset 0 1px 0 #ffffff38,
+    0 3px 0 var(--brand-red-pressed);
+}
+.proof.cinematic .cinema-count {
+  background: var(--brand-rose);
+  color: var(--brand-red-hover);
+  font-size: 0.75rem;
+  min-width: 1.4rem;
+}
+.proof.cinematic .cinema-header-note {
+  max-width: 10rem;
+  color: var(--brand-muted);
+  line-height: 1.5;
+}
+
+.proof.cinematic .folio-button,
+.workspace-panel.dubizzle-panel .folio-button {
+  border-radius: 999px;
+  min-height: 44px;
+  font-weight: 600;
+  white-space: normal;
+  transition:
+    transform 160ms ease-out,
+    background-color 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out;
+}
+.proof.cinematic .folio-button--primary,
+.workspace-panel.dubizzle-panel .folio-button--primary {
+  color: var(--brand-white);
+  background: var(--brand-red);
+  border: 1px solid var(--brand-red);
+  box-shadow:
+    inset 0 1px 0 #ffffff38,
+    0 3px 0 var(--brand-red-pressed),
+    0 7px 12px -7px #930f1e80;
+}
+.proof.cinematic .folio-button--secondary,
+.workspace-panel.dubizzle-panel .folio-button--secondary {
+  color: var(--brand-ink);
+  background: var(--brand-white);
+  border: 1px solid var(--brand-control-line);
+  box-shadow: 0 2px 0 #20212412;
+}
+.proof.cinematic .folio-button--quiet,
+.workspace-panel.dubizzle-panel .folio-button--quiet {
+  color: var(--brand-ink);
+  background: var(--brand-white);
+  border: 1px solid var(--brand-control-line);
+}
+.proof.cinematic .folio-button[aria-pressed="true"],
+.workspace-panel.dubizzle-panel .folio-button[aria-pressed="true"] {
+  background: var(--brand-rose-strong);
+  border-color: var(--brand-red);
+  color: var(--brand-red-hover);
+}
+
+/* One enclosed object: raised real photograph, readable facts, clear footer. */
+.proof.cinematic .cinema-car {
+  padding: 0.65rem;
+  border: 1px solid var(--brand-rose-line);
+  border-top: 4px solid var(--brand-red);
+  border-radius: 20px;
+  background: linear-gradient(
+    155deg,
+    var(--brand-white),
+    var(--brand-rose) 45%
+  );
+  box-shadow:
+    var(--brand-shadow-card),
+    inset 0 1px 0 var(--brand-white);
+  overflow: visible;
+  transition: transform 220ms ease-out;
+}
+.proof.cinematic .cinema-car:hover {
+  transform: none;
+  box-shadow:
+    var(--brand-shadow-card),
+    inset 0 1px 0 var(--brand-white);
+}
+.proof.cinematic :is(.cinema-car-photo, .inner-vehicle-image) {
+  border: 5px solid var(--brand-white);
+  border-radius: 13px;
+  background: var(--brand-canvas);
+  box-shadow:
+    0 2px 3px #20212408,
+    0 8px 15px -8px #20212440;
+  overflow: hidden;
+}
+.proof.cinematic :is(.cinema-car-photo, .inner-vehicle-image) .folio-photo {
+  background: var(--brand-canvas);
+}
+.proof.cinematic :is(.cinema-car-body, .inner-vehicle-body) {
+  padding: 1.15rem 0.65rem 0.5rem;
+}
+.proof.cinematic .cinema-car-body h3 {
+  overflow-wrap: anywhere;
+}
+.proof.cinematic :is(.cinema-car-price, .inner-vehicle-price) {
+  background: var(--brand-white);
+  border-block: 1px solid var(--brand-rose-line);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+.proof.cinematic :is(.cinema-card-actions, .inner-vehicle-actions) {
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding-top: 0.5rem;
+}
+.proof.cinematic .inner-vehicle-actions > .folio-button {
+  flex: 1 1 auto;
+}
+
+/* Use the detail action's text width before the wrapping row distributes space. */
+.proof.cinematic .inner-detail-actions > .folio-button[aria-pressed] {
+  flex: 1 1 auto;
+  overflow-wrap: normal;
+}
+
+.proof.cinematic .comparison-table-region {
+  border-color: var(--brand-rose-line);
+  border-radius: 18px;
+  box-shadow: var(--brand-shadow-card);
+}
+.proof.cinematic .comparison-vehicle {
+  background: var(--brand-rose);
+  border-top: 4px solid var(--brand-red);
+}
+.proof.cinematic .comparison-image-well {
+  border: 4px solid var(--brand-white);
+  box-shadow: 0 5px 12px -7px #20212460;
+}
+.proof.cinematic .comparison-vehicle-copy {
+  margin-top: 0.5rem;
+}
+.proof.cinematic .comparison-view-link {
+  border-color: var(--brand-control-line);
+  background: var(--brand-white);
+  border-radius: 999px;
+}
+.proof.cinematic :is(.inner-assistant, .inner-task-support, .cinema-assistant) {
+  background: var(--brand-charcoal);
+  border: 1px solid #45464e;
+  box-shadow:
+    var(--brand-shadow-panel),
+    inset 0 1px 0 #ffffff28;
+}
+
+.workspace-panel.dubizzle-panel {
+  --inner-warning: #fff3df;
+  --inner-warning-ink: #80471f;
+  border: 1px solid var(--brand-line);
+  border-top: 4px solid var(--brand-red);
+  border-radius: 20px;
+  box-shadow: var(--brand-shadow-panel);
+  font:
+    400 1rem/1.6 "DM Sans",
+    sans-serif;
+}
+.dubizzle-panel .inner-panel-eyebrow {
+  color: var(--brand-red-hover);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.65rem;
+}
+.dubizzle-panel .workspace-panel-header {
+  background: var(--brand-canvas);
+  border-bottom: 1px solid var(--brand-line);
+  padding-block: 0.65rem 1rem;
+}
+
+/* Extend the same surface hierarchy to detail, review and recovery routes. */
+.proof.cinematic
+  :is(
+    .inner-search-toolbar,
+    .inner-next-actions,
+    .inner-task-state,
+    .inner-detail-section,
+    .inner-review-record,
+    .inner-operation-facts,
+    .proof-review-content,
+    .proof-review-car,
+    .cinema-empty
+  ) {
+  border-radius: 18px;
+  box-shadow: var(--brand-shadow-card);
+}
+.proof.cinematic .inner-search-toolbar {
+  background: linear-gradient(110deg, var(--brand-white), var(--brand-rose));
+  border-color: var(--brand-rose-line);
+}
+.proof.cinematic .inner-detail-overview {
+  padding: 1rem;
+  background: var(--brand-rose);
+  border: 1px solid var(--brand-rose-line);
+  border-top: 4px solid var(--brand-red);
+  border-radius: 22px;
+  box-shadow: var(--brand-shadow-card);
+}
+.proof.cinematic .inner-detail-photo {
+  border: 5px solid var(--brand-white);
+  box-shadow: 0 5px 15px -8px #20212455;
+}
+.proof.cinematic .inner-detail-decision {
+  border: 0;
+  background: var(--brand-white);
+  box-shadow:
+    inset 0 1px 0 var(--brand-white),
+    0 4px 15px -10px #20212440;
+}
+.proof.cinematic .proof-review-car {
+  background: var(--brand-rose);
+  border-top: 4px solid var(--brand-red);
+}
+.proof.cinematic .inner-task-state--success .inner-state-mark {
+  background: var(--folio-success);
+  color: var(--brand-white);
+}
+.proof.cinematic .inner-task-state--success .inner-eyebrow,
+.dubizzle-panel .conversation-action-result {
+  color: var(--folio-success);
+}
+.proof.cinematic .inner-enquiry-form {
+  padding: 0.25rem 1rem 1rem;
+  border: 1px solid var(--brand-line);
+  border-radius: 12px;
+  background: var(--brand-canvas);
+}
+.proof.cinematic .inner-slot-options label {
+  border-color: var(--brand-control-line);
+  background: var(--brand-white);
+  border-radius: 12px;
+}
+.proof.cinematic .inner-slot-options label:has(:checked) {
+  background: var(--brand-rose);
+  border-color: var(--brand-red);
+  box-shadow: inset 3px 0 0 var(--brand-red);
+}
+.proof.cinematic input:is([type="checkbox"], [type="radio"]),
+.dubizzle-panel input:is([type="checkbox"], [type="radio"]) {
+  accent-color: var(--brand-red);
+}
+.dubizzle-panel
+  :is(
+    .conversation-context,
+    .conversation-memory,
+    .conversation-clarification,
+    .inner-panel-service
+  ) {
+  border-radius: 14px;
+  background: var(--brand-white);
+  border-color: var(--brand-line);
+  box-shadow: 0 4px 10px -7px #20212440;
+}
+.dubizzle-panel .conversation-service {
+  color: var(--brand-white);
+  background: var(--brand-charcoal);
+  border-color: #45464e;
+  border-radius: 14px;
+}
+.dubizzle-panel .conversation-context {
+  background: var(--brand-rose);
+  border-color: var(--brand-rose-line);
+}
+.dubizzle-panel .conversation-turns > li {
+  margin-block: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--brand-line);
+  border-radius: 14px;
+  background: var(--brand-white);
+}
+.dubizzle-panel .conversation-turns > li > h3:first-child {
+  color: var(--brand-red-hover);
+}
+.dubizzle-panel .conversation-composer textarea,
+.dubizzle-panel .folio-input {
+  border-color: var(--brand-control-line);
+  border-radius: 12px;
+  background: var(--brand-white);
+}
+.dubizzle-panel .workspace-check {
+  border-color: var(--brand-control-line);
+  background: var(--brand-white);
+}
+.proof.cinematic .cinema-assistant-symbol,
+.proof.cinematic .inner-support-mark,
+.proof.cinematic .inner-assistant-mark {
+  background: var(--brand-rose);
+  color: var(--brand-red);
+  box-shadow:
+    inset 0 1px 0 var(--brand-white),
+    0 3px 0 #00000030;
+}
+.proof.cinematic .cinema-assistant {
+  backdrop-filter: none;
+}
+.proof.cinematic .cinema-compare-art {
+  box-shadow: var(--brand-shadow-panel);
+}
+.proof.cinematic .cinema-value-strip {
+  border-block: 1px solid var(--brand-line);
+  box-shadow: 0 4px 12px -8px #20212430;
+}
+.proof.cinematic .proof-photo-reveal .folio-photo__image {
+  animation: none;
+}
+.proof.cinematic .cinema-header nav .comparison-mobile-access {
+  display: none;
+}
+
+/* Readability refinement from the user's inspected reference, not a font change. */
+.proof.cinematic
+  :is(
+    .cinema-quick-choices button,
+    .cinema-assistant .folio-field__label,
+    .cinema-assistant .folio-input,
+    .cinema-assistant-disclosure,
+    .cinema-search .folio-field__label,
+    .cinema-search .folio-input
+  ) {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.proof.cinematic:not(.inner-workspace) .folio-button,
+.proof.cinematic:not(.inner-workspace) .cinema-card-actions .folio-button,
+.proof.cinematic
+  :is(
+    .cinema-car-facts,
+    .cinema-car-facts .proof-conflicting,
+    .cinema-car-price > span,
+    .cinema-warning,
+    .inner-vehicle-facts dt,
+    .inner-vehicle-price > span,
+    .comparison-card-warning summary,
+    .inner-card-source summary,
+    .comparison-categories > button
+  ) {
+  font-size: 0.875rem;
+}
+.proof.cinematic
+  :is(
+    .cinema-car-make,
+    .cinema-photo-label,
+    .cinema-claim-note,
+    .cinema-car-facts .proof-fact-caption,
+    .cinema-car-facts .proof-claim small,
+    .inner-vehicle-facts .proof-fact-caption,
+    .cinema-source-title > span,
+    .cinema-detail-photo figcaption,
+    .cinema-action-note,
+    .cinema-sample-note,
+    .cinema-result-count,
+    .cinema-assistant-heading p,
+    .cinema-header-note,
+    .cinema-hero-caption,
+    .cinema-compare-art small
+  ) {
+  font-size: 0.75rem;
+}
+.proof.cinematic
+  :is(
+    .cinema-hero-copy > p:not(.cinema-eyebrow),
+    .cinema-collection-intro > p:not(.cinema-eyebrow):not(.cinema-sample-note),
+    .inner-state-copy p,
+    .inner-original-description,
+    .inner-task-support > p,
+    .inner-assistant-response > p:not(.inner-eyebrow)
+  ),
+.workspace-panel.dubizzle-panel .workspace-panel-header + p,
+.workspace-panel.dubizzle-panel .workspace-form > p {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* Feedback never changes dimensions, intercepts input, or enables a pending action. */
+.proof.cinematic :is(button, summary),
+.dubizzle-panel :is(button, summary) {
+  touch-action: manipulation;
+}
+.proof.cinematic :is(button, a, summary, input, textarea, select):focus-visible,
+.dubizzle-panel :is(button, a, summary, input, textarea, select):focus-visible {
+  outline: 3px solid var(--brand-red-hover);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 2px var(--brand-white);
+}
+.proof.cinematic a:not(.folio-button):active,
+.dubizzle-panel a:not(.folio-button):active {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+.proof.cinematic
+  :is(button, .folio-button):active:not(:disabled):not([aria-disabled="true"]),
+.dubizzle-panel
+  :is(button, .folio-button):active:not(:disabled):not([aria-disabled="true"]) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px #20212424;
+}
+.proof.cinematic
+  .folio-button--primary:active:not(:disabled):not([aria-disabled="true"]),
+.dubizzle-panel
+  .folio-button--primary:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--brand-red-pressed);
+  border-color: var(--brand-red-pressed);
+  color: var(--brand-white);
+}
+.proof.cinematic
+  :is(button, .folio-button):is(:disabled, [aria-disabled="true"]),
+.dubizzle-panel
+  :is(button, .folio-button):is(:disabled, [aria-disabled="true"]) {
+  background: var(--folio-disabled-surface);
+  border-color: var(--brand-control-line);
+  color: var(--brand-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .proof.cinematic
+    :is(button, .folio-button, .comparison-view-link, summary):hover:not(
+      :disabled
+    ):not([aria-disabled="true"]),
+  .dubizzle-panel
+    :is(button, .folio-button, summary):hover:not(:disabled):not(
+      [aria-disabled="true"]
+    ) {
+    background: var(--brand-rose-strong);
+    border-color: var(--brand-red);
+    color: var(--brand-red-hover);
+  }
+  .proof.cinematic
+    .folio-button--primary:hover:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel
+    .folio-button--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--brand-red-hover);
+    border-color: var(--brand-red-hover);
+    color: var(--brand-white);
+  }
+  .proof.cinematic
+    .cinema-header
+    :is(nav a, nav button, .workspace-access):hover:not(:disabled):not(
+      [aria-disabled="true"]
+    ),
+  .proof.cinematic
+    .cinema-mobile-tools
+    :is(a, button):hover:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--brand-red-hover);
+    background: var(--brand-rose);
+    border-color: var(--brand-red);
+  }
+  .proof.cinematic
+    .cinema-header
+    nav
+    [aria-current="page"]:hover:not(:disabled):not([aria-disabled="true"]),
+  .proof.cinematic
+    .comparison-categories
+    button[aria-current]:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--brand-red-hover);
+    color: var(--brand-white);
+  }
+  .proof.cinematic a:not(.folio-button):hover,
+  .dubizzle-panel a:not(.folio-button):hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+  .proof.cinematic .cinema-header :is(nav a, .cinema-brand):hover {
+    text-decoration: none;
+  }
+  .proof.cinematic :is(input, textarea, select):hover:not(:disabled),
+  .dubizzle-panel :is(input, textarea, select):hover:not(:disabled) {
+    border-color: var(--brand-red);
+  }
+  .proof.cinematic .inner-slot-options label:has(input:enabled):hover,
+  .dubizzle-panel .workspace-check:has(input:enabled):hover {
+    background: var(--brand-rose);
+    border-color: var(--brand-red);
+  }
+  .proof.cinematic
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(1px);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .proof.cinematic .cinema-car:hover:not(:focus-within) {
+    transform: translateY(-3px);
+  }
+  .proof.cinematic
+    .folio-button:hover:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel
+    .folio-button:hover:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(-1px);
+  }
+  .proof.cinematic
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(1px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .proof.cinematic .cinema-header {
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+  .proof.cinematic .cinema-header nav {
+    margin-inline: auto 0;
+  }
+}
+@media (max-width: 560px) {
+  .proof.cinematic .cinema-header {
+    min-height: 82px;
+    gap: 0.65rem;
+  }
+  .proof.cinematic .cinema-brand {
+    font-size: 2.15rem;
+  }
+  .proof.cinematic .cinema-brand span {
+    font-size: 0.75rem;
+  }
+  .proof.cinematic .cinema-mobile-tools {
+    gap: 0.35rem;
+  }
+  .proof.cinematic .cinema-mobile-tools :is(a, button) {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.8125rem;
+  }
+  .proof.cinematic .cinema-header nav {
+    margin: 0;
+    border: 0;
+    padding: 0.4rem 0 0.25rem;
+  }
+  .proof.cinematic .cinema-header nav[data-open="true"] {
+    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    min-width: 0;
+  }
+  .proof.cinematic .cinema-header nav :is(a, button) {
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .proof.cinematic .cinema-header .workspace-access {
+    display: none;
+  }
+  .proof.cinematic .cinema-header nav .comparison-mobile-access {
+    display: inline-flex;
+  }
+  .proof.cinematic .inner-detail-overview {
+    padding: 0.65rem;
+    gap: 1rem;
+  }
+  .proof.cinematic .inner-detail-decision {
+    padding: 1rem;
+  }
+}
+@media (max-width: 959px) {
+  .workspace-panel.dubizzle-panel {
+    inset: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+}
+@media (max-width: 360px) {
+  /* Rem sizes still enlarge with user text preferences; words get more room. */
+  .proof.cinematic .cinema-hero h1 {
+    font-size: 2rem;
+    overflow-wrap: break-word;
+  }
+  .proof.cinematic .cinema-hero h1 em {
+    display: inline-block;
+    max-width: 100%;
+  }
+  .proof.cinematic .inner-detail-heading h1 {
+    font-size: 1.75rem;
+    overflow-wrap: break-word;
+  }
+  .workspace-panel.dubizzle-panel .workspace-panel-header h2 {
+    font-size: 1.5rem;
+    overflow-wrap: break-word;
+  }
+  .proof.cinematic .cinema-mobile-tools {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
+  .proof.cinematic .cinema-header nav[data-open="true"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Navigation gets a visible press state without shifting its hit area. */
+.proof.cinematic
+  .cinema-header
+  :is(nav a, nav button, .workspace-access):active:not(:disabled):not(
+    [aria-disabled="true"]
+  ),
+.proof.cinematic
+  .cinema-mobile-tools
+  :is(a, button):active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--brand-red-hover);
+  background: var(--brand-rose-strong);
+  border-color: var(--brand-red);
+  box-shadow: inset 0 2px 3px #20212424;
+  text-decoration: none;
+}
+.proof.cinematic
+  .cinema-header
+  nav
+  [aria-current="page"]:active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--brand-white);
+  background: var(--brand-red-pressed);
+  border-color: var(--brand-red-pressed);
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .proof.cinematic
+    :is(button, .folio-button):active:not(:disabled):not(
+      [aria-disabled="true"]
+    ),
+  .dubizzle-panel
+    :is(button, .folio-button):active:not(:disabled):not(
+      [aria-disabled="true"]
+    ),
+  .proof.cinematic .cinema-car,
+  .proof.cinematic .cinema-car:hover,
+  .proof.cinematic .folio-button,
+  .proof.cinematic
+    .folio-button:hover:not(:disabled):not([aria-disabled="true"]),
+  .proof.cinematic
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel .folio-button,
+  .dubizzle-panel
+    .folio-button:hover:not(:disabled):not([aria-disabled="true"]),
+  .dubizzle-panel
+    .folio-button:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+    transition: none;
+  }
+}
+/* Keep the two-color focus indicator above every hover/pressed shadow. */
+.proof.cinematic
+  :is(button, a, summary, input, textarea, select, [tabindex]):focus-visible:is(
+    :hover,
+    :active,
+    :focus-visible
+  ):not(:disabled):not([aria-disabled="true"]),
+.workspace-panel.dubizzle-panel
+  :is(button, a, summary, input, textarea, select, [tabindex]):focus-visible:is(
+    :hover,
+    :active,
+    :focus-visible
+  ):not(:disabled):not([aria-disabled="true"]) {
+  outline: 3px solid var(--brand-red-hover);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 2px var(--brand-white);
+}
+@media (forced-colors: active) {
+  .proof.cinematic
+    :is(button, a, summary, input, textarea, select):focus-visible,
+  .dubizzle-panel
+    :is(button, a, summary, input, textarea, select):focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+  .proof.cinematic
+    :is(
+      button,
+      a,
+      summary,
+      input,
+      textarea,
+      select,
+      [tabindex]
+    ):focus-visible:is(:hover, :active, :focus-visible):not(:disabled):not(
+      [aria-disabled="true"]
+    ),
+  .workspace-panel.dubizzle-panel
+    :is(
+      button,
+      a,
+      summary,
+      input,
+      textarea,
+      select,
+      [tabindex]
+    ):focus-visible:is(:hover, :active, :focus-visible):not(:disabled):not(
+      [aria-disabled="true"]
+    ) {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+  .proof.cinematic .cinema-header nav [aria-current="page"],
+  .proof.cinematic .folio-button[aria-pressed="true"],
+  .proof.cinematic .inner-slot-options label:has(:checked) {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* S19 representative header extension. Actual crop and fit review pending. */
+/* Preserve the complete official app tile beside the existing wordmark. */
+.proof.cinematic .cinema-brand .cinema-brand-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+.proof.cinematic .cinema-brand-name img {
+  display: block;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  max-width: none;
+  object-fit: contain;
+}
+.proof.cinematic .cinema-header {
+  padding-inline: 1rem;
+  margin-block: 0.75rem;
+  border: 1px solid #20212426;
+  border-radius: 12px;
+  box-shadow: 0 5px 16px -11px #20212450;
+  clip-path: none;
+}
+
+.proof.cinematic .inner-masthead--architecture,
+.proof.cinematic .inner-masthead--editorial {
+  border: 1px solid #2021243d;
+  border-radius: 12px;
+}
+.proof.cinematic .inner-masthead--architecture {
+  padding-inline: 1.25rem;
+}
+.proof.cinematic .inner-masthead--editorial {
+  display: block;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 160px;
+  padding: 1.25rem;
+  background: var(--brand-canvas);
+}
+.proof.cinematic .inner-masthead--editorial > div {
+  position: relative;
+  z-index: 1;
+  max-width: 52%;
+}
+.proof.cinematic .inner-masthead--editorial .inner-masthead-copy {
+  margin-top: 0.7rem;
+  padding: 0;
+  border: 0;
+}
+.proof.cinematic .inner-header-art {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 44%;
+  height: 100%;
+  object-fit: cover;
+  mask-image: linear-gradient(90deg, transparent, #000 35%);
+  pointer-events: none;
+}
+.proof.cinematic .inner-header-art--short-fade {
+  mask-image: linear-gradient(90deg, transparent, #000 20%);
+}
+.proof.cinematic .inner-header-art--listing {
+  margin: 0;
+}
+.proof.cinematic .inner-header-art--listing .folio-photo {
+  height: 100%;
+  aspect-ratio: auto;
+}
+@media (min-width: 768px) {
+  .proof.cinematic
+    .inner-masthead--editorial:has(> .inner-header-art--short-fade) {
+    min-height: 200px;
+  }
+}
+@media (max-width: 767px) {
+  .proof.cinematic .cinema-brand-name img {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .proof.cinematic .inner-masthead--editorial {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 0;
+  }
+  .proof.cinematic .inner-masthead--editorial > div {
+    max-width: none;
+    padding: 16px;
+  }
+  .proof.cinematic .inner-masthead--editorial .inner-masthead-copy {
+    margin: 0;
+    padding: 0 16px 16px;
+  }
+  .proof.cinematic .inner-header-art {
+    position: static;
+    grid-row: 1;
+    width: 100%;
+    height: 112px;
+    mask-image: none;
+    border-bottom: 1px solid #20212426;
+  }
+}
+@media (max-width: 360px) {
+  .proof.cinematic .cinema-brand {
+    font-size: 1.6rem;
+  }
+  .proof.cinematic .cinema-header {
+    padding-inline: 12px;
+  }
+  .proof.cinematic .inner-masthead--architecture {
+    padding-inline: 12px;
+  }
+  .proof.cinematic .inner-masthead--editorial > div,
+  .proof.cinematic .inner-masthead--editorial .inner-masthead-copy {
+    padding-inline: 12px;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "asset_id": "dubizzle-official-lockup",
+  "asset_path": "References/product-assets/header-set/brand/dubizzle-official-lockup.svg",
+  "asset_kind": "official_complete_lockup",
+  "source_page_url": "https://www.dubizzle.com/",
+  "source_asset_url": "https://static.dubizzle.com/static_assets/dubizzleLogo.svg",
+  "association_evidence": "Official homepage web retrieval exposes the image labelled Dubizzle with this exact static.dubizzle.com target.",
+  "retrieved_at_utc": "2026-09-24T06:05:16.744086+00:00",
+  "http_status": 200,
+  "content_type": "image/svg+xml",
+  "sha256": "5830b4ca4f7aef9c5a9b245d3099bc1ec1c83f63135f7c018122c1c007f8b9e9",
+  "size_bytes": 4575,
+  "intrinsic_dimensions": { "width": 111, "height": 36, "aspect_ratio": "37:12" },
+  "source_colors": ["#1B1D1B", "#E00000"],
+  "transformations": "none; exact official response bytes preserved",
+  "symbol_only_asset": null,
+  "symbol_only_reason": "No independently verified complete-symbol asset found in the bounded link check; person/letterform and wordmark share a single path, so no extraction or tracing was performed.",
+  "frontend_usage": "Use the complete lockup in place of the existing dubizzle wordmark. Do not display an additional dubizzle name beside it. Preserve proportions and official colors.",
+  "source_quirks": ["view-box is nonstandard; standard viewBox is absent", "fillRule is nonstandard; source bytes deliberately unchanged"],
+  "static_svg_check": "PASS_STATIC_PASSIVE_CONTENT_CHECK",
+  "browser_render_status": "NOT_RUN",
+  "rights": {
+    "official_source": true,
+    "reuse_permission": "NOT_ESTABLISHED",
+    "license": null,
+    "terms_source": "https://www.dubizzle.com/legalhub/terms/",
+    "note": "Official terms require prior written consent for use of displayed marks. Download availability and user direction are not recorded as a third-party license; no public deployment or publication was performed."
+  },
+  "evidence": [
+    "Records/build/studio/header-set/brand-source.md",
+    "Records/build/studio/header-set/brand-retrieval.json",
+    "Records/build/studio/header-set/brand-verification.json",
+    "Records/build/studio/header-set/brand-icon-discovery.json"
+  ]
+}

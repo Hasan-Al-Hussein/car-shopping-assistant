@@ -1,0 +1,44 @@
+[
+  {
+    "file": "backend/app/inventory/import_reader.py",
+    "expected_sha256": "42e9080bfca591dd3eac6429073a4be974f71da6292796e0eaa35cd85af6354b",
+    "actual_sha256": "42e9080bfca591dd3eac6429073a4be974f71da6292796e0eaa35cd85af6354b",
+    "unchanged": true
+  },
+  {
+    "file": "backend/app/inventory/ooxml_structure.py",
+    "expected_sha256": "463056adcf75ba5a143bbb139bd99e41055b4dd04c6c2cb7c250d551c1353a81",
+    "actual_sha256": "463056adcf75ba5a143bbb139bd99e41055b4dd04c6c2cb7c250d551c1353a81",
+    "unchanged": true
+  },
+  {
+    "file": "backend/tests/inventory/test_normalization.py",
+    "expected_sha256": "c17c56bae69bae96fa16f295ced86d3e0ee7b10ceef0d202bab9e4c3372eb5df",
+    "actual_sha256": "c17c56bae69bae96fa16f295ced86d3e0ee7b10ceef0d202bab9e4c3372eb5df",
+    "unchanged": true
+  },
+  {
+    "file": "backend/tests/inventory/test_import_reader.py",
+    "expected_sha256": "e08853bf48d64fa1bb79e0dc7f64885e33997bb7f1f1d15e253f720b682d7906",
+    "actual_sha256": "e08853bf48d64fa1bb79e0dc7f64885e33997bb7f1f1d15e253f720b682d7906",
+    "unchanged": true
+  },
+  {
+    "file": "backend/app/inventory/text_normalization.py",
+    "expected_sha256": "8416b7b9fb85ff7eefbf6d50b794205f64ed8dbd538857e1629c6114a68b0e41",
+    "actual_sha256": "8416b7b9fb85ff7eefbf6d50b794205f64ed8dbd538857e1629c6114a68b0e41",
+    "unchanged": true
+  },
+  {
+    "file": "backend/app/inventory/references.py",
+    "expected_sha256": "e3fe92603dea970584e4032152bf7503f01662c2008f9ed7510e67979524395a",
+    "actual_sha256": "e3fe92603dea970584e4032152bf7503f01662c2008f9ed7510e67979524395a",
+    "unchanged": true
+  },
+  {
+    "file": "backend/app/inventory/normalization.py",
+    "expected_sha256": "cd10adab247f9ab37cc8b181c57840e3b443fd79890c147502ee282799eceeb2",
+    "actual_sha256": "cd10adab247f9ab37cc8b181c57840e3b443fd79890c147502ee282799eceeb2",
+    "unchanged": true
+  }
+]

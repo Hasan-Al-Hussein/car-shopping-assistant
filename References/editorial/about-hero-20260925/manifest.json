@@ -1,0 +1,14 @@
+{
+  "role": "About-page decorative automotive header, not an inventory listing",
+  "file": "frontend/public/cinematic/headers/about-porsche-front.jpg",
+  "source_page": "https://unsplash.com/photos/close-up-of-a-red-porsche-car-front-Fq9Zm-U7FD0",
+  "source_image": "https://images.unsplash.com/photo-1767023208259-eb83a4660fb0?auto=format&fit=max&fm=jpg&q=85&w=1600",
+  "photographer": "Zhen Yao",
+  "license": "Unsplash License",
+  "license_url": "https://unsplash.com/license",
+  "source_page_observed_free": true,
+  "width": 1600,
+  "height": 1067,
+  "sha256": "029cedfbd9276c7bb46ce384b5150c6433aaf16fac9fb1c53b9b61b4071f38d0",
+  "decision": "Close view of red Porsche front; rejects mountain-dominant road candidate; unchanged original bytes"
+}

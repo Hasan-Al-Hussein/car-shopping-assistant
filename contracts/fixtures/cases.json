@@ -1,0 +1,452 @@
+[
+  {
+    "id": "identity-explicit-notice",
+    "model": "IdentityBootstrapRequest",
+    "valid": true,
+    "payload": {
+      "notice_version": "DEMO-POLICY-1",
+      "notice_acknowledged": true,
+      "display_name": "Synthetic Buyer"
+    }
+  },
+  {
+    "id": "identity-no-notice",
+    "model": "IdentityBootstrapRequest",
+    "valid": false,
+    "payload": {
+      "notice_version": "DEMO-POLICY-1",
+      "notice_acknowledged": false
+    },
+    "expected_error": {
+      "loc": [],
+      "type": "value_error"
+    }
+  },
+  {
+    "id": "identity-owner-injection",
+    "model": "IdentityBootstrapRequest",
+    "valid": false,
+    "payload": {
+      "notice_version": "DEMO-POLICY-1",
+      "notice_acknowledged": true,
+      "owner_id": "victim"
+    },
+    "expected_error": {
+      "loc": [
+        "owner_id"
+      ],
+      "type": "extra_forbidden"
+    }
+  },
+  {
+    "id": "identity-string-bool",
+    "model": "IdentityBootstrapRequest",
+    "valid": false,
+    "payload": {
+      "notice_version": "DEMO-POLICY-1",
+      "notice_acknowledged": "true"
+    },
+    "expected_error": {
+      "loc": [
+        "notice_acknowledged"
+      ],
+      "type": "bool_type"
+    }
+  },
+  {
+    "id": "budget-minor-units",
+    "model": "BudgetRange",
+    "valid": true,
+    "payload": {
+      "minimum": 1000000,
+      "maximum": 2000000,
+      "currency": "AED",
+      "basis": "cash"
+    }
+  },
+  {
+    "id": "budget-reversed",
+    "model": "BudgetRange",
+    "valid": false,
+    "payload": {
+      "minimum": 2000000,
+      "maximum": 1000000,
+      "currency": "AED",
+      "basis": "cash"
+    },
+    "expected_error": {
+      "loc": [],
+      "type": "value_error"
+    }
+  },
+  {
+    "id": "budget-float-rejected",
+    "model": "BudgetRange",
+    "valid": false,
+    "payload": {
+      "maximum": 2000000.1,
+      "currency": "AED",
+      "basis": "cash"
+    },
+    "expected_error": {
+      "loc": [
+        "maximum"
+      ],
+      "type": "int_type"
+    }
+  },
+  {
+    "id": "budget-finance-not-cash",
+    "model": "BudgetRange",
+    "valid": false,
+    "payload": {
+      "maximum": 2000000,
+      "currency": "AED",
+      "basis": "monthly_finance"
+    },
+    "expected_error": {
+      "loc": [
+        "basis"
+      ],
+      "type": "literal_error"
+    }
+  },
+  {
+    "id": "search-trim-and-budget",
+    "model": "SearchRequest",
+    "valid": true,
+    "payload": {
+      "query": "synthetic",
+      "filters": {
+        "trims": [
+          "example"
+        ],
+        "budget": {
+          "maximum": 2000000,
+          "currency": "AED"
+        }
+      },
+      "page_size": 20,
+      "client_request_id": "00000000-0000-4000-8000-000000000001"
+    }
+  },
+  {
+    "id": "search-too-many-results",
+    "model": "SearchRequest",
+    "valid": false,
+    "payload": {
+      "page_size": 51,
+      "client_request_id": "00000000-0000-4000-8000-000000000001"
+    },
+    "expected_error": {
+      "loc": [
+        "page_size"
+      ],
+      "type": "less_than_equal"
+    }
+  },
+  {
+    "id": "search-string-page",
+    "model": "SearchRequest",
+    "valid": false,
+    "payload": {
+      "page_size": "20",
+      "client_request_id": "00000000-0000-4000-8000-000000000001"
+    },
+    "expected_error": {
+      "loc": [
+        "page_size"
+      ],
+      "type": "int_type"
+    }
+  },
+  {
+    "id": "search-unsupported-hard-filter",
+    "model": "SearchRequest",
+    "valid": false,
+    "payload": {
+      "filters": {
+        "sunroof": true
+      },
+      "client_request_id": "00000000-0000-4000-8000-000000000001"
+    },
+    "expected_error": {
+      "loc": [
+        "filters",
+        "sunroof"
+      ],
+      "type": "extra_forbidden"
+    }
+  },
+  {
+    "id": "explicit-preference",
+    "model": "PreferencesUpdate",
+    "valid": true,
+    "payload": {
+      "expected_revision": 0,
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "client_action_id": "00000000-0000-4000-8000-000000000002",
+      "scope": "durable",
+      "intent": "remember",
+      "changes": [
+        {
+          "strength": "soft",
+          "key": "makes",
+          "value": [
+            "Synthetic"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "one-time-not-durable",
+    "model": "PreferencesUpdate",
+    "valid": false,
+    "payload": {
+      "expected_revision": 0,
+      "session_id": "00000000-0000-4000-8000-000000000001",
+      "client_action_id": "00000000-0000-4000-8000-000000000002",
+      "scope": "session",
+      "intent": "remember",
+      "changes": [
+        {
+          "strength": "soft",
+          "key": "makes",
+          "value": [
+            "Synthetic"
+          ]
+        }
+      ]
+    },
+    "expected_error": {
+      "loc": [
+        "scope"
+      ],
+      "type": "literal_error"
+    }
+  },
+  {
+    "id": "membership-command",
+    "model": "MembershipRequest",
+    "valid": true,
+    "payload": {
+      "expected_revision": 4,
+      "client_action_id": "00000000-0000-4000-8000-000000000002"
+    }
+  },
+  {
+    "id": "membership-missing-revision",
+    "model": "MembershipRequest",
+    "valid": false,
+    "payload": {
+      "client_action_id": "00000000-0000-4000-8000-000000000002"
+    },
+    "expected_error": {
+      "loc": [
+        "expected_revision"
+      ],
+      "type": "missing"
+    }
+  },
+  {
+    "id": "exact-confirm",
+    "model": "ConfirmRequest",
+    "valid": true,
+    "payload": {
+      "review_id": "00000000-0000-4000-8000-000000000003",
+      "expected_draft_revision": 1,
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rules_version": "DEMO-POLICY-1",
+      "store_generation": "00000000-0000-4000-8000-000000000004",
+      "confirmation": "confirm_simulated_viewing"
+    }
+  },
+  {
+    "id": "confirm-time-replacement",
+    "model": "ConfirmRequest",
+    "valid": false,
+    "payload": {
+      "review_id": "00000000-0000-4000-8000-000000000003",
+      "expected_draft_revision": 1,
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "rules_version": "DEMO-POLICY-1",
+      "store_generation": "00000000-0000-4000-8000-000000000004",
+      "confirmation": "confirm_simulated_viewing",
+      "starts_at_utc": "2026-09-24T06:00:00Z"
+    },
+    "expected_error": {
+      "loc": [
+        "starts_at_utc"
+      ],
+      "type": "extra_forbidden"
+    }
+  },
+  {
+    "id": "not-observed-is-uncertain",
+    "model": "OperationStatus",
+    "valid": true,
+    "payload": {
+      "state": "not_observed",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observed_store_generation": "00000000-0000-4000-8000-000000000004",
+      "definitive_noncommit": false,
+      "recovery": "read_original_operation"
+    }
+  },
+  {
+    "id": "not-observed-is-not-failure",
+    "model": "OperationStatus",
+    "valid": false,
+    "payload": {
+      "state": "not_observed",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observed_store_generation": "00000000-0000-4000-8000-000000000004",
+      "definitive_noncommit": true,
+      "recovery": "retry_original_operation"
+    },
+    "expected_error": {
+      "loc": [
+        "not_observed",
+        "definitive_noncommit"
+      ],
+      "type": "literal_error"
+    }
+  },
+  {
+    "id": "restore-generation-unresolved",
+    "model": "OperationStatus",
+    "valid": true,
+    "payload": {
+      "state": "unresolved_generation",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observed_store_generation": "00000000-0000-4000-8000-000000000004",
+      "submitted_store_generation": "00000000-0000-4000-8000-000000000005",
+      "definitive_noncommit": false,
+      "recovery": "operator_reconciliation"
+    }
+  },
+  {
+    "id": "restore-may-not-auto-replay",
+    "model": "OperationStatus",
+    "valid": false,
+    "payload": {
+      "state": "unresolved_generation",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "observed_store_generation": "00000000-0000-4000-8000-000000000004",
+      "submitted_store_generation": "00000000-0000-4000-8000-000000000005",
+      "recovery": "retry_original_operation"
+    },
+    "expected_error": {
+      "loc": [
+        "unresolved_generation",
+        "recovery"
+      ],
+      "type": "literal_error"
+    }
+  },
+  {
+    "id": "durable-rejection",
+    "model": "OperationStatus",
+    "valid": true,
+    "payload": {
+      "state": "rejected",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "review_id": "00000000-0000-4000-8000-000000000003",
+      "original_store_generation": "00000000-0000-4000-8000-000000000004",
+      "terminal_at": "2026-09-23T18:00:00Z",
+      "replay_valid_until": "2026-12-22T18:00:00Z",
+      "rejection_code": "CAPACITY_UNAVAILABLE",
+      "booking": {
+        "state": "not_created"
+      },
+      "lead": {
+        "state": "not_requested"
+      },
+      "csv": {
+        "state": "not_requested"
+      }
+    }
+  },
+  {
+    "id": "rejection-cannot-have-booking",
+    "model": "OperationStatus",
+    "valid": false,
+    "payload": {
+      "state": "rejected",
+      "operation_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "review_id": "00000000-0000-4000-8000-000000000003",
+      "original_store_generation": "00000000-0000-4000-8000-000000000004",
+      "terminal_at": "2026-09-23T18:00:00Z",
+      "replay_valid_until": "2026-12-22T18:00:00Z",
+      "rejection_code": "CAPACITY_UNAVAILABLE",
+      "booking": {
+        "state": "confirmed_simulated"
+      },
+      "lead": {
+        "state": "not_requested"
+      },
+      "csv": {
+        "state": "not_requested"
+      }
+    },
+    "expected_error": {
+      "loc": [
+        "rejected",
+        "booking",
+        "state"
+      ],
+      "type": "literal_error"
+    }
+  },
+  {
+    "id": "current-export",
+    "model": "ExportCurrent",
+    "valid": true,
+    "payload": {
+      "state": "current",
+      "store_generation": "00000000-0000-4000-8000-000000000004",
+      "observed_at": "2026-09-23T18:00:00Z",
+      "canonical_version": 2,
+      "exported_version": 2
+    }
+  },
+  {
+    "id": "stale-export-is-not-current",
+    "model": "ExportCurrent",
+    "valid": false,
+    "payload": {
+      "state": "current",
+      "store_generation": "00000000-0000-4000-8000-000000000004",
+      "observed_at": "2026-09-23T18:00:00Z",
+      "canonical_version": 3,
+      "exported_version": 2
+    },
+    "expected_error": {
+      "loc": [],
+      "type": "value_error"
+    }
+  },
+  {
+    "id": "contact-declined",
+    "model": "ContactValue",
+    "valid": true,
+    "payload": {
+      "state": "declined",
+      "value": null
+    }
+  },
+  {
+    "id": "missing-contact-cannot-contain-value",
+    "model": "ContactValue",
+    "valid": false,
+    "payload": {
+      "state": "missing",
+      "value": "synthetic@example.invalid"
+    },
+    "expected_error": {
+      "loc": [],
+      "type": "value_error"
+    }
+  }
+]

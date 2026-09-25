@@ -1,0 +1,1352 @@
+{
+  "schema_version": "fe03-source-fixture-audit-1",
+  "audited_at_utc": "2026-09-23T20:36:57.071214+00:00",
+  "scope": "Bounded manual source evidence for development-only FE03 proof. No production ingestion, activation or backend fact extraction.",
+  "canonical_project_root": "${PROJECT_ROOT}",
+  "workbook": {
+    "path": "sources/Copy_of_sample_cars_dataset.xlsx",
+    "sha256_before": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+    "sha256_after": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+    "worksheet": "cleaned dataset",
+    "worksheet_xml": "xl/worksheets/sheet2.xml",
+    "read_method": "Python standard-library read-only ZIP/XML; shared strings resolved without normalization; actual A-cell IDs matched to Studio by workbook hash + exact sheet + source ID."
+  },
+  "snapshot_reference_convention": {
+    "accepted_protocol": "contracts/v1/inventory_protocol.md",
+    "namespace": "provided-cars-cleaned",
+    "source_id_rule": "String form of validated original Listing_ID read from actual A cell, never row arithmetic.",
+    "snapshot_rule": "SHA256 of UTF-8 sorted-key compact canonical JSON over exactly eight accepted protocol keys.",
+    "proposal_status": "FE03_ONLY_PROPOSED_MANUAL_FIXTURE_VERSION_LABELS; not published or activated; lead owns final fixture mapping.",
+    "preimage": {
+      "namespace": "provided-cars-cleaned",
+      "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+      "sheet": "cleaned dataset",
+      "normalization_version": "fe03-manual-labels-v1",
+      "extraction_version": "fe03-manual-excerpts-v1",
+      "evidence_review_version": "fe03-source-fixture-audit-v1",
+      "photo_policy_version": "fe03-exact-source-photo-v1",
+      "schema_version": "1.0.0"
+    },
+    "canonical_json": "{\"evidence_review_version\":\"fe03-source-fixture-audit-v1\",\"extraction_version\":\"fe03-manual-excerpts-v1\",\"namespace\":\"provided-cars-cleaned\",\"normalization_version\":\"fe03-manual-labels-v1\",\"photo_policy_version\":\"fe03-exact-source-photo-v1\",\"schema_version\":\"1.0.0\",\"sheet\":\"cleaned dataset\",\"workbook_sha256\":\"94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9\"}",
+    "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+    "not_equal_to_workbook_hash": true,
+    "change_rule": "Any changed source or manually derived meaning must bump the corresponding version label and digest. Do not reuse a backend normalization-only snapshot for these manual claims."
+  },
+  "source_evidence_hashes": [
+    {
+      "path": "docs/evidence/dataset_audit.md",
+      "sha256": "5a4b70653ee07d230f774c7aff76905f0bd4a3d14288a35025b95496ffa16a30"
+    },
+    {
+      "path": "fixtures/shared/source-facts.json",
+      "sha256": "f5a9e6439b932c287afe142170e343d06a221e48050acd0d775265770f6df003"
+    },
+    {
+      "path": "References/product-assets/listing_photo_manifest.json",
+      "sha256": "a4e962e6e10d4bb87543c5691f3eb59164134b44c19a130b1fa44ee3caeda5dc"
+    },
+    {
+      "path": "References/product-assets/frontend_integration.md",
+      "sha256": "c77eaedf7d2d605458b2b0d2e39d72a7c8f149b8c81079c0dd295f3a0b6d2e41"
+    },
+    {
+      "path": "Records/build/studio/url_checks.json",
+      "sha256": "bfbc17f6016324f766d049ab444ef2f1b31893834bd6c98cafdc4c0b25a1199e"
+    },
+    {
+      "path": "contracts/v1/inventory_protocol.md",
+      "sha256": "e68eeb0cf30e6eee2d8e03f835b08fde6be4a2e454ef359d729c311717b054e9"
+    }
+  ],
+  "recommended_core_source_ids": [
+    "4",
+    "27",
+    "52",
+    "17",
+    "35"
+  ],
+  "optional_numeric_label_source_ids": [
+    "12",
+    "22"
+  ],
+  "ordinary_photo_candidate_source_id": "1",
+  "records": [
+    {
+      "source_id": "4",
+      "recommended_role": "core",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 5,
+        "listing_id_cell": "A5"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "4"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 4.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "4.0",
+          "display_label": "4",
+          "cell": "A5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2019.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2019.0",
+          "display_label": "2019",
+          "cell": "B5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "mercedes-benz",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "13",
+          "display_label": "mercedes-benz",
+          "cell": "C5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "e-class",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "101",
+          "display_label": "e-class",
+          "cell": "D5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "e 400",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "466",
+          "display_label": "e 400",
+          "cell": "E5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "MERCEDES E 450 COUPE 2019 JAPANESE SPECS",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "467",
+          "display_label": "MERCEDES E 450 COUPE 2019 JAPANESE SPECS",
+          "cell": "F5",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [
+        {
+          "attribute": "trim",
+          "state": "conflicting",
+          "display_summary": "Trim differs: e 400 in the field; E 450 in the title.",
+          "claims": [
+            {
+              "label": "e 400",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "E5",
+                "raw_type": "str",
+                "cell_text_sha256": "fb0d6fc935a76fa53cd6d149f91efac468f7b264c167516f4b5e57b0f6ae40e1",
+                "raw_text": "e 400",
+                "span": {
+                  "start": 0,
+                  "end": 5,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            },
+            {
+              "label": "E 450",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "F5",
+                "raw_type": "str",
+                "cell_text_sha256": "efc9a8133a07cd408a21d9cc8978f9dc7b5f45fb98be50dd5205c4d4c1fa5d4f",
+                "raw_text": "E 450",
+                "span": {
+                  "start": 9,
+                  "end": 14,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F5",
+          "G5"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H5",
+        "url": "https://dbz-images.dubizzle.com/images/2024/05/19/c47ef9ac50f548b580033ad92d14bd0c-.heic?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "CHECKED_URL_ONLY",
+          "evidence_path": "Records/build/studio/url_checks.json",
+          "same_url_observation_may_cover_multiple_source_rows": true,
+          "requests": [
+            {
+              "method": "HEAD",
+              "checked_at_utc": "2026-09-23T18:27:32.267772+00:00",
+              "status": "HTTP_RESPONSE_OBSERVED",
+              "http_status": 200,
+              "response_headers": {
+                "Content-Type": "image/webp",
+                "Content-Length": "108292",
+                "Cache-Control": "public, max-age=15768000, immutable",
+                "ETag": "\"dd075849bf002290b917d3ccfa65abeb\"",
+                "Last-Modified": "Mon, 02 Mar 2026 20:42:45 GMT"
+              },
+              "prefix_format": null,
+              "body_bytes_read": 0
+            },
+            {
+              "method": "GET",
+              "checked_at_utc": "2026-09-23T18:27:35.099369+00:00",
+              "status": "HTTP_RESPONSE_OBSERVED",
+              "http_status": 206,
+              "response_headers": {
+                "Content-Type": "image/webp",
+                "Content-Length": "4096",
+                "Content-Range": "bytes 0-4095/108292",
+                "Cache-Control": "public, max-age=15768000, immutable",
+                "ETag": "\"dd075849bf002290b917d3ccfa65abeb\"",
+                "Last-Modified": "Mon, 02 Mar 2026 20:42:45 GMT"
+              },
+              "prefix_format": "webp",
+              "body_bytes_read": 4096
+            }
+          ],
+          "browser_display": "NOT_TESTED",
+          "image_content": "NOT_INSPECTED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [
+        {
+          "attribute": "mileage",
+          "classification": "listing_claim",
+          "value": 56000,
+          "unit": "km",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "G5",
+            "raw_type": "str",
+            "cell_text_sha256": "879ca534bbba34f3c5f1ba8f5369f38245d3e1b5c43956a7ec2562a51b2af363",
+            "raw_text": "Mileage - 56,000 KM",
+            "span": {
+              "start": 13,
+              "end": 32,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        }
+      ],
+      "description": {
+        "cell": "G5",
+        "raw_value": "Model - 2019 Mileage - 56,000 KM Grade - 4.5 B +971568992992 Japanese Specs Clean Title Scratch Less Car Fresh Import No Paint No Accident Lane assist Radar Adaptive Cruise Control Heads Up Display Auto park 360 ° Camera Sunroof AMG Rims Brumester Surround Sound System",
+        "raw_type": "str",
+        "code_points": 269,
+        "sha256_utf8": "879ca534bbba34f3c5f1ba8f5369f38245d3e1b5c43956a7ec2562a51b2af363",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "27",
+      "recommended_role": "core",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 28,
+        "listing_id_cell": "A28"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "27"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 27.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "27.0",
+          "display_label": "27",
+          "cell": "A28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2019.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2019.0",
+          "display_label": "2019",
+          "cell": "B28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "mercedes-benz",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "13",
+          "display_label": "mercedes-benz",
+          "cell": "C28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "glc coupe",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "566",
+          "display_label": "glc coupe",
+          "cell": "D28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "other",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "27",
+          "display_label": "other",
+          "cell": "E28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "Mercedes GLC 250 Coupe 2019 Partial Service History GCC",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "567",
+          "display_label": "Mercedes GLC 250 Coupe 2019 Partial Service History GCC",
+          "cell": "F28",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [
+        {
+          "attribute": "service_history",
+          "state": "conflicting",
+          "display_summary": "Service history differs: partial in the title; full in the description.",
+          "claims": [
+            {
+              "label": "Partial Service History",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "F28",
+                "raw_type": "str",
+                "cell_text_sha256": "f50bfca675fa7bdf5ebeb69cc04c1e73588912e0e44c2b30142a8943c81b9fd1",
+                "raw_text": "Partial Service History",
+                "span": {
+                  "start": 28,
+                  "end": 51,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            },
+            {
+              "label": "Full Service History",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "G28",
+                "raw_type": "str",
+                "cell_text_sha256": "2fd1961daa7025f29b5cde542d785328d815d6e6781788974ec866d465f33765",
+                "raw_text": "Full Service History",
+                "span": {
+                  "start": 119,
+                  "end": 139,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F28",
+          "G28"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H28",
+        "url": "https://dbz-images.dubizzle.com/images/2024/10/24/573655b8700f45efab90e162e300a669-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [
+        {
+          "attribute": "mileage",
+          "classification": "listing_claim",
+          "value": 75500,
+          "unit": "km",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "G28",
+            "raw_type": "str",
+            "cell_text_sha256": "2fd1961daa7025f29b5cde542d785328d815d6e6781788974ec866d465f33765",
+            "raw_text": "75500 km",
+            "span": {
+              "start": 46,
+              "end": 54,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        }
+      ],
+      "description": {
+        "cell": "G28",
+        "raw_value": "- Mercedes GLC 250 Coupe - 2019 - GCC Specs - 75500 km - 2.0T 4 Cylinder - Silver exterior with Red Leather Interior - Full Service History Do not hesitate to call us for any info! • Saif (عربي - English): +971522051890 • Dhinakar (Tamil - Hindi - English): +971525368168 • Attia (عربي - English): +971525384938 • Amer (عربي - English): +971525390890 We also provide: - Car Financing, Buying and trading. - Car insurance - Worldwide export - Window Tint - Ceramic Coat & Detailing Our showroom is open all week long from 9.00am to 8.00pm Oasis Cars, Showroom 244, Dubai Auto Zone, DUCAMZ - Ras Al Khor - Dubai https://goo.gl/maps/mscP8HEQsjNVayuJ8",
+        "raw_type": "str",
+        "code_points": 647,
+        "sha256_utf8": "2fd1961daa7025f29b5cde542d785328d815d6e6781788974ec866d465f33765",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "52",
+      "recommended_role": "core",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 53,
+        "listing_id_cell": "A53"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "52"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 52.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "52.0",
+          "display_label": "52",
+          "cell": "A53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2015.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2015.0",
+          "display_label": "2015",
+          "cell": "B53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "mercedes-benz",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "13",
+          "display_label": "mercedes-benz",
+          "cell": "C53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "s-class",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "671",
+          "display_label": "s-class",
+          "cell": "D53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "s 63 amg 4matic",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "672",
+          "display_label": "s 63 amg 4matic",
+          "cell": "E53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "BENZ S63 | AMG | 2014 | CLEAN CAR | FRESH JAPAN IMPORT",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "673",
+          "display_label": "BENZ S63 | AMG | 2014 | CLEAN CAR | FRESH JAPAN IMPORT",
+          "cell": "F53",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [
+        {
+          "attribute": "model_year",
+          "state": "conflicting",
+          "display_summary": "Model year differs: 2015 in the field; 2014 in the title and description.",
+          "claims": [
+            {
+              "label": "2015",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "B53",
+                "raw_type": "float",
+                "cell_text_sha256": "8c9d774b45b45fcc7a325b9364f705959cd398b14bb1eaa0ae8cc96b3c4eac51",
+                "raw_value": 2015.0,
+                "xml_value": "2015.0"
+              }
+            },
+            {
+              "label": "2014",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "F53",
+                "raw_type": "str",
+                "cell_text_sha256": "bbde89921624825cdfe0af973583d9196a452c395a7329990cec8d326cafe021",
+                "raw_text": "2014",
+                "span": {
+                  "start": 17,
+                  "end": 21,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            },
+            {
+              "label": "2014",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "G53",
+                "raw_type": "str",
+                "cell_text_sha256": "35ee5fdbc53b85d45714dc8d9682cd5591ed4acceddc6dd91a0217fbed5738c9",
+                "raw_text": "Year Of the Model - 2014",
+                "span": {
+                  "start": 26,
+                  "end": 50,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F53",
+          "G53"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H53",
+        "url": "https://dbz-images.dubizzle.com/images/2024/11/21/c6450516405b4dfeb166571e0138839a-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [],
+      "description": {
+        "cell": "G53",
+        "raw_value": "• Mercedes Benz S63 AMG • Year Of the Model - 2014 • Black Interior • Dynamic Seats • Cooling Seats • Low Mileage • Japan Imported • Recently Arrived • Neat & Clean Car ••••••••••••••••••••••••••••••••••••••••••••••••••••••• Follow Us On Instagram For More Luxury Cars, Just Click on the Link. https://instagram.com/mirzaautomobilefze?utm_medium=copy_link ••••••••••••••••••••••••••••••••••••••••••••••••••••••• We have Direct access more then 160 Auctions in Japan. We can buy any type or any Model of the car by your Special Order, So if you are Looking for Any type of the Car, Contact with Us or visit Our Showroom Mirza Automobile FZE, ••••••••••••••••••••••••••••••••••••••••••••••••••••••• About Us : A name you can trust, Welcome to Mirza Automobile FZE, We've been in the auto industry for 16 years in UAE, and 30 years in Japan. ••••••••••••••••••••••••••••••••••••••••••••••••••••••• Contact us : ( Mob / Whatsapp ) • Ayaz Wazir : +971 54 3069550 • Mirza Faizan Baig : +971 50 8685237 ••••••••••••••••••••••••••••••••••••••••••••••••••••••• Our Service : ( VIP ) • Flexible finance and insurance options . • Expert sales and after-sales support . • Car registration assistance . ( Insurance - Registration ) . • Export deals and services available . • we can deliver the car to any where on U.A.E",
+        "raw_type": "str",
+        "code_points": 1307,
+        "sha256_utf8": "35ee5fdbc53b85d45714dc8d9682cd5591ed4acceddc6dd91a0217fbed5738c9",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "17",
+      "recommended_role": "core",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 18,
+        "listing_id_cell": "A18"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "17"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 17.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "17.0",
+          "display_label": "17",
+          "cell": "A18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2020.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2020.0",
+          "display_label": "2020",
+          "cell": "B18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "bentley",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "336",
+          "display_label": "bentley",
+          "cell": "C18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "continental",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "518",
+          "display_label": "continental",
+          "cell": "D18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "gtc mulliner",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "519",
+          "display_label": "gtc mulliner",
+          "cell": "E18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "2020 | BENTLEY | CONTINENTAL | GTC | W12 | FULL OPTION | EXCELLENT CONDITION |",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "520",
+          "display_label": "2020 | BENTLEY | CONTINENTAL | GTC | W12 | FULL OPTION | EXCELLENT CONDITION |",
+          "cell": "F18",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [
+        {
+          "attribute": "engine",
+          "state": "conflicting",
+          "display_summary": "Engine differs: W12 in the title and description opening; 4.0L V8 Twin Turbo later in the description.",
+          "claims": [
+            {
+              "label": "W12",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "F18",
+                "raw_type": "str",
+                "cell_text_sha256": "c9af73883c5943adb3478d28e9be0183ed34d691c4aadc85433fec7e3491e52a",
+                "raw_text": "W12",
+                "span": {
+                  "start": 37,
+                  "end": 40,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            },
+            {
+              "label": "W12",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "G18",
+                "raw_type": "str",
+                "cell_text_sha256": "980f483ecdd2c11ed0f2022ed69b4aa76bd6273425edf0523b45e0fa0d9faed6",
+                "raw_text": "W12",
+                "span": {
+                  "start": 37,
+                  "end": 40,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            },
+            {
+              "label": "4.0L V8 Twin Turbo",
+              "evidence": {
+                "sheet": "cleaned dataset",
+                "cell": "G18",
+                "raw_type": "str",
+                "cell_text_sha256": "980f483ecdd2c11ed0f2022ed69b4aa76bd6273425edf0523b45e0fa0d9faed6",
+                "raw_text": "Engine - 4.0L V8 Twin Turbo",
+                "span": {
+                  "start": 265,
+                  "end": 292,
+                  "unit": "unicode_code_points",
+                  "interval": "[start,end)"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F18",
+          "G18"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H18",
+        "url": "https://dbz-images.dubizzle.com/images/2024/06/20/6436315e640b4dff9d204c789622c3c1-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [],
+      "description": {
+        "cell": "G18",
+        "raw_value": "2020 | BENTLEY | CONTINENTAL | GTC | W12 | FULL OPTION | EXCELLENT CONDITION | **Transmission - 8 Speed Dual Clutch Transmission with Active All-Wheel Drive Spec - European Horse power - 542 Hp Max Speed - 198 mph/ 318km/h Acceleration - 0 -100 km/h in 4.0 seconds Engine - 4.0L V8 Twin Turbo **EXTRA OPTIONS Bentley Rotating Display Welcome Lighting Ambient Lighting Coupe Convertible LED Matrix Headlamps Remote Controlled Garage Door Opener **Naim for Bentley - PREMIUM AUDIO SYSTEM - 18 Speakers - 2200w - 8 Different DSP Modes - Apple Car Play Continental GTC Specification **Touring Specification - Head Up Display - Night Vision - Active Cruise Control - Lane Assist - Lane Departure Front Seat Comfort Specification - Adjustment Headrest - Ventilation and Massage Function - Moving Headrest - Adjustable Cushion Length - Adjustable Side Bolster -Mulliner Driving Specification with - Contrast Binding to Carpet Overmats - Contrast Stitching and Seat Piping - Black and Polished Edge Wheel - Mulliner Range - Solid and Metallic - Contrast Seatbelts - by Mulliner **THE (7SEVEN LUXURY) - THE TRUE DEFINITION OF LUXURY ** Multi brand dealer with decades of experience in the UAE for new and pre-owned luxury vehicles. ** We are committed to providing exceptional service in every part of our business, as customer satisfaction is our top priority. **For more details follow us on INSTA \"sevenluxury.ae\" and visit our showroom in Al Quoz industrial area 3 Dubai",
+        "raw_type": "str",
+        "code_points": 1465,
+        "sha256_utf8": "980f483ecdd2c11ed0f2022ed69b4aa76bd6273425edf0523b45e0fa0d9faed6",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "35",
+      "recommended_role": "core",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 36,
+        "listing_id_cell": "A36"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "35"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 35.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "35.0",
+          "display_label": "35",
+          "cell": "A36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2017.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2017.0",
+          "display_label": "2017",
+          "cell": "B36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "mini",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "288",
+          "display_label": "mini",
+          "cell": "C36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "cooper",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "473",
+          "display_label": "cooper",
+          "cell": "D36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "s",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "97",
+          "display_label": "s",
+          "cell": "E36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "ميني كوبر 2017 S",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "602",
+          "display_label": "ميني كوبر 2017 S",
+          "cell": "F36",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F36",
+          "G36"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H36",
+        "url": "https://dbz-images.dubizzle.com/images/2024/12/04/79361b583f854d6cb6e191681ba566e7-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [
+        {
+          "attribute": "title",
+          "classification": "exact_unicode_source_text",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "F36",
+            "raw_type": "str",
+            "cell_text_sha256": "ccb16cf1afa5944e7887c31955f9efddbed0d48269104545ffcb4680de2e0700",
+            "raw_text": "ميني كوبر 2017 S",
+            "span": {
+              "start": 0,
+              "end": 16,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        },
+        {
+          "attribute": "description",
+          "classification": "semantic_missingness",
+          "display_label": "Description not stated",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "G36",
+            "raw_type": "str",
+            "cell_text_sha256": "cdb4ee2aea69cc6a83331bbe96dc2caa9a299d21329efb0336fc02a82e1839a8",
+            "raw_text": ".",
+            "span": {
+              "start": 0,
+              "end": 1,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        }
+      ],
+      "description": {
+        "cell": "G36",
+        "raw_value": ".",
+        "raw_type": "str",
+        "code_points": 1,
+        "sha256_utf8": "cdb4ee2aea69cc6a83331bbe96dc2caa9a299d21329efb0336fc02a82e1839a8",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "12",
+      "recommended_role": "numeric_label_supplement",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 13,
+        "listing_id_cell": "A13"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "12"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 12.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "12.0",
+          "display_label": "12",
+          "cell": "A13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2019.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2019.0",
+          "display_label": "2019",
+          "cell": "B13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "mazda",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "64",
+          "display_label": "mazda",
+          "cell": "C13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": 3.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "3.0",
+          "display_label": "3",
+          "cell": "D13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": "s grade",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "497",
+          "display_label": "s grade",
+          "cell": "E13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "Mazda 3 2019 Model GCC Spec Excellent Condition Single Hand Used Car For Sale",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "498",
+          "display_label": "Mazda 3 2019 Model GCC Spec Excellent Condition Single Hand Used Car For Sale",
+          "cell": "F13",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [],
+      "cash_price": {
+        "state": "listing_claim",
+        "amount_minor": 3500000,
+        "currency": "AED",
+        "display_label": "AED 35,000",
+        "classification": "manually_audited_cash_price_claim_not_current_or_independently_verified",
+        "evidence": {
+          "sheet": "cleaned dataset",
+          "cell": "G13",
+          "raw_type": "str",
+          "cell_text_sha256": "ef6de8248b400334cc41ff3db02506368297e32692455633f1087736b1e808a1",
+          "raw_text": "PRICE REDUCED 35000 AED",
+          "span": {
+            "start": 0,
+            "end": 23,
+            "unit": "unicode_code_points",
+            "interval": "[start,end)"
+          }
+        },
+        "policy_scope": "FE03 source fixture only; no affordability guarantee or BE-04 extraction acceptance."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H13",
+        "url": "https://dbz-images.dubizzle.com/images/2024/03/13/b16a4b5d793f4090b168dc85e51c943a-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [
+        {
+          "attribute": "model",
+          "classification": "numeric_categorical_label",
+          "display_label": "3",
+          "not_quantity": true,
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "D13",
+            "raw_type": "float",
+            "cell_text_sha256": "a416ea84421fa7e1351582da48235bac88380a337ec5cb5a9239dc7d57908b4b",
+            "raw_value": 3.0,
+            "xml_value": "3.0"
+          }
+        },
+        {
+          "attribute": "salary_requirement",
+          "classification": "source_finance_advertising_not_car_price_or_product_requirement",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "G13",
+            "raw_type": "str",
+            "cell_text_sha256": "ef6de8248b400334cc41ff3db02506368297e32692455633f1087736b1e808a1",
+            "raw_text": "Salary Required:- AED 3000/-(WPS)",
+            "span": {
+              "start": 654,
+              "end": 687,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        }
+      ],
+      "description": {
+        "cell": "G13",
+        "raw_value": "PRICE REDUCED 35000 AED Mazda 3 2019 Model Scratch less exterior Model, 1.6 ltr engine less fuel Consumption car is for sale 100% Accident Free In Perfect Condition (Electrical and Mechanical) Only Single hand driven GCC Specification Cruise Control Bluetooth Systems ABS Brake Systems Parking Sensors Keyless Entry USB Pot Audio Aux In Fully Automatic Power Mirror Power Windows Power Steering Central Lock Systems Extra Clean Interior Call to view 052 7993306 Bank Auto finance can be arrange at 0% down payment and below fees also can be cover in auto finance. (Bank Processing fee, Evaluation Fee RTA Test/Registration fees, Comprehensive Insurance) Salary Required:- AED 3000/-(WPS) Saving and current both account are acceptable for Auto Loan Cheque Book not required No Salary Transfer Required Auto loan offer for Non-listed Companies also Monthly Installment is less than Monthly Car Rental Required Document:- Passport Copy and Visa Page copy Emirates ID Copy Driving License Salary Certificate (AED 3000 and More) Contact for more details Call 052 7993306",
+        "raw_type": "str",
+        "code_points": 1066,
+        "sha256_utf8": "ef6de8248b400334cc41ff3db02506368297e32692455633f1087736b1e808a1",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    },
+    {
+      "source_id": "22",
+      "recommended_role": "numeric_label_supplement",
+      "source_locator": {
+        "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+        "sheet": "cleaned dataset",
+        "row": 23,
+        "listing_id_cell": "A23"
+      },
+      "proposed_design_proof_ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "9303532e7ac736643877459dc6cf0cdb53d6a2b38f7783601ec58575a85c9217",
+        "source_id": "22"
+      },
+      "fields": {
+        "source_id": {
+          "raw_value": 22.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "22.0",
+          "display_label": "22",
+          "cell": "A23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "year": {
+          "raw_value": 2024.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "2024.0",
+          "display_label": "2024",
+          "cell": "B23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "make": {
+          "raw_value": "aston martin",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "543",
+          "display_label": "aston martin",
+          "cell": "C23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "model": {
+          "raw_value": "dbx",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "544",
+          "display_label": "dbx",
+          "cell": "D23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "trim": {
+          "raw_value": 707.0,
+          "raw_type": "float",
+          "xml_type": "n",
+          "xml_value": "707.0",
+          "display_label": "707",
+          "cell": "E23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        },
+        "title": {
+          "raw_value": "TIMELESS CERTIFIED / 2 Year Warranty / 2 Year Service Contract",
+          "raw_type": "str",
+          "xml_type": "s",
+          "xml_value": "545",
+          "display_label": "TIMELESS CERTIFIED / 2 Year Warranty / 2 Year Service Contract",
+          "cell": "F23",
+          "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+        }
+      },
+      "material_conflicts": [],
+      "cash_price": {
+        "state": "not_stated",
+        "amount_minor": null,
+        "currency": null,
+        "inspection_scope": [
+          "F23",
+          "G23"
+        ],
+        "classification": "manual_audit_of_title_and_description",
+        "display_label": "Price not stated",
+        "note": "No vehicle cash price is stated in the inspected title/description; this does not establish zero, affordability, sold status or absence of finance language."
+      },
+      "photo": {
+        "source_state": "source_present",
+        "source_cell": "H23",
+        "url": "https://dbz-images.dubizzle.com/images/2024/06/10/43c8a73813a9474a8a12f74365db73e8-.jpeg?impolicy=dpv",
+        "exact_match_to_studio_manifest": true,
+        "studio_network_observation": {
+          "status": "NOT_CHECKED"
+        },
+        "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+        "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+        "rights_status": "NOT_ESTABLISHED",
+        "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+      },
+      "other_audited_source_excerpts": [
+        {
+          "attribute": "trim",
+          "classification": "numeric_categorical_label",
+          "display_label": "707",
+          "not_quantity": true,
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "E23",
+            "raw_type": "float",
+            "cell_text_sha256": "d81ac5020bf054ac6b2112857c8b9505c47fcff45b0dca136a6deba51e3a2a31",
+            "raw_value": 707.0,
+            "xml_value": "707.0"
+          }
+        },
+        {
+          "attribute": "service_contract_interval",
+          "classification": "listing_claim_not_current_odometer",
+          "evidence": {
+            "sheet": "cleaned dataset",
+            "cell": "G23",
+            "raw_type": "str",
+            "cell_text_sha256": "7c9c8608faa7f3b91e9eee86234625c3be10bf938f51ddebb2a45abbdc037e1d",
+            "raw_text": "2 YEAR SERVICE CONTRACT (16000 Km or 1 year, whichever comes first)",
+            "span": {
+              "start": 74,
+              "end": 141,
+              "unit": "unicode_code_points",
+              "interval": "[start,end)"
+            }
+          }
+        }
+      ],
+      "description": {
+        "cell": "G23",
+        "raw_value": "**TIMELESS CERTIFIED PRE-OWNED PACKAGE** * 2 YEAR WARRANTY UNLIMITED KM * 2 YEAR SERVICE CONTRACT (16000 Km or 1 year, whichever comes first) * CERTIFIED HISTORY AND MILEAGE * QUALITY ASSURED ASTON MARTIN GENUINE PARTS * MULTI-POINT PRE-DELIVERY HARDWARE & SOFTWARE CHECK * SERVICING COMPLETED * 12 MONTHS OF ROADSIDE ASSISTANCE * COMPLEMENTARY REGISTRATION * Bank Finance option availalble",
+        "raw_type": "str",
+        "code_points": 390,
+        "sha256_utf8": "7c9c8608faa7f3b91e9eee86234625c3be10bf938f51ddebb2a45abbdc037e1d",
+        "classification": "exact_original_listing_claim_text_including_unverified_promotions_and_contacts",
+        "rendering_rule": "Escaped source text in expandable source copy; source requests, contact details, links, warranties and dealer-wide claims do not authorize product actions or establish vehicle facts."
+      }
+    }
+  ],
+  "synthetic_operational_data": {
+    "authored": false,
+    "classification": "Lead-owned explicitly synthetic scheduling/resource/owner/draft/review/operation data must stay separate from audited workbook content.",
+    "not_inferred": [
+      "managed eligibility",
+      "live availability",
+      "slot availability",
+      "reserved capacity",
+      "confirmed booking",
+      "dealer delivery",
+      "buyer contact",
+      "price derived from trim or title digits"
+    ]
+  },
+  "photo_selection_limits": [
+    "No Studio photo is visually inspected or browser-decoded in the retained evidence. No cinematic quality rank can be supported yet.",
+    "Among the five core records only ID4 has retained HEAD200 and a 4096-byte WebP-prefix GET206; IDs17/27/35/52 are NOT_CHECKED.",
+    "ID1 is a supplementary ordinary-URL decode candidate with HEAD200/WebP-prefix evidence; never use its photograph for another selected car.",
+    "Keep the original same-record URL in provenance when the lead applies controlled failed-photo injection."
+  ],
+  "verification": {
+    "source_workbook_unchanged": true,
+    "exact_text_spans_checked_against_original_cells": true,
+    "network_requests": 0,
+    "image_downloads": 0,
+    "browser_or_image_decode": "NOT_RUN",
+    "tests_builds_installs": "NOT_RUN",
+    "production_source_edits": 0,
+    "all_seven_proof_records_and_one_external_candidate_match_studio_manifest": true
+  },
+  "proof_dataset_source_ids": [
+    "4",
+    "27",
+    "52",
+    "17",
+    "35",
+    "12",
+    "22"
+  ],
+  "ordinary_photo_candidate_not_in_proof_dataset": {
+    "source_id": "1",
+    "source_locator": {
+      "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+      "sheet": "cleaned dataset",
+      "row": 2,
+      "listing_id_cell": "A2"
+    },
+    "fields": {
+      "source_id": {
+        "raw_value": 1.0,
+        "raw_type": "float",
+        "xml_type": "n",
+        "xml_value": "1.0",
+        "display_label": "1",
+        "cell": "A2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      },
+      "year": {
+        "raw_value": 2013.0,
+        "raw_type": "float",
+        "xml_type": "n",
+        "xml_value": "2013.0",
+        "display_label": "2013",
+        "cell": "B2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      },
+      "make": {
+        "raw_value": "ford",
+        "raw_type": "str",
+        "xml_type": "s",
+        "xml_value": "19",
+        "display_label": "ford",
+        "cell": "C2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      },
+      "model": {
+        "raw_value": "explorer",
+        "raw_type": "str",
+        "xml_type": "s",
+        "xml_value": "382",
+        "display_label": "explorer",
+        "cell": "D2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      },
+      "trim": {
+        "raw_value": "other",
+        "raw_type": "str",
+        "xml_type": "s",
+        "xml_value": "27",
+        "display_label": "other",
+        "cell": "E2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      },
+      "title": {
+        "raw_value": "ford Explorer 2013 silver color GCC calen car",
+        "raw_type": "str",
+        "xml_type": "s",
+        "xml_value": "455",
+        "display_label": "ford Explorer 2013 silver color GCC calen car",
+        "cell": "F2",
+        "classification": "manually_audited_source_field_not_independently_verified_vehicle_fact"
+      }
+    },
+    "photo": {
+      "source_state": "source_present",
+      "source_cell": "H2",
+      "url": "https://dbz-images.dubizzle.com/images/2023/04/02/cbea51c7d80b4b7d882533bb24abc0fb-.jpeg?imwidth=800",
+      "exact_match_to_studio_manifest": true,
+      "studio_network_observation": {
+        "status": "CHECKED_URL_ONLY",
+        "evidence_path": "Records/build/studio/url_checks.json",
+        "same_url_observation_may_cover_multiple_source_rows": true,
+        "requests": [
+          {
+            "method": "HEAD",
+            "checked_at_utc": "2026-09-23T18:27:31.762024+00:00",
+            "status": "HTTP_RESPONSE_OBSERVED",
+            "http_status": 200,
+            "response_headers": {
+              "Content-Type": "image/webp",
+              "Content-Length": "72744",
+              "Cache-Control": "public, max-age=15768000, immutable",
+              "ETag": "\"d8c4966852c6416e8fb1592494c32c04\"",
+              "Last-Modified": "Wed, 24 Jun 2026 05:50:55 GMT"
+            },
+            "prefix_format": null,
+            "body_bytes_read": 0
+          },
+          {
+            "method": "GET",
+            "checked_at_utc": "2026-09-23T18:27:34.801724+00:00",
+            "status": "HTTP_RESPONSE_OBSERVED",
+            "http_status": 206,
+            "response_headers": {
+              "Content-Type": "image/webp",
+              "Content-Length": "4096",
+              "Content-Range": "bytes 0-4095/72744",
+              "Cache-Control": "public, max-age=15768000, immutable",
+              "ETag": "\"d8c4966852c6416e8fb1592494c32c04\"",
+              "Last-Modified": "Wed, 24 Jun 2026 05:50:55 GMT"
+            },
+            "prefix_format": "webp",
+            "body_bytes_read": 4096
+          }
+        ],
+        "browser_display": "NOT_TESTED",
+        "image_content": "NOT_INSPECTED"
+      },
+      "browser_decode": "NOT_RUN_BY_THIS_AUDIT",
+      "visual_composition": "NOT_INSPECTED_BY_STUDIO_OR_THIS_AUDIT",
+      "rights_status": "NOT_ESTABLISHED",
+      "render_hint": "Exact source URL, no-referrer; no rewritten query, rehosting, substitute car or inferred specification."
+    },
+    "scope": "Existing Studio technical fallback reference only; not one of the seven selected proof records."
+  }
+}

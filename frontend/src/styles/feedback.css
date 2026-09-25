@@ -1,0 +1,532 @@
+/* User feedback revision: one stable shell, clearer discovery, distinct inner art. */
+.proof.cinematic .feedback-header {
+  width: calc(100% - clamp(2.5rem, 8.88889vw, 8rem));
+  container: app-header / inline-size;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 106px;
+  padding: 1rem 1.4rem;
+  margin-block: 1rem;
+  border-radius: 18px;
+  border-color: #20212414;
+  box-shadow: 0 8px 26px -20px #20212460;
+}
+.proof.cinematic .feedback-header .cinema-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+  text-decoration: none;
+}
+.proof.cinematic .feedback-header .cinema-brand span {
+  margin: 0;
+  letter-spacing: normal;
+}
+.proof.cinematic .feedback-header .cinema-brand-symbol {
+  display: block;
+  flex: 0 0 auto;
+}
+.proof.cinematic .feedback-header .cinema-brand-symbol img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+.proof.cinematic .feedback-header .cinema-brand-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+.proof.cinematic .feedback-header .cinema-brand-name {
+  color: var(--brand-red);
+  font:
+    700 2.4rem/0.9 "DM Sans",
+    sans-serif;
+  letter-spacing: -0.065em;
+}
+.proof.cinematic .feedback-header .cinema-brand-tagline {
+  display: block;
+  color: #5b5c64;
+  font:
+    600 0.62rem/1.4 "DM Sans",
+    sans-serif;
+  letter-spacing: 0.09em;
+}
+.proof.cinematic .feedback-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin: 0;
+}
+.proof.cinematic .feedback-header nav :is(a, button) {
+  border: 1px solid #dadce2;
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.proof.cinematic .feedback-header nav [aria-current="page"] {
+  color: white;
+  background: var(--brand-red);
+  border-color: var(--brand-red);
+  box-shadow: none;
+}
+.proof.cinematic .feedback-header .feedback-ask-ai {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.8rem 1.1rem;
+  min-height: 48px;
+  border: 1px solid #b71226;
+  border-radius: 14px;
+  color: white;
+  background: var(--brand-red);
+  box-shadow:
+    inset 0 1px #ffffff30,
+    0 4px 0 #a80d20,
+    0 8px 18px -12px #a80d20;
+  font:
+    650 0.95rem/1.3 "DM Sans",
+    sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+.feedback-ask-ai svg {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+}
+.feedback-menu-toggle {
+  display: none;
+}
+.proof.cinematic .cinema-hero-actions .cinema-compare-cta {
+  gap: 0.65rem;
+  background: #ffffffef;
+  border: 1px solid #25262d;
+  box-shadow: 0 4px 0 #25262d18;
+}
+.cinema-compare-cta svg {
+  width: 21px;
+  height: 21px;
+}
+.proof.cinematic .cinema-assistant-heading p,
+.proof.cinematic .cinema-assistant-disclosure,
+.proof.cinematic .cinema-sample-note {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.proof.cinematic .cinema-assistant-disclosure {
+  color: #d6d9e1;
+}
+.proof.cinematic .cinema-assistant-symbol {
+  background: var(--brand-red);
+  color: white;
+}
+
+.inventory-filters {
+  margin: 1.15rem 0 1.6rem;
+}
+.inventory-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+.inventory-filter-field {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.55rem 0.8rem;
+  min-width: 0;
+  border: 1px solid #dadbe0;
+  border-radius: 12px;
+  background: white;
+}
+.inventory-filter-field > span {
+  color: #60626a;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.inventory-filter-field select {
+  width: 100%;
+  min-height: 30px;
+  border: 0;
+  padding: 0.1rem 1.2rem 0.1rem 0;
+  background: transparent;
+  color: #202124;
+  font:
+    600 0.88rem/1.5 "DM Sans",
+    sans-serif;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+.inventory-filter-field:focus-within {
+  outline: 2px solid var(--brand-red);
+  outline-offset: 2px;
+}
+.inventory-filter-field select:focus-visible {
+  outline-offset: 1px;
+}
+.inventory-filter-bar > .folio-button {
+  align-self: stretch;
+  border-radius: 12px;
+  padding-inline: 1rem;
+}
+.inventory-filter-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #676971;
+}
+.inventory-filter-note button {
+  margin-left: 0.5rem;
+  color: var(--brand-red);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  font: inherit;
+  cursor: pointer;
+  min-height: 36px;
+}
+.inventory-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+.inventory-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.8rem;
+  min-height: 40px;
+  max-width: 100%;
+  border-radius: 999px;
+  border: 1px solid #f0bbc4;
+  color: #a91125;
+  background: #fff0f3;
+  font:
+    600 0.82rem/1.45 "DM Sans",
+    sans-serif;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.inventory-chip span {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.inventory-clear {
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  color: #555861;
+  background: none;
+  font:
+    500 0.82rem/1.4 "DM Sans",
+    sans-serif;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.inventory-suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.9rem 0;
+  font-size: 0.95rem;
+}
+.inventory-suggestion button {
+  min-height: 40px;
+  border: 0;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  background: #fff0f3;
+  color: #af1028;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+.inventory-suggestion span {
+  flex-basis: 100%;
+  color: #62656d;
+  font-size: 0.8rem;
+}
+.cinema-results .inventory-filter-bar {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.cinema-results .inventory-filter-bar > .folio-button {
+  grid-column: 1 / -1;
+}
+
+.proof.cinematic .inner-masthead--automotive {
+  min-height: 300px;
+  padding: clamp(1.5rem, 3.2vw, 3rem);
+  margin: 1rem 0 1.6rem;
+  border: 0;
+  border-radius: 22px;
+  background: #f1f2f4;
+  box-shadow: 0 10px 26px -24px #1c1e28;
+}
+.proof.cinematic .inner-masthead--automotive > div {
+  max-width: 53%;
+}
+.proof.cinematic .inner-masthead--automotive .inner-header-art {
+  width: 58%;
+  object-fit: cover;
+  mask-image: linear-gradient(90deg, transparent, #000 28%);
+}
+.proof.cinematic .inner-masthead--automotive h1 {
+  max-width: 15ch;
+  font-size: clamp(2.7rem, 4vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+.proof.cinematic .inner-masthead--automotive .inner-masthead-copy {
+  max-width: 46%;
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.feedback-about-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 4rem;
+  padding: 3rem 0;
+  border-bottom: 1px solid #dfe0e5;
+  margin-bottom: 2rem;
+}
+.proof.cinematic .inner-browse > .inner-masthead--automotive {
+  min-height: 250px;
+  padding: 1.75rem 2.5rem;
+  margin-bottom: 1rem;
+}
+.proof.cinematic .inner-browse > .inner-masthead--automotive h1 {
+  font-size: clamp(2.3rem, 3.25vw, 2.9rem);
+  max-width: 18ch;
+}
+.proof.cinematic .inner-browse-results {
+  padding-top: 0;
+}
+.proof.cinematic .inner-search-toolbar {
+  padding: 0.75rem 1rem;
+}
+.proof.cinematic .inner-browse-results > .inventory-filters {
+  margin-block: 0.8rem;
+}
+.proof.cinematic .inner-browse-results > .cinema-result-count {
+  padding-block: 0.4rem;
+}
+.proof.cinematic .inner-search-evidence {
+  padding: 0 0.75rem;
+  margin-block: 0.4rem 0.8rem;
+}
+.proof.cinematic .inner-search-evidence > summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+}
+.feedback-about-story > .inner-eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.feedback-about-story h2 {
+  font:
+    400 clamp(2rem, 3.4vw, 3.5rem)/1.1 "DM Serif Display",
+    serif;
+  margin: 0;
+}
+.feedback-about-story p:not(.inner-eyebrow) {
+  font-size: 1.05rem;
+  color: #545861;
+  line-height: 1.8;
+  margin-top: 0;
+}
+.feedback-about-story a {
+  color: #b40d27;
+  font-weight: 600;
+}
+.feedback-prototype-note {
+  margin-top: 3rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid #dddfe4;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #686a71;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .proof.cinematic .feedback-header nav :is(a, button):hover {
+    background: #f5f5f7;
+    color: #af1028;
+  }
+  .feedback-ask-ai:hover {
+    transform: translateY(-1px);
+  }
+  .inventory-chip:hover {
+    background: #ffe2e8;
+  }
+}
+@media (max-width: 1000px) {
+  .proof.cinematic .feedback-header {
+    gap: 0.75rem;
+    padding-inline: 1rem;
+  }
+  .proof.cinematic .feedback-header nav :is(a, button) {
+    padding-inline: 0.55rem;
+  }
+  .proof.cinematic .feedback-header .cinema-brand-name {
+    font-size: 2rem;
+  }
+  .proof.cinematic .feedback-header .cinema-brand-symbol img {
+    width: 42px;
+    height: 42px;
+  }
+  .inventory-filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .inventory-filter-bar > .folio-button {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 840px) {
+  .proof.cinematic .feedback-header {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+  .proof.cinematic .feedback-header .feedback-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #d4d6dd;
+    border-radius: 9px;
+    background: white;
+    color: #25262c;
+    font:
+      600 0.85rem/1.4 "DM Sans",
+      sans-serif;
+  }
+  .proof.cinematic .feedback-header nav {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .proof.cinematic .feedback-header nav[data-open="true"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    width: 100%;
+  }
+  .proof.cinematic .feedback-header nav :is(a, button) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+}
+@media (max-width: 600px) {
+  .proof.cinematic .feedback-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.65rem;
+    padding: 0.9rem;
+    min-height: 0;
+    border-radius: 14px;
+  }
+  .proof.cinematic .feedback-header .feedback-menu-toggle {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 36px;
+  }
+  .proof.cinematic .feedback-header nav {
+    grid-row: 3;
+  }
+  .proof.cinematic .feedback-header .feedback-ask-ai {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0.65rem 0.75rem;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+  }
+  .proof.cinematic .feedback-header .cinema-brand {
+    gap: 0.45rem;
+  }
+  .proof.cinematic .feedback-header .cinema-brand-name {
+    font-size: min(1.8rem, 9vw);
+  }
+  .proof.cinematic .feedback-header .cinema-brand-copy {
+    min-width: 0;
+  }
+  .proof.cinematic .feedback-header .cinema-brand-tagline {
+    font-size: 0.52rem;
+    letter-spacing: 0.07em;
+  }
+  .proof.cinematic .feedback-header .cinema-brand-symbol img {
+    width: 38px;
+    height: 38px;
+  }
+  .proof.cinematic .cinema-hero-actions .cinema-compare-cta {
+    min-height: 46px;
+  }
+  .proof.cinematic .inner-masthead--automotive {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    min-height: 0;
+    margin-top: 0.7rem;
+    border-radius: 16px;
+  }
+  .proof.cinematic .inner-browse > .inner-masthead--automotive {
+    min-height: 0;
+    padding: 0;
+  }
+  .proof.cinematic .inner-masthead--automotive > .inner-header-art {
+    position: static;
+    width: 100%;
+    height: 170px;
+    mask-image: none;
+    order: 0;
+  }
+  .proof.cinematic .inner-masthead--automotive > div {
+    max-width: none;
+    padding: 1.25rem 1.25rem 0;
+    order: 1;
+  }
+  .proof.cinematic .inner-masthead--automotive h1 {
+    font-size: 2.55rem;
+  }
+  .proof.cinematic .inner-masthead--automotive .inner-masthead-copy {
+    max-width: none;
+    padding: 0.75rem 1.25rem 1.4rem;
+    margin: 0;
+  }
+  .feedback-about-story {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 1.5rem 0;
+  }
+}
+@container app-header (max-width: 18rem) {
+  .proof.cinematic .feedback-header .cinema-brand {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .proof.cinematic .feedback-header .feedback-menu-toggle {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .proof.cinematic .feedback-header .feedback-ask-ai {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feedback-ask-ai {
+    transition: none;
+  }
+  .feedback-ask-ai:hover {
+    transform: none;
+  }
+}

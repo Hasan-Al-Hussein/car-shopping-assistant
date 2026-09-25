@@ -1,0 +1,55 @@
+{
+  "format": "CSA-RELEASE-1",
+  "source_manifest_sha256": "ee126597e80635c63b360e4a678a26924dd6907fda2a80099dcdda09de687cb6",
+  "checks": {
+    "portable_clean_setup": "PASS",
+    "integrated_application": "PASS",
+    "qualified_lead_csv": "PASS",
+    "multi_turn_conversation": "PASS",
+    "new_session_recall": "PASS",
+    "asset_provenance": "PASS",
+    "independent_review": "PASS"
+  },
+  "evidence": [
+    {
+      "kind": "portable_clean_setup",
+      "path": "delivery/evidence/clean-setup.md",
+      "sha256": "7071b849d5c803e05236a84a3ada73c5582b1c0249f91beef8e6a57184ac9dae",
+      "reviewed": true,
+      "sanitized": true,
+      "synthetic": true
+    },
+    {
+      "kind": "qualified_lead_csv",
+      "path": "delivery/evidence/qualified-lead.csv",
+      "sha256": "c45346619ed420d8ad89eb87f2f192eb94b01b1a1f2a0e31b7c87b215d2c6d33",
+      "reviewed": true,
+      "sanitized": true,
+      "synthetic": true
+    },
+    {
+      "kind": "multi_turn_conversation",
+      "path": "delivery/evidence/multi-turn-conversation.md",
+      "sha256": "54f2f08b7f5e9cbc722435ff03538519a0326ef8743ca09c34c366f8970df6ff",
+      "reviewed": true,
+      "sanitized": true,
+      "synthetic": true
+    },
+    {
+      "kind": "new_session_recall",
+      "path": "delivery/evidence/new-session-recall.md",
+      "sha256": "9f96ddaebf69aae78d32e4f0dea654507b384c8742820358a3f2e711c9ec36c2",
+      "reviewed": true,
+      "sanitized": true,
+      "synthetic": true
+    },
+    {
+      "kind": "independent_review",
+      "path": "delivery/evidence/release-review.md",
+      "sha256": "f8547c5d4eda7ca36abb4777868dd0c9fd3242bd70a1f377e4623411d451d246",
+      "reviewed": true,
+      "sanitized": true,
+      "synthetic": true
+    }
+  ]
+}

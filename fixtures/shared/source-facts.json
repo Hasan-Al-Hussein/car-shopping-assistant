@@ -1,0 +1,74 @@
+{
+  "schema_version": "source-facts-1",
+  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9",
+  "source_relative_path": "sources/Copy_of_sample_cars_dataset.xlsx",
+  "cases": [
+    {
+      "id": "numeric-model-label-3",
+      "sheet": "cleaned dataset",
+      "cell": "D13",
+      "raw_value": 3.0,
+      "raw_type": "float",
+      "expected_semantics": {
+        "kind": "categorical_label",
+        "attribute": "model",
+        "normalized_label": "3",
+        "is_quantity": false
+      },
+      "source_id": "12",
+      "notes": "Retained audit identifies the sole numeric model as float 3.0. Read-only XML confirms D13 numeric <v>3.0</v>; actual Listing_ID cell A13 contains numeric 12.0. Preserve source numeric type separately from normalized model label; do not append .0 to the label."
+    },
+    {
+      "id": "numeric-trim-label-707",
+      "sheet": "cleaned dataset",
+      "cell": "E23",
+      "raw_value": 707.0,
+      "raw_type": "float",
+      "expected_semantics": {
+        "kind": "categorical_label",
+        "attribute": "trim",
+        "normalized_label": "707",
+        "is_quantity": false
+      },
+      "source_id": "22",
+      "notes": "Retained audit identifies the sole numeric trim as float 707.0. Read-only XML confirms E23 numeric <v>707.0</v>; actual Listing_ID cell A23 contains numeric 22.0. Preserve the label; do not treat it as a measured quantity or reject it because it is numeric."
+    },
+    {
+      "id": "placeholder-description-full-stop",
+      "sheet": "cleaned dataset",
+      "cell": "G36",
+      "raw_value": ".",
+      "raw_type": "str",
+      "expected_semantics": {
+        "kind": "semantic_missingness",
+        "attribute": "description",
+        "storage_nonempty": true,
+        "has_substantive_description": false
+      },
+      "source_id": "35",
+      "notes": "Retained audit flags one full stop as substantively absent description. Read-only XML confirms G36 shared-string index 603 resolves exactly to '.'; actual Listing_ID cell A36 contains numeric 35.0. This does not imply a missing listing or a known vehicle fact."
+    },
+    {
+      "id": "arabic-title-exact-unicode",
+      "sheet": "cleaned dataset",
+      "cell": "F36",
+      "raw_value": "ميني كوبر 2017 S",
+      "raw_type": "str",
+      "expected_semantics": {
+        "kind": "unicode_text",
+        "attribute": "title",
+        "preserve_exact_text": true,
+        "is_verified_vehicle_fact": false
+      },
+      "source_id": "35",
+      "span": {
+        "start": 0,
+        "end": 16,
+        "unit": "unicode_code_points",
+        "interval": "[start,end)",
+        "text": "ميني كوبر 2017 S"
+      },
+      "notes": "The retained audit lists cleaned title row 36 as Arabic-bearing but omits its exact text. One read-only XML inspection resolves F36 shared-string index 602 to this entire 16-code-point cell without trimming, translation or normalization. Actual Listing_ID A36 is numeric 35.0; the title remains source text rather than a verified year/trim assertion."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "agentseed",
+  "photographer": "Agentseed",
+  "profile": "https://unsplash.com/@agentseed",
+  "source_page": "https://unsplash.com/photos/the-interior-of-a-car-with-a-steering-wheel-and-dashboard-0KJlYHZhPWs",
+  "observed_image_link_cdn": "https://images.unsplash.com/photo-1734299071795-076cf066d10a",
+  "license_url": "https://unsplash.com/license",
+  "source_license_observation": "Free to use under the Unsplash License",
+  "download_url": "https://images.unsplash.com/photo-1734299071795-076cf066d10a?fm=jpg&fit=max&w=1600&q=82",
+  "resolved_url": "https://images.unsplash.com/photo-1734299071795-076cf066d10a?fm=jpg&fit=max&w=1600&q=82",
+  "http_status": 200,
+  "retrieved_at_utc": "2026-09-24T06:18:34.624078+00:00",
+  "content_type": "image/jpeg",
+  "format": "JPEG",
+  "width": 1600,
+  "height": 1067,
+  "bytes": 187913,
+  "sha256": "ebe9deb22c8a7319c120136d1cb69fc6767bf8712661eca1cbbc58ac454ff623",
+  "path": "References/product-assets/header-set/revision-02/detail-cabin.jpg",
+  "transformations": "No local retouch/crop/re-encoding; source CDN served bounded-width JPEG.",
+  "selected_at_utc": "2026-09-24T06:19:39.027981+00:00",
+  "classification": "editorial_decoration_not_selected_listing_interior_or_specification",
+  "selection_reason": "Landscape source with steering wheel in right half plus dashboard and center console; recognizable automotive scene in a shallow banner.",
+  "visual_inspection": "Full local image inspected with view_image; no discernible person/face; Subaru emblem and WRX badge visible; gauge needles and blurred readouts retained.",
+  "object_fit": "cover",
+  "object_position": "50% 65%",
+  "target_art_aspect_ratios": [
+    "3.3:1 desktop",
+    "3.2:1 mobile"
+  ],
+  "analytical_source_crop_y": {
+    "3.3:1": [
+      378.4,
+      863.2
+    ],
+    "3.2:1": [
+      368.6,
+      868.6
+    ]
+  },
+  "crop_notes": "Retains upper wheel, hub and dashboard; lower wheel rim/WRX badge may fall below crop. Keep title fade mainly within left20% of image area. Recheck if image area becomes substantially wider than3.5:1.",
+  "decorative_alt": "",
+  "browser_crop_render_status": "NOT_RUN",
+  "rights_limits": "Unsplash free license observed on the exact source page; no claim that vehicle marks or displayed equipment imply affiliation or belong to a listing. No independent third-party release verification.",
+  "proof": {
+    "candidate_bytes_preserved": true,
+    "jpeg_verify": "PASS",
+    "dimensions": "PASS",
+    "hash": "PASS"
+  },
+  "rejected_candidate": {
+    "id": "luke-miller",
+    "reason": "Portrait source; less suitable for the requested shallow landscape header",
+    "path": "Records/build/studio/header-set/revision-02/cabin-candidates/luke-miller.jpg"
+  }
+}

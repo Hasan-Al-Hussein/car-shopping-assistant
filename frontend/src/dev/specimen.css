@@ -1,0 +1,119 @@
+.specimen {
+  max-inline-size: 76rem;
+  margin-inline: auto;
+  padding: var(--folio-space-12) var(--folio-page-gutter);
+}
+
+/* Dev-only proof control; all production typography remains rooted in rem. */
+:root:has(.specimen[data-text-size="double"]) {
+  font-size: 200%;
+}
+
+.specimen__header {
+  max-inline-size: 48rem;
+  margin-block-end: var(--folio-space-12);
+}
+
+.specimen__eyebrow {
+  margin-block-end: var(--folio-space-4);
+  color: var(--folio-accent);
+  font-size: var(--folio-text-small);
+  font-weight: 600;
+}
+
+.specimen__intro {
+  margin-block-start: var(--folio-space-6);
+  color: var(--folio-text-secondary);
+  font-size: var(--folio-text-lead);
+}
+
+.specimen__section {
+  padding-block: var(--folio-space-8);
+  border-block-start: 1px solid var(--folio-rule);
+}
+
+.specimen__section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--folio-space-4);
+  margin-block-end: var(--folio-space-6);
+}
+
+.specimen__index {
+  color: var(--folio-accent);
+  font-size: var(--folio-text-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.specimen__two-column,
+.specimen__photos,
+.specimen__notices {
+  display: grid;
+  gap: var(--folio-space-8);
+  min-inline-size: 0;
+}
+
+.specimen form,
+.specimen__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--folio-space-6);
+  min-inline-size: 0;
+}
+
+.specimen form > .folio-button {
+  align-self: flex-start;
+}
+
+.specimen__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--folio-space-3);
+}
+
+.specimen__note,
+.specimen figcaption,
+.specimen__footer {
+  color: var(--folio-text-secondary);
+  font-size: var(--folio-text-small);
+  overflow-wrap: anywhere;
+}
+
+.specimen__note {
+  margin-block: var(--folio-space-4);
+  max-inline-size: var(--folio-reading-width);
+}
+
+.specimen__source {
+  margin-block: var(--folio-space-6);
+  font-size: var(--folio-text-fact);
+}
+
+.specimen__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--folio-space-3) var(--folio-space-6);
+  margin-block-start: var(--folio-space-6);
+}
+
+.specimen figure {
+  min-inline-size: 0;
+}
+
+.specimen figcaption {
+  margin-block-start: var(--folio-space-3);
+}
+
+.specimen__footer {
+  padding-block-start: var(--folio-space-8);
+  border-block-start: 1px solid var(--folio-rule);
+}
+
+@media (min-width: 52rem) {
+  .specimen__two-column,
+  .specimen__photos,
+  .specimen__notices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

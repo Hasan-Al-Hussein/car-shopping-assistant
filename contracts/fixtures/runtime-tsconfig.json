@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": false,
+    "verbatimModuleSyntax": true
+  },
+  "include": [
+    "runtime-consumer.ts",
+    "../generated/runtime.ts",
+    "../generated/runtime.validators.d.mts"
+  ]
+}

@@ -1,0 +1,639 @@
+/* V6 is deliberately opt-in. The accepted homepage has no inner-workspace class. */
+.inner-workspace .cinema-value-strip,
+.inner-workspace .cinema-compare-invitation,
+.inner-workspace .cinema-collection-intro #collection-heading {
+  display: none;
+}
+.inner-workspace .cinema-collection {
+  padding-top: 1.6rem;
+}
+.inner-workspace .cinema-collection-intro h1 {
+  font-size: clamp(2.25rem, 3.4vw, 3rem);
+  line-height: 1.1;
+  margin-block: 0.4rem 1rem;
+}
+.inner-workspace .cinema-sample-note,
+.inner-workspace .cinema-result-count,
+.inner-workspace .cinema-claim-note,
+.inner-workspace .cinema-warning {
+  font-size: 0.8125rem;
+}
+.inner-workspace .cinema-car-facts {
+  font-size: 0.875rem;
+}
+.inner-panel {
+  background: var(--brand-white);
+  border-color: var(--brand-line);
+  border-top: 5px solid var(--brand-ink);
+}
+.inner-panel .folio-button {
+  min-height: 46px;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+}
+.inner-panel .workspace-panel-header {
+  border-bottom: 1px solid var(--brand-line);
+  margin-bottom: 1rem;
+}
+.proof.cinematic.inner-workspace {
+  --inner-paper: var(--brand-white);
+  --inner-sage: var(--brand-rose);
+  --inner-line: var(--brand-line);
+  --inner-ink: var(--brand-ink);
+  padding-top: 1rem;
+  background: var(--brand-canvas);
+  font-size: 1rem;
+}
+.inner-workspace .cinema-header {
+  min-height: 5.5rem;
+  padding: 1rem 1.5rem;
+  gap: 1.8rem;
+  background: var(--inner-paper);
+  border: 1px solid var(--inner-line);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 rgb(32 33 36 / 4%);
+}
+.inner-workspace .cinema-brand {
+  font-size: 2rem;
+  letter-spacing: 0.22em;
+  flex-shrink: 0;
+}
+.inner-workspace .cinema-brand span {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  margin-top: 0.4rem;
+}
+.inner-workspace .cinema-header nav {
+  gap: 0.4rem;
+  align-items: center;
+}
+.inner-workspace .cinema-header nav a,
+.inner-workspace .cinema-header nav button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  letter-spacing: 0;
+  background: transparent;
+  color: var(--brand-ink);
+}
+.inner-workspace .cinema-header nav a[aria-current="page"] {
+  background: var(--brand-ink);
+  color: var(--brand-white);
+  border-color: var(--brand-ink);
+}
+.inner-workspace .cinema-header nav a::after {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .inner-workspace .cinema-header nav a:hover,
+  .inner-workspace .cinema-header nav button:hover {
+    border-color: var(--brand-control-line);
+  }
+}
+
+.inner-workspace .cinema-count {
+  font-size: 0.8rem;
+  margin-left: 0.45rem;
+}
+.inner-workspace .cinema-header nav a[aria-current="page"] .cinema-count {
+  color: var(--brand-ink);
+  background: var(--brand-rose);
+}
+.inner-workspace .cinema-header-note {
+  max-width: 10rem;
+  text-align: right;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--brand-muted);
+}
+.inner-workspace .folio-button {
+  min-height: 46px;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  padding: 0.75rem 1.05rem;
+  border-radius: 10px;
+}
+.inner-workspace .cinema-card-actions .folio-button {
+  font-size: 0.9375rem;
+}
+.inner-workspace .folio-button--secondary {
+  background: var(--brand-white);
+  border: 1px solid var(--brand-control-line);
+  color: var(--brand-ink);
+}
+.inner-workspace .folio-button--quiet {
+  border: 1px solid var(--brand-line);
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .inner-workspace .folio-button:hover:not(:disabled) {
+    box-shadow: 0 3px 0 rgb(32 33 36 / 10%);
+  }
+}
+
+.inner-workspace .folio-button:disabled {
+  box-shadow: none;
+  opacity: 0.6;
+}
+.inner-workspace .proof-page {
+  padding-top: 1.2rem;
+}
+.inner-workspace .proof-back,
+.inner-workspace .cinema-back {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+}
+.inner-workspace .proof-page h1 {
+  font-size: clamp(2.2rem, 3.3vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin: 0.25rem 0 1rem;
+}
+.inner-workspace .proof-eyebrow,
+.inner-workspace .cinema-eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.4rem;
+}
+.inner-workspace .proof-comparison-title {
+  margin: 0;
+  align-items: center;
+}
+.inner-workspace .proof-comparison-title h1 {
+  margin-bottom: 0.75rem;
+}
+.inner-workspace .proof-compare > .proof-back {
+  min-height: 28px;
+  margin-bottom: 0.4rem;
+}
+.inner-workspace .proof-comparison-title .proof-eyebrow {
+  display: none;
+}
+.inner-workspace .proof-review h1 {
+  max-width: none;
+}
+.inner-workspace .inner-comparison-summary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.9rem 1.2rem;
+  margin: 0 0 0.8rem;
+  border: 1px solid var(--brand-line);
+  border-left: 5px solid var(--brand-ink);
+  border-radius: 12px;
+  background: var(--brand-rose);
+}
+.inner-workspace .inner-selection-count {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--brand-line);
+  flex-shrink: 0;
+}
+.inner-workspace .inner-selection-count > strong {
+  font:
+    400 1.9rem/1 "DM Serif Display",
+    Georgia,
+    serif;
+}
+.inner-workspace .inner-selection-count > strong span {
+  color: var(--brand-muted);
+  font-size: 1.2rem;
+}
+.inner-workspace .inner-selection-count > span {
+  max-width: 4rem;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+.inner-workspace .inner-comparison-summary p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.inner-workspace .inner-comparison-summary p span {
+  color: var(--brand-muted);
+  font-size: 0.8125rem;
+}
+.inner-workspace .inner-comparison-summary > .folio-button {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.inner-workspace .proof-table-instruction,
+.inner-workspace .proof-table-note {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin-block: 0.7rem;
+}
+.inner-workspace .proof-table-instruction {
+  margin-block: 0 0.5rem;
+  font-size: 0.75rem;
+}
+.inner-workspace .proof-table-region {
+  border-color: var(--brand-line);
+  box-shadow: 0 5px 16px rgb(32 33 36 / 4%);
+}
+.inner-workspace .proof-table th:first-child {
+  background: var(--brand-rose);
+  width: 9rem;
+  font-size: 0.875rem;
+}
+.inner-workspace .proof-attribute-heading span {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 1.25rem;
+  color: var(--brand-muted);
+}
+.inner-workspace .proof-table th,
+.inner-workspace .proof-table td {
+  padding: 1rem 1.15rem;
+}
+.inner-workspace .proof-table thead th {
+  padding-top: 1.15rem;
+  border-bottom: 2px solid var(--brand-line);
+}
+.inner-workspace .proof-table .proof-photo {
+  margin: 0 0 0.75rem;
+}
+.inner-workspace .proof-table .folio-photo {
+  height: 11.5rem;
+  aspect-ratio: auto;
+  border-radius: 8px;
+  background: var(--brand-canvas);
+}
+.inner-workspace .proof-table .folio-photo img {
+  object-fit: contain;
+}
+.inner-workspace .proof-table .proof-photo figcaption {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+.inner-workspace .proof-column-id {
+  font-size: 0.6875rem;
+  margin-top: 0.7rem;
+  letter-spacing: 0.1em;
+}
+.inner-workspace .proof-car-heading {
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+.inner-workspace .proof-table .proof-source-title {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0.5rem 0 0.8rem;
+}
+.inner-workspace .proof-table td {
+  font-size: 1rem;
+}
+.inner-workspace .proof-table .proof-claim small,
+.inner-workspace .proof-table .proof-fact-value small {
+  font-size: 0.75rem;
+}
+.inner-workspace .proof-fact-caption {
+  font-size: 0.75rem;
+}
+.inner-workspace .cinema-detail {
+  padding-top: 1.2rem;
+}
+.inner-workspace .cinema-detail-heading {
+  margin-bottom: 1.2rem;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--brand-line);
+}
+.inner-workspace .cinema-detail h1 {
+  font-size: clamp(2.25rem, 3.4vw, 3.25rem);
+  line-height: 1.08;
+}
+.inner-workspace .cinema-detail-heading .cinema-eyebrow {
+  display: none;
+}
+.inner-workspace .cinema-source-title {
+  font-size: 0.875rem;
+  max-width: 28rem;
+}
+.inner-workspace .cinema-source-title > span {
+  font-size: 0.6875rem;
+}
+.inner-workspace .cinema-inspection {
+  gap: 1.5rem;
+  align-items: stretch;
+}
+.inner-workspace .cinema-detail-photo .folio-photo {
+  max-height: 25rem;
+  aspect-ratio: 4/3;
+  border: 1px solid var(--brand-line);
+  background: var(--brand-rose);
+}
+.inner-workspace .cinema-detail-photo figcaption {
+  font-size: 0.75rem;
+}
+.inner-workspace .cinema-decision {
+  background: var(--brand-white);
+  border: 1px solid var(--brand-line);
+  border-top: 4px solid var(--brand-ink);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+.inner-workspace .cinema-detail-price > span,
+.inner-workspace .cinema-detail-facts dt {
+  font-size: 0.8125rem;
+}
+.inner-workspace .cinema-detail-price > p,
+.inner-workspace .cinema-detail-warning p,
+.inner-workspace .cinema-viewing-note {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+.inner-workspace .cinema-detail-facts {
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+.inner-workspace .cinema-detail-facts .proof-fact-caption,
+.inner-workspace .cinema-detail-facts .proof-claim small {
+  font-size: 0.75rem;
+}
+.inner-workspace .cinema-evidence {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+}
+.inner-workspace .cinema-evidence-intro h2 {
+  font-size: 2rem;
+}
+.inner-workspace .cinema-evidence-intro p,
+.inner-workspace .cinema-evidence-content details,
+.inner-workspace .cinema-unresolved-fact {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.inner-workspace .cinema-conflict-block {
+  border: 1px solid #d3bea4;
+  border-radius: 12px;
+  background: #f6efe4;
+  padding: 1.25rem;
+}
+.inner-workspace .proof-review-layout {
+  gap: 1.5rem;
+  align-items: start;
+}
+.inner-workspace .proof-review-car {
+  background: var(--brand-rose);
+  border: 1px solid var(--brand-line);
+  padding: 1.25rem;
+}
+.inner-workspace .proof-review-content {
+  background: var(--brand-white);
+  border: 1px solid var(--brand-line);
+  border-top: 4px solid var(--brand-ink);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.inner-workspace .proof-review-content p,
+.inner-workspace .proof-review-rule,
+.inner-workspace .proof-confirm-box {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.inner-workspace .proof-review-car .proof-source-title,
+.inner-workspace .proof-review-car .proof-photo figcaption {
+  font-size: 0.8125rem;
+}
+.inner-workspace .proof-appointment-time {
+  background: var(--brand-rose);
+  border: 1px solid var(--brand-line);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.inner-workspace .proof-outcome-banner {
+  border-radius: 10px;
+}
+.inner-workspace .proof-operation-key {
+  overflow-wrap: anywhere;
+}
+.inner-workspace .workspace-access {
+  background: var(--brand-rose);
+  border: 1px solid var(--brand-line);
+  border-radius: 9px;
+  padding: 0.6rem 0.8rem;
+  min-height: 44px;
+}
+@media (max-width: 1100px) and (min-width: 561px) {
+  .inner-workspace .cinema-header {
+    gap: 0.6rem;
+    padding-inline: 1rem;
+    flex-wrap: wrap;
+  }
+  .inner-workspace .cinema-header-note {
+    display: none;
+  }
+  .inner-workspace .cinema-header nav {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 767px) {
+  .inner-workspace .inner-comparison-summary {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .inner-workspace .inner-comparison-summary > p {
+    flex: 1;
+  }
+  .inner-workspace .cinema-detail-heading {
+    align-items: start;
+  }
+}
+@media (max-width: 560px) {
+  .proof.cinematic.inner-workspace {
+    padding-top: 0.6rem;
+  }
+  .inner-workspace .cinema-header {
+    min-height: 64px;
+    padding: 0.6rem 0.8rem;
+    gap: 0.75rem;
+    border-radius: 12px;
+  }
+  .inner-workspace .cinema-brand {
+    font-size: 1.35rem;
+    letter-spacing: 0.18em;
+  }
+  .inner-workspace .cinema-header nav {
+    gap: 0.3rem;
+  }
+  .inner-workspace .cinema-header nav a,
+  .inner-workspace .cinema-header nav button {
+    justify-content: flex-start;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+  }
+  .inner-workspace .proof-page,
+  .inner-workspace .cinema-detail {
+    padding-top: 0.8rem;
+  }
+  .inner-workspace .proof-page h1,
+  .inner-workspace .cinema-detail h1 {
+    font-size: 2rem;
+  }
+  .inner-workspace .proof-back,
+  .inner-workspace .cinema-back {
+    min-height: 32px;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+  .inner-workspace .folio-button {
+    font-size: 0.875rem;
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
+  }
+  .inner-workspace .inner-comparison-summary {
+    padding: 0.75rem;
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
+  .inner-workspace .inner-selection-count {
+    border: 0;
+    padding-right: 0;
+    gap: 0.45rem;
+  }
+  .inner-workspace .inner-selection-count > strong {
+    font-size: 1.65rem;
+  }
+  .inner-workspace .inner-selection-count > span {
+    font-size: 0.75rem;
+  }
+  .inner-workspace .inner-comparison-summary > p {
+    order: 3;
+    flex-basis: 100%;
+    font-size: 0.8125rem;
+  }
+  .inner-workspace .inner-comparison-summary p br {
+    display: none;
+  }
+  .inner-workspace .inner-comparison-summary p span {
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+  }
+  .inner-workspace .inner-comparison-summary > .folio-button {
+    margin-left: auto;
+  }
+  .inner-workspace .proof-table th:first-child {
+    width: 7rem;
+    font-size: 0.75rem;
+  }
+  .inner-workspace .proof-table th,
+  .inner-workspace .proof-table td {
+    padding: 0.8rem;
+  }
+  .inner-workspace .proof-table .folio-photo {
+    height: 8rem;
+  }
+  .inner-workspace .proof-table .proof-photo figcaption {
+    font-size: 0.6875rem;
+  }
+  .inner-workspace .proof-car-heading {
+    font-size: 1.3rem;
+  }
+  .inner-workspace .proof-table .proof-source-title {
+    font-size: 0.75rem;
+  }
+  .inner-workspace .proof-table td {
+    font-size: 0.9375rem;
+  }
+  .inner-workspace .cinema-detail-heading {
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .inner-workspace .cinema-source-title {
+    font-size: 0.75rem;
+  }
+  .inner-workspace .cinema-detail-photo .folio-photo {
+    height: 12rem;
+  }
+  .inner-workspace .cinema-decision {
+    padding: 0.9rem;
+  }
+  .inner-workspace .cinema-detail-photo figcaption {
+    font-size: 0.6875rem;
+  }
+  .inner-workspace .cinema-detail-price > p,
+  .inner-workspace .cinema-viewing-note {
+    font-size: 0.75rem;
+  }
+  .inner-workspace .cinema-evidence {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+  .inner-workspace .proof-review-content,
+  .inner-workspace .proof-review-car {
+    padding: 0.9rem;
+  }
+  .inner-workspace .proof-review-content p,
+  .inner-workspace .proof-review-rule,
+  .inner-workspace .proof-confirm-box {
+    font-size: 0.875rem;
+  }
+}
+@media (max-width: 560px) {
+  .inner-workspace[data-text-size="normal"] .proof-table {
+    --comparison-car-width: calc(100vw - 2.5rem - 6rem - 2px);
+    --comparison-count: 3;
+    width: calc(6rem + var(--comparison-car-width) * var(--comparison-count));
+    min-width: 0;
+  }
+  .inner-workspace[data-text-size="normal"] .proof-table[data-car-count="1"] {
+    --comparison-count: 1;
+  }
+  .inner-workspace[data-text-size="normal"] .proof-table[data-car-count="2"] {
+    --comparison-count: 2;
+  }
+  .inner-workspace[data-text-size="normal"]
+    .proof-table
+    thead
+    th:not(:first-child) {
+    min-width: 0;
+  }
+  .inner-workspace[data-text-size="normal"] .proof-table th:first-child {
+    width: 6rem;
+  }
+  .inner-workspace[data-text-size="normal"] .proof-table th,
+  .inner-workspace[data-text-size="normal"] .proof-table td {
+    padding-inline: 0.7rem;
+  }
+}
+@media (max-width: 560px) {
+  .inner-workspace[data-text-size="double"] .cinema-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .inner-workspace[data-text-size="double"] .cinema-header .cinema-brand {
+    align-self: start;
+  }
+  .inner-workspace[data-text-size="double"] .inner-comparison-summary {
+    align-items: stretch;
+  }
+  .inner-workspace[data-text-size="double"]
+    .inner-comparison-summary
+    > .folio-button {
+    margin-left: 0;
+    white-space: normal;
+  }
+  .inner-workspace[data-text-size="double"] .proof-review-content,
+  .inner-workspace[data-text-size="double"] .proof-confirm-box {
+    padding: 12px;
+  }
+  .inner-workspace[data-text-size="double"] .folio-button {
+    overflow-wrap: normal;
+    word-break: normal;
+    padding-inline: 12px;
+  }
+}

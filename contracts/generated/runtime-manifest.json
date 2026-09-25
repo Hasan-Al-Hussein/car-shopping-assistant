@@ -1,0 +1,17 @@
+{
+  "contract_version": "1.0.0",
+  "openapi_sha256": "9d19a773afe7bc14e8e21fd05762a7a63114423f37c6996614c8f9f4b5a5cc70",
+  "dialect": "2020-12",
+  "operations": 30,
+  "components": 129,
+  "validators": 147,
+  "discriminator_translations": 30,
+  "standalone_bytes": 1236132,
+  "standalone_gzip_bytes": 114969,
+  "endpoint_validators": 57,
+  "endpoint_standalone_bytes": 776382,
+  "endpoint_standalone_gzip_bytes": 74186,
+  "ajv": "8.20.0",
+  "formats": "3.0.1",
+  "vite": "8.3.0"
+}

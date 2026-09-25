@@ -1,0 +1,42 @@
+# Persistence schema contract — v1 candidate
+
+Platform owns all SQLAlchemy tables/migrations. This is a reviewed design candidate for F-02; no database has been created by this file. Exact migration/code proof belongs to BE-01 after F-02/F-03 acceptance.
+
+Common representation: UUID strings for internal IDs; UTC ISO text with `Z` for stored instants; integer versions/revisions; SHA-256 lower-case hex fingerprints; JSON only for bounded validated evidence/state payloads, never to replace relational owner/key/resource constraints. Exact currency values use minor-unit integers. Foreign keys enabled on **every** connection. Use DELETE journal + FULL synchronous on the installed SQLite 3.49.1. Select one explicit `BEGIN IMMEDIATE` write path and `BEGIN` read path with bounded busy timeout; prove emitted SQL in BE-01.
+
+| Table | Key / required columns | Relational constraints and lifecycle |
+| --- | --- | --- |
+| store_metadata | singleton ID=1, schema_version, store_generation, created_at, restored_at?, recovery_point? | New generation on controlled restore; incompatible schema fails closed, never initializes empty replacement |
+| inventory_snapshots | snapshot_id PK, namespace, workbook_sha256, sheet_name, import_version, extraction_version, policy_version, accepted_count, rejected_count, created_at | Immutable; counts nonnegative; active marker is separate |
+| active_inventory | singleton ID=1, snapshot_id FK, revision | Activation changes pointer only after complete staged snapshot/index validation |
+| listing_versions | composite PK(namespace,snapshot_id,source_id), source_row, original_json, normalized_json | FK snapshot; no globally unique bare source_id; normalized fields cannot silently repair original source |
+| attribute_evidence | ID PK, composite listing FK, attribute, raw_locator_json, normalized_json, status, extraction_version | Multiple conflicting claims preserved; indexed by exact listing/attribute |
+| vehicle_resources | ID PK, mapping_version, created_at | Stable capacity identity; source label or URL is never implicit identity |
+| listing_resource_mappings | composite listing PK/FK, resource_id FK, mapping_version, provenance_json | One validated resource per version, many versions per stable resource; changes invalidate reviews |
+| owners | ID PK, display_name?, created_at, shortlist_revision, preference_revision | Nonunique display name; owner itself is never a credential |
+| owner_credentials | ID PK, owner_id FK, token_digest UNIQUE, context_id UNIQUE, csrf_binding, issued_at, expires_at, revoked_at? | Store digest only; fixed 30-day issue lifetime; revocation no data cascade |
+| journeys | ID PK, owner_id FK UNIQUE, created_at | One baseline Journey per owner; retained as long as required by dependent records |
+| conversation_sessions | ID PK, owner_id FK, journey_id FK, revision, state_json, created_at, last_activity_at, expires_at | Composite UNIQUE(owner_id,id) supports owner-consistent child FKs; accepted activity only renews transcript retention |
+| messages | ID PK, owner_id, session_id, client_message_id, payload_hash, expected_revision, accepted_revision, result_json?, state, created_at | UNIQUE(session_id,client_message_id); composite owner/session FK; no overwrite from stale completion |
+| result_presentations | ID PK, owner_id, session_id, snapshot_id, criteria_hash, created_revision, created_at | Owned explicit action only; composite owner/session FK; immutable order |
+| presentation_items | presentation_id FK, ordinal, composite listing FK | PK(presentation_id,ordinal), ordinal>=0; exact scoped references |
+| preference_settings | owner_id PK/FK, collection_mode | Aggregate revision lives on owners.preference_revision; mode changes never renew values |
+| preferences | composite PK(owner_id,key), value_json, strength, source_session_reference, source_action_id, source_message_reference?, confirmed_at, expires_at, applicability | One typed entry per independently patchable key; per-field provenance/lifetime; unchanged fields retain original metadata; clear removes only that entry; expiry never touches operational records |
+| shortlist_memberships | composite PK(owner_id,namespace,snapshot_id,source_id), added_at, updated_at, expires_at | Exact historical listing ref; unique membership, unresolved-reference retention protection |
+| command_receipts | ID PK, owner_id, command_kind, client_action_id, payload_hash, applied_revision, result_json, created_at, expires_at | UNIQUE(owner_id,command_kind,client_action_id); exact retry before stale check; shortlist add/remove share one command namespace |
+| booking_drafts | ID PK, owner_id, session_id?, revision, exact ref, appointment_json?, state, active_review_id?, created_at, updated_at, expires_at | Edit/confirm serializes on same revision; terminal/recovery state independent of transcript expiry |
+| booking_reviews | ID PK, owner_id, draft_id?, draft_revision, operation_key, payload_hash, immutable_payload_json, store_generation, issued_at, expires_at, state | UNIQUE(owner_id,operation_key); immutable complete reviewed payload retained independently of draft/session cleanup |
+| operation_outcomes | ID PK, owner_id, operation_key, review_id, payload_hash, store_generation, terminal_state, terminal_result_json, terminal_at, replay_valid_until | UNIQUE(owner_id,operation_key), UNIQUE(review_id); terminal_state only SUCCEEDED/REJECTED; no persisted timeout/unknown as rejection |
+| bookings | ID PK, owner_id, review_id, operation_id, resource_id, exact original ref, starts_at_utc, ends_at_utc, timezone, immutable_receipt_json, confirmed_at, expires_at | UNIQUE(review_id), UNIQUE(operation_id), start<end; serialized half-open overlap check under write lock; index(resource_id,start,end) is not sole overlap enforcement |
+| leads | ID PK, owner_id, journey_id, source_session_reference, revision, stage, values_json, created_at, updated_at, expires_at | UNIQUE(owner_id,journey_id), owner-consistent journey FK; closed interested/viewing_confirmed stage; explicit capture only; retain source-session ID as sanitized provenance without retaining expired transcript |
+| lead_bookings | lead_id FK, booking_id FK | Unique link; same-owner validation; retry cannot duplicate linkage |
+| export_intents | ID PK, lead_id FK, lead_revision, store_generation, projection_version, state, attempts, last_error_code?, created_at | UNIQUE(store_generation,projection_version,lead_id); projector repair independent of booking; durable outbox created in canonical action transaction |
+| export_state | singleton ID=1, store_generation, canonical_version, exported_version?, state, updated_at | Versions are global projection scope within one generation; stale or old-generation output cannot replace or claim current publication |
+| rule_versions | version PK, policy_version, rules_json, eligibility_version, created_at | Immutable review authority; current pointer separate; no rewriting historical rules |
+| operational_events | ID PK, event_type, source/config/generation refs, safe_code?, created_at | Sanitized local diagnostics; never raw contact/transcript/credentials; not product analytics |
+
+No deletion cascade from credentials/session/draft into reviews/outcomes/bookings/leads. Nullable origin FKs may be cleared only under the adopted retention procedure while immutable review/receipt identity is retained. Shortlist and command receipts must retain enough revision authority that an old command never becomes fresh again after cleanup. Expired review/key cannot be recreated from client payload; normal confirmation requires a retained server-issued review.
+
+Owner-consistent composite FKs apply to child records wherever a separate owner and parent ID coexist. Domain validation still checks ownership before loading private data. Schema constraints provide a second boundary, not a substitute for authorization. Inventory snapshot deletion is prohibited while referenced by retained private/history records; no source retargeting on activation.
+
+BE-01 acceptance needs isolated runtime test stores, actual SQLite/FTS5 metadata, PRAGMA inspection on two fresh connections, one-time migration/restart, FK/unique rejection, transaction tracing and rollback, corrupt/incompatible-store fail-closed behavior, resolved allowed paths and no source changes. Existing live stores must be opened in noncreating mode; only explicit operator initialization may create a fresh store. No `create_all` as a silent startup repair.

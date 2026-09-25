@@ -1,0 +1,38 @@
+[
+  {
+    "name": "dm-sans-regular.ttf",
+    "url": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAopxhTg.ttf",
+    "bytes": 48280,
+    "sha256": "B0AE3E89A7D3EF2B1838BB4B1CEB0B17CC3435AF061EEE809D76AA623FF116E9"
+  },
+  {
+    "name": "dm-sans-semibold.ttf",
+    "url": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAfJthTg.ttf",
+    "bytes": 48280,
+    "sha256": "B79A2EA7A38F33FD96A282FADB9CE97626BB0724A44D21075859F0E50239993A"
+  },
+  {
+    "name": "dm-serif-display.ttf",
+    "url": "https://fonts.gstatic.com/s/dmserifdisplay/v17/-nFnOHM81r4j6k0gjAW3mujVU2B2K_c.ttf",
+    "bytes": 70348,
+    "sha256": "C03775F8CC3DB88CFEA259B231ABE13F94E6A3D3CB01C09477A2E42A1F5919E1"
+  },
+  {
+    "name": "dm-serif-display-italic.ttf",
+    "url": "https://fonts.gstatic.com/s/dmserifdisplay/v17/-nFhOHM81r4j6k0gjAW3mujVU2B2G_Vx1w.ttf",
+    "bytes": 68312,
+    "sha256": "0AB2FCACEDAAFC0A7536453D4A763F131BA83A636706D3EC2D685CF04478A920"
+  },
+  {
+    "name": "DM-Sans-OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmsans/OFL.txt",
+    "bytes": 4482,
+    "sha256": "9AF36190332437F5ECD09974DE43C1F7C77A310A996CDD8CEB25628B458840E1"
+  },
+  {
+    "name": "DM-Serif-Display-OFL.txt",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/dmserifdisplay/OFL.txt",
+    "bytes": 4605,
+    "sha256": "A3E5CDD67D4571DD0A24FCC968DE0EFDE7AE97EF752DAF0906E4767619DD7231"
+  }
+]
