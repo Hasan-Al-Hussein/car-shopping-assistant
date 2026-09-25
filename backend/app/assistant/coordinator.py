@@ -64,6 +64,7 @@ from .intent import (
     issue,
 )
 from .interpretation import interpret
+from .output_policy import safe_assistant_text
 from .provider import GeminiAdapter
 from .read_ports import InventoryReadPort, SessionPort, UnconfiguredInventory
 from .recalled_values import format_recalled_preferences, is_recall_question
@@ -226,6 +227,23 @@ class ReadCoordinator:
         self._gate = CallGate()
 
     async def run(
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        request: MessageRequest,
+        *,
+        request_state: MutableMapping[str, Any],
+        budget: TurnBudget,
+        private_values: tuple[str, ...] = (),
+    ) -> MessageResult:
+        result = await self._run(
+            context, session_id, request, request_state=request_state,
+            budget=budget, private_values=private_values,
+        )
+        # Covers completed replays and action/collection delegates as well as read turns.
+        return result.model_copy(update={"text": safe_assistant_text(result.text)})
+
+    async def _run(
         self,
         context: AuthorizedOwnerContext,
         session_id: str,
@@ -528,6 +546,7 @@ class ReadCoordinator:
             return await self._complete(context, admission, result, budget)
         if observed.snapshot.unresolved is not None:
             plan = unresolved_collection_plan(admission, observed, provider=True)
+            plan.result.text = safe_assistant_text(plan.result.text)
             return await self._gate.run(
                 lambda: port.complete_collection(context, admission, plan),
                 budget,
@@ -586,6 +605,7 @@ class ReadCoordinator:
             result.state = "clarification"
             return await self._complete(context, admission, result, budget)
         # Unknown/postmutation failures propagate; the bridge never rewrites success text.
+        plan.result.text = safe_assistant_text(plan.result.text)
         return await self._gate.run(
             lambda: port.complete_collection(context, admission, plan),
             budget,
@@ -828,6 +848,7 @@ class ReadCoordinator:
         ticket = admission.ticket
         if ticket is None:
             raise ApiFailure("INTERNAL_ERROR")
+        result.text = safe_assistant_text(result.text)
         # No register/select-before-complete: P9 commits the signed search presentation and
         # exact selection with this ticket, so the turn cannot supersede its own read.
         return await self._gate.run(

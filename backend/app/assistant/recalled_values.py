@@ -7,6 +7,8 @@ from datetime import datetime
 from app.api.schemas.inventory import BudgetRange, SearchCriteria
 from app.api.schemas.memory import BudgetPreference, PreferenceRecord
 
+from .output_policy import safe_assistant_text
+
 _CATEGORY_LIMIT = 3
 _LABELS = {
     "budget": "cash budget",
@@ -89,7 +91,9 @@ def format_recalled_preferences(
             value = _budget(preference.value)
         else:
             shown = preference.value[:_CATEGORY_LIMIT]
-            value = ", ".join(json.dumps(item, ensure_ascii=False) for item in shown)
+            value = ", ".join(
+                json.dumps(safe_assistant_text(item), ensure_ascii=False) for item in shown
+            )
             remaining = len(preference.value) - len(shown)
             if remaining:
                 value += f"; {remaining} additional saved values remain in your preference record"
@@ -107,5 +111,7 @@ def format_recalled_preferences(
         lines.append("No current saved preferences are available. You can state new criteria.")
     if record.collection_mode == "disabled":
         lines.append("Preference saving is paused; retained values are shown only for review.")
-    lines.append("These saved values have not changed your current search or saved new preferences.")
+    lines.append(
+        "These saved values have not changed your current search or saved new preferences."
+    )
     return "\n".join(lines)

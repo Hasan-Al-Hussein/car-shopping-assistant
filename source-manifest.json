@@ -1,7 +1,7 @@
 {
   "format": "CSA-GITHUB-SOURCE-1",
   "scope": "Public local assessment source; not a deployment or full release acceptance.",
-  "source_manifest_sha256": "e874e897c62114d664e985a383580b13f49b8c24312d84b299b2921fd9b7bcff",
+  "source_manifest_sha256": "d91aa9d1dc24a22b90d8d04eaded62a8fd28b5b89f1cdda4638f503b7d6419e2",
   "files": [
     {
       "path": ".gitignore",
@@ -10,8 +10,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 13102,
-      "sha256": "289d66e0c5d01d99692dedcf4ed7c70725b0d405448f32474675fb49177caec7"
+      "bytes": 13382,
+      "sha256": "7ea563881453a6409844aba87141406ef3b4db036b7254ac7c5a6a96d8d7b642"
     },
     {
       "path": "Records/build/BE-04/evidence/accepted-inventory-integrity.json",
@@ -260,8 +260,8 @@
     },
     {
       "path": "backend/app/assistant/coordinator.py",
-      "bytes": 36908,
-      "sha256": "2fd22af94258596c2db9f97cf453d5fb5942703af7d46b5f413a66eba6ea9f63"
+      "bytes": 37783,
+      "sha256": "0204a013f2604a2d78248758300c18511cd13dab9ff9facebd239d350fa06134"
     },
     {
       "path": "backend/app/assistant/evaluation/__init__.py",
@@ -320,8 +320,8 @@
     },
     {
       "path": "backend/app/assistant/grounding.py",
-      "bytes": 7698,
-      "sha256": "4daf3fb6af5e1243c6b86d1bdbc83e6c553eae3745efb8d1d861b1583778a61f"
+      "bytes": 7767,
+      "sha256": "896b61b4db68d277db04228921487fc29a5f0a722414d2fa1fd87ae5152eb246"
     },
     {
       "path": "backend/app/assistant/intent.py",
@@ -332,6 +332,11 @@
       "path": "backend/app/assistant/interpretation.py",
       "bytes": 2373,
       "sha256": "671a7eedee486da8de2c310fc0846e56205cf6230365ac385fb0b7f7702df6f2"
+    },
+    {
+      "path": "backend/app/assistant/output_policy.py",
+      "bytes": 3180,
+      "sha256": "1d57504172295cbb94eeff42b61a5883df91aad2ac6defaa2838e3a9d65a7ab2"
     },
     {
       "path": "backend/app/assistant/packet.py",
@@ -350,8 +355,8 @@
     },
     {
       "path": "backend/app/assistant/recalled_values.py",
-      "bytes": 4704,
-      "sha256": "4e42dc00e879ea5147cf94b71a80a20511b516bf1d4a631b5fa2898e24bd9140"
+      "bytes": 4817,
+      "sha256": "edb2b8229273d90c0cc82c7735aae4d53ee5b5583c40fa677d86fcfc42438e79"
     },
     {
       "path": "backend/app/assistant/references.py",
@@ -1029,6 +1034,51 @@
       "sha256": "ce3be4e3ef053b87d5384fdc7a614db109618dfcc1df75f11a8a03ab75790c86"
     },
     {
+      "path": "backend/tests/assistant/__init__.py",
+      "bytes": 40,
+      "sha256": "a3ba0372d7664cfcfad8046a9dd0f0df3501c1a78fc99510f206bad985fa903a"
+    },
+    {
+      "path": "backend/tests/assistant/a4_cases.py",
+      "bytes": 3856,
+      "sha256": "7fb7b031a31ed15491a8c0556e1f4d7e286811cd2d221c22339aeb1943f98823"
+    },
+    {
+      "path": "backend/tests/assistant/conversation_fakes.py",
+      "bytes": 13898,
+      "sha256": "e54d5276c9d550b9ca6e369f2f62958162d2ff097e7f928cfc79108aebd01376"
+    },
+    {
+      "path": "backend/tests/assistant/test_collection_planner.py",
+      "bytes": 18191,
+      "sha256": "be6e13968bf0ef974d1c37efc16f553daa366dc91c1d3f2fc285d2ff5a1bb7ff"
+    },
+    {
+      "path": "backend/tests/assistant/test_collection_routing.py",
+      "bytes": 8127,
+      "sha256": "83e8136fef4ec94e7f447ecef1636f895c6d509b51e696931f8f066a24ac88d5"
+    },
+    {
+      "path": "backend/tests/assistant/test_coordinator.py",
+      "bytes": 23978,
+      "sha256": "285256cb5257095a612894ce262d809d5648f14a828891190d4f02b364be29f8"
+    },
+    {
+      "path": "backend/tests/assistant/test_grounded_coordinator.py",
+      "bytes": 16038,
+      "sha256": "324367ca41b863f7df3e04d13ce9c7d95d3ee8464813ea1a0dfcb547e7981105"
+    },
+    {
+      "path": "backend/tests/assistant/test_output_policy.py",
+      "bytes": 7971,
+      "sha256": "409592fa112d6e05f6676ff4004de88e4bdca9c3713919b66826dd0187ccd1e5"
+    },
+    {
+      "path": "backend/tests/assistant/test_recalled_values.py",
+      "bytes": 4411,
+      "sha256": "db7a29ac92fa576b60ac7690e3bf7bddc3a2f2bf4fc97c0d56a6787cee728470"
+    },
+    {
       "path": "backend/uv.lock",
       "bytes": 108398,
       "sha256": "8d0c601492371685cb5d90fdd6192353591feede3455ccea69240d3473e8b886"
@@ -1167,6 +1217,11 @@
       "path": "delivery/evidence/clean-setup.md",
       "bytes": 5890,
       "sha256": "7071b849d5c803e05236a84a3ada73c5582b1c0249f91beef8e6a57184ac9dae"
+    },
+    {
+      "path": "delivery/evidence/competitor-output-check.md",
+      "bytes": 1505,
+      "sha256": "5c29a08d8aa70cd784a0f71b5637e0c5c93776f569193f92ffec2d5745c32dfd"
     },
     {
       "path": "delivery/evidence/multi-turn-conversation.md",

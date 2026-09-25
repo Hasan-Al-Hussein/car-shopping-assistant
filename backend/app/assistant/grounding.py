@@ -18,6 +18,8 @@ from app.api.schemas.inventory import (
     UnknownFact,
 )
 
+from .output_policy import safe_assistant_text
+
 Fact = TextFact | IntegerFact | CashPriceFact
 RefKey = tuple[str, str, str]
 LABELS: dict[str, str] = {
@@ -155,7 +157,7 @@ def value_text(value: object, attribute: str) -> str:
         return f"{value:,} km" if attribute == "mileage_km" else str(value)
     if isinstance(value, str):
         # A quoted value remains data; callers render this plain text, never HTML/Markdown.
-        return json.dumps(value, ensure_ascii=False)
+        return json.dumps(safe_assistant_text(value), ensure_ascii=False)
     raise GroundingError("UNSUPPORTED_FACT_VALUE")
 
 

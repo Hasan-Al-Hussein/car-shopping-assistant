@@ -132,6 +132,8 @@ The [verification summary](delivery/evidence/verification-summary.md) records th
 
 The latency pilot used the provider-disabled local API, not live AI responses or an internet deployment. The 500 ms target is an additional project goal, not a PDF requirement. The final mobile tray correction passed 13 targeted tests and application/test TypeScript checks after the 357-test run. The latest frontend build reported 829.15 kB minified / 138.84 kB gzip for the warned chunk. The performance target remains unmet; a complete security audit and universal mobile compatibility haven't been established.
 
+The final [competitor-output check](delivery/evidence/competitor-output-check.md) passed **386 focused offline tests** after correcting an evidence/recall edge case. This checks the reviewed names and variants; it is not an exhaustive guarantee for every platform.
+
 ## Repository guide
 
 | Path | Contents |
