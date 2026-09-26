@@ -5496,7 +5496,7 @@
             }
           ],
           "prose_mode": "fixed",
-          "expected_text": "Which currency and total cash amount should the budget use?"
+          "expected_text": "Is this the total vehicle purchase budget or a payment amount?"
         }
       ]
     },
@@ -7583,7 +7583,7 @@
             }
           ],
           "prose_mode": "fixed",
-          "expected_text": "State exact new soft requirements in an explicit quoted save request, or first settle changed search criteria before asking to remember the current values."
+          "expected_text": "Tell me the new soft preferences to save, or first settle changed search criteria before asking to remember the current values."
         }
       ]
     },

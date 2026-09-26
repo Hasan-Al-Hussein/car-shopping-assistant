@@ -2,6 +2,7 @@
 
 import json
 from collections.abc import Callable
+from typing import Any
 
 import httpx
 from google import genai
@@ -30,8 +31,43 @@ OFFICIAL_BASE_URL = "https://generativelanguage.googleapis.com/"
 MODEL_PATH = "/v1beta/models/gemini-3.5-flash-lite:generateContent"
 
 
+def native_json_schema(schema: dict[str, Any]) -> dict[str, Any]:
+    """Project Pydantic tagged unions into Gemini's documented JSON Schema subset.
+
+    The unchanged Pydantic contract still validates every returned object locally.
+    Branch tags remain single-value enums, making our anyOf branches disjoint.
+    Never mutate the caller's canonical schema or copy buyer data into this channel.
+    """
+
+    def project(node: Any) -> Any:
+        if not isinstance(node, dict):
+            return node
+        result: dict[str, Any] = {}
+        for name, value in node.items():
+            # Array upper bounds make Gemini expand large nested grammars and can
+            # reject an otherwise valid request. Keep them in the canonical local
+            # contract; the wire retains types, required fields and lower bounds.
+            if name in {"title", "default", "discriminator", "maxItems"}:
+                continue
+            if name == "const":
+                result["enum"] = [value]
+            elif name in {"properties", "$defs", "definitions"}:
+                result[name] = {key: project(child) for key, child in value.items()}
+            elif name in {"oneOf", "anyOf", "allOf"}:
+                result["anyOf" if name == "oneOf" else name] = [project(child) for child in value]
+            elif name in {"items", "additionalProperties", "not"}:
+                result[name] = project(value)
+            else:
+                result[name] = value
+        return result
+
+    return project(schema)
+
+
 def _http_failure_phase(
-    error: httpx.HTTPError, *, response_started: bool = False,
+    error: httpx.HTTPError,
+    *,
+    response_started: bool = False,
 ) -> ProviderFailurePhase:
     if not response_started and isinstance(error, (httpx.ConnectError, httpx.ConnectTimeout)):
         return "http_connect"
@@ -121,7 +157,8 @@ class BoundedHttpTransport(httpx.AsyncBaseTransport):
                 total += len(chunk)
                 if total > MAX_RESPONSE_BYTES:
                     raise ProviderFault(
-                        "output_too_large", failure_phase="http_response",
+                        "output_too_large",
+                        failure_phase="http_response",
                         http_status=self.http_status,
                     )
                 chunks.append(chunk)
@@ -190,8 +227,11 @@ def _extract(response: types.GenerateContentResponse) -> TransportResponse:
         # A signature is opaque metadata, not thought text. This stateless
         # interpreter returns only visible text and never replays model parts.
         fields = part.model_dump(exclude_none=True)
-        if (set(fields) - {"text", "thought", "thought_signature"}
-                or part.thought or part.text is None):
+        if (
+            set(fields) - {"text", "thought", "thought_signature"}
+            or part.thought
+            or part.text is None
+        ):
             raise ProviderFault("malformed")
         texts.append(part.text)
     text = "".join(texts)
@@ -272,24 +312,28 @@ class GoogleGenAITransport:
                         ),
                     )
                     phase = "sdk_request"
+                    # The endpoint rejects the planner's complex schema. Its full
+                    # canonical contract stays in the prompt and local validator.
+                    native_schema = request.schema.get("title") != "TurnIntent"
+                    text_format: dict[str, Any] = {"mimeType": "APPLICATION_JSON"}
+                    if native_schema:
+                        text_format["schema"] = native_json_schema(request.schema)
                     response = await client.aio.models.generate_content(
                         model=self._settings.provider_model,
                         contents=request.contents,
                         config=types.GenerateContentConfig(
                             system_instruction=(
-                                output_system_instruction(request.schema, repair=request.repair)
+                                output_system_instruction(
+                                    request.schema,
+                                    repair=request.repair,
+                                    native_schema=native_schema,
+                                )
                             ),
                             max_output_tokens=MAX_OUTPUT_TOKENS,
                             candidate_count=1,
                             http_options=types.HttpOptions(
                                 extra_body={
-                                    "generationConfig": {
-                                        "responseFormat": {
-                                            "text": {
-                                                "mimeType": "APPLICATION_JSON",
-                                            }
-                                        }
-                                    }
+                                    "generationConfig": {"responseFormat": {"text": text_format}}
                                 }
                             ),
                             tools=[],

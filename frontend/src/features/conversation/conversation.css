@@ -1,6 +1,185 @@
 .conversation-shell {
   overscroll-behavior: contain;
 }
+.conversation-header-tools,
+.conversation-settings-toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+.conversation-settings-toolbar {
+  justify-content: end;
+  padding: 0.25rem 0.75rem;
+}
+.workspace-panel.conversation-shell .conversation-settings-trigger,
+.conversation-settings-trigger {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #bdc1cc;
+  background: transparent;
+}
+.conversation-settings-trigger svg {
+  width: 21px;
+  height: 21px;
+}
+.workspace-panel.conversation-shell
+  .conversation-settings-trigger[data-state="open"],
+.workspace-panel.conversation-shell .conversation-settings-trigger:hover {
+  background: #34303a;
+  border-color: #66464f;
+  color: #ffb1ba;
+}
+.conversation-settings-popover {
+  --chat-muted: #bdc1cc;
+  box-sizing: border-box;
+  z-index: 100;
+  width: min(22rem, calc(100vw - 3rem));
+  max-height: min(25rem, var(--radix-popover-content-available-height, 70dvh));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.9rem;
+  border: 1px solid #4d505e;
+  border-radius: 16px;
+  background: #22252e;
+  color: #f5f5f7;
+  box-shadow: 0 14px 38px #0007;
+  color-scheme: dark;
+  font:
+    400 0.8125rem/1.5 "DM Sans",
+    "Segoe UI",
+    sans-serif;
+}
+.conversation-settings-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.workspace-panel.dubizzle-panel.conversation-shell
+  .conversation-settings-heading
+  h3,
+.conversation-settings-heading h3 {
+  margin: 0;
+  font:
+    600 0.9375rem/1.3 "DM Sans",
+    "Segoe UI",
+    sans-serif;
+  color: #f5f5f7;
+}
+.conversation-settings-heading button {
+  border: 0;
+  background: transparent;
+  color: #bdc1cc;
+  width: 32px;
+  height: 32px;
+  font: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.conversation-settings-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin: 0.5rem 0 0.75rem;
+  border-radius: 9px;
+  background: #191b22;
+}
+.conversation-settings-tabs button {
+  min-height: 36px;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #bdc1cc;
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.conversation-settings-tabs button[aria-selected="true"] {
+  background: #46313c;
+  color: #ffc0c9;
+  font-weight: 600;
+}
+.conversation-settings-body,
+.conversation-settings-context,
+.conversation-settings-car-options {
+  display: grid;
+  gap: 0.6rem;
+}
+.conversation-settings-body p {
+  margin: 0;
+}
+.conversation-settings-body .conversation-service {
+  font-size: 0.75rem;
+}
+.conversation-settings-body .conversation-account-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+.conversation-settings-body .conversation-account-options > p {
+  grid-column: 1 / -1;
+}
+.workspace-panel.dubizzle-panel.conversation-shell
+  .conversation-settings-body
+  .folio-button,
+.conversation-settings-body .folio-button {
+  min-height: 38px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #4a4e5c;
+  border-radius: 9px;
+  background: #2c2f3a;
+  color: #f5f5f7;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+.workspace-panel.dubizzle-panel.conversation-shell
+  .conversation-settings-tabs
+  button:is(:hover, :focus-visible) {
+  background: #34303a;
+  color: #ffc0c9;
+}
+.conversation-settings-body .conversation-settings-help,
+.conversation-settings-body .conversation-draft-note,
+.conversation-settings-body .conversation-memory > p,
+.conversation-settings-body .conversation-memory small {
+  color: #bdc1cc;
+  font-size: 0.6875rem;
+}
+.conversation-settings-body .conversation-settings-label {
+  color: #ffb1ba;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+.conversation-settings-body .conversation-memory {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.conversation-settings-body .conversation-memory h3 {
+  font-size: 0.8125rem;
+  margin: 0 0 0.5rem;
+}
+.conversation-settings-body .conversation-memory ul {
+  padding-left: 1.1rem;
+}
+.conversation-settings-body a {
+  color: #ffc0c9;
+  text-underline-offset: 0.18em;
+}
+.conversation-settings-popover :is(button, a, summary):focus-visible {
+  outline: 2px solid #ff878d;
+  outline-offset: 2px;
+}
 .conversation-onboarding {
   display: grid;
   gap: 0.6rem;

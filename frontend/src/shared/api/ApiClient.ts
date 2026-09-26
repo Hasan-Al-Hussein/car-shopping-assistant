@@ -77,7 +77,7 @@ export class ApiClient {
   }
 
   async revalidateIdentity(): Promise<ResponseOf<"get_identity">> {
-    const epoch = this.owner.invalidate();
+    const { epoch } = this.owner.capture();
     const response = await this.read("get_identity", {});
     this.owner.accept(epoch, response.data);
     return response;

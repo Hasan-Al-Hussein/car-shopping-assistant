@@ -116,6 +116,26 @@ function orderedSearch() {
 }
 
 describe("Conversation structured results; synthetic component evidence only", () => {
+  test("natural grounded prose stays visible above matching cars without legacy boilerplate", () => {
+    const text =
+      "There are 3 Nissan cars in these results. The Altima has the newest listed model year, 2023.\n\nIts price has conflicting source values, so I would check that before comparing budgets.";
+    renderAnswer({ ...conversationResult(), search: orderedSearch(), text });
+    const answer = screen.getByText(
+      (_, element) => element?.tagName === "P" && element.textContent === text,
+    );
+    expect(answer).toBeVisible();
+    expect(
+      screen.queryByText("Original answer details"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "3 matching cars" }),
+    ).toBeVisible();
+    expect(
+      answer.compareDocumentPosition(
+        screen.getByRole("heading", { name: "3 matching cars" }),
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
   test("the complete current DTO-derived search template folds without changing saved text", () => {
     renderAnswer(resultWithSearch(currentText));
     const original = screen

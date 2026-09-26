@@ -19,7 +19,7 @@ from app.api.schemas.inventory import (
     SearchRequest,
     SearchResult,
 )
-from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState
+from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState, TranscriptTurn
 from app.assistant.budget import TurnBudget
 from app.assistant.intent import TurnIntent
 from app.assistant.provider import (
@@ -236,6 +236,29 @@ class FakeSessions:
     async def get(self, context: AuthorizedOwnerContext, session_id: str) -> SessionState:
         self.lifecycle.append("get")
         return self.current.model_copy(deep=True)
+
+    async def recent_context(
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        *,
+        before_revision: int,
+    ) -> tuple[TranscriptTurn, ...]:
+        turns = sorted(self.turns.values(), key=lambda turn: turn.admission.session.revision)
+        return tuple(
+            TranscriptTurn(
+                message_id=turn.admission.message_id,
+                client_message_id=turn.admission.request.client_message_id,
+                session_id=session_id,
+                accepted_revision=turn.admission.session.revision,
+                accepted_at="2026-09-25T00:00:00Z",
+                user_text=turn.admission.request.text,
+                state="completed",
+                assistant_result=turn.result,
+            )
+            for turn in turns
+            if turn.result is not None and turn.admission.session.revision < before_revision
+        )[-6:]
 
     async def original_refs(
         self, context: AuthorizedOwnerContext, session_id: str, presentation_id: str

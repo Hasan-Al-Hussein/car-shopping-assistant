@@ -50,6 +50,58 @@ const outcome = (promise: Promise<unknown>) =>
   );
 
 describe("FE-02 owner epochs and memory-only cache", () => {
+  test("focus retains cached private state while checking and after the same owner is confirmed", async () => {
+    const gate = deferred<void>();
+    const { owner, api, policy } = setup(
+      scriptedFetch([
+        {
+          method: "GET",
+          path: "/api/v1/identity",
+          body: { meta: meta(identity().context_id), data: identity() },
+          gate: gate.promise,
+        },
+      ]),
+    );
+    const snapshot = owner.capture();
+    const key = policy.privateRead("get_shortlist", {}).queryKey;
+    policy.client.setQueryData(key, shortlist());
+    const changed = vi.fn();
+    const unsubscribe = owner.subscribe(changed);
+    const binding = bindOwnerInvalidation(
+      owner,
+      () => api.revalidateIdentity(),
+      window,
+    );
+    cleanups.push(() => {
+      binding.dispose();
+      unsubscribe();
+    });
+    window.dispatchEvent(new Event("focus"));
+    expect(owner.capture()).toEqual(snapshot);
+    expect(policy.client.getQueryData(key)).toEqual(shortlist());
+    gate.resolve();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(owner.capture()).toEqual(snapshot);
+    expect(policy.client.getQueryData(key)).toEqual(shortlist());
+    expect(changed).not.toHaveBeenCalled();
+  });
+
+  test("a different owner returned by revalidation still purges the former owner's cache", async () => {
+    const { owner, api, policy } = setup(
+      scriptedFetch([
+        {
+          method: "GET",
+          path: "/api/v1/identity",
+          body: { meta: meta(identity(1).context_id), data: identity(1) },
+        },
+      ]),
+    );
+    const key = policy.privateRead("get_shortlist", {}).queryKey;
+    policy.client.setQueryData(key, shortlist());
+    await api.revalidateIdentity();
+    expect(owner.capture().contextId).toBe(identity(1).context_id);
+    expect(policy.client.getQueryData(key)).toBeUndefined();
+  });
   test("late A response cannot refill cache after switching to B with the same display name", async () => {
     const gate = deferred<void>();
     const fetcher = vi.fn(

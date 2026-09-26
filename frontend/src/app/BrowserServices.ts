@@ -255,32 +255,39 @@ export class BrowserServices {
   }
 
   async revalidate() {
-    // Focus/other-tab events may hide the old context immediately, but never replay a write.
+    // Ordinary focus checks retain confirmed state. Logout, expiry, cross-tab
+    // invalidation and 401 still synchronously clear it through OwnerSession.
     if (this.#commandPending) {
       this.#recheckRequested = true;
       return;
     }
     const sequence = ++this.#sequence;
-    this.#publish({
-      phase: "checking",
-      pending: false,
-      identity: null,
-      session: null,
-      notice: null,
-    });
+    const retained = this.#view.phase === "recognized" && this.#view.identity;
+    if (!retained)
+      this.#publish({
+        phase: "checking",
+        pending: false,
+        identity: null,
+        session: null,
+        notice: null,
+      });
     try {
       const response = await this.api.revalidateIdentity();
       if (sequence !== this.#sequence) return;
       this.#accept(response.data, response.meta.store_generation ?? null);
     } catch (error) {
-      if (sequence === this.#sequence)
+      if (sequence === this.#sequence) {
+        const stillRecognized =
+          retained && this.owner.capture().contextId === retained.context_id;
         this.#publish({
-          phase:
-            error instanceof ClientFailure && error.status === 401
+          phase: stillRecognized
+            ? "recognized"
+            : error instanceof ClientFailure && error.status === 401
               ? "lost"
               : "unavailable",
           notice: failureMessage(error),
         });
+      }
     }
   }
 
@@ -288,6 +295,16 @@ export class BrowserServices {
     identity: Schema<"RecognizedIdentity"> | Schema<"AnonymousIdentity">,
     generation: string | null,
   ) {
+    const sameContext =
+      identity.state === "recognized" &&
+      this.#view.identity?.context_id === identity.context_id &&
+      this.#identityGeneration === generation;
+    if (
+      identity.state === "recognized" &&
+      this.#identityGeneration &&
+      generation !== this.#identityGeneration
+    )
+      this.owner.accept(this.owner.invalidate(), identity);
     this.#identityGeneration = generation;
     const safeIdentity =
       identity.state === "recognized"
@@ -302,7 +319,8 @@ export class BrowserServices {
     this.#publish({
       phase: identity.state,
       identity: safeIdentity,
-      session: null,
+      session: sameContext ? this.#view.session : null,
+      notice: null,
     });
     if (
       identity.state === "recognized" &&
@@ -500,8 +518,19 @@ export class BrowserServices {
       if (
         sequence === this.#sessionReadSequence &&
         this.owner.isCurrent(snapshot)
-      )
-        this.#publish({ session: null, notice: failureMessage(error) });
+      ) {
+        const keepCurrent =
+          this.#view.session?.session_id === id &&
+          error instanceof ClientFailure &&
+          (error.kind === "network" ||
+            error.kind === "timeout" ||
+            (error.kind === "api" &&
+              [429, 503, 504].includes(error.status ?? 0)));
+        this.#publish({
+          session: keepCurrent ? this.#view.session : null,
+          notice: failureMessage(error),
+        });
+      }
     }
   }
 }

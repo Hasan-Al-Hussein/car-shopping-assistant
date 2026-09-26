@@ -6,9 +6,9 @@ Create one worker for the application composition, never one per request or time
 """
 
 import asyncio
-from copy import deepcopy
 from collections.abc import Callable, MutableMapping
 from concurrent.futures import Future, ThreadPoolExecutor
+from copy import deepcopy
 from dataclasses import replace
 from math import isfinite
 from threading import Lock
@@ -25,13 +25,13 @@ from app.api.schemas.inventory import (
     SearchResult,
 )
 from app.api.schemas.memory import MembershipRequest, PreferencesUpdate
-from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState
+from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState, TranscriptTurn
 from app.core.errors import ApiFailure
 from app.identity.authorization import AuthorizedOwnerContext
 from app.inventory.details_service import InventoryDetailsService
 from app.inventory.search_service import InventorySearchService
-from app.memory.service import PreferenceService
 from app.leads.service import LeadService
+from app.memory.service import PreferenceService
 from app.sessions.service import SessionService, ShortlistChange, TurnAdmission, TurnTicket
 from app.sessions.state import SessionContent
 from app.shortlist.service import ShortlistService
@@ -140,8 +140,13 @@ class SessionServiceAdapter:
     """
 
     def __init__(
-        self, service: SessionService, worker: BoundedServiceWorker, budget: TurnBudget,
-        *, actions: ActionBridge | None = None, collection: CollectionBridge | None = None,
+        self,
+        service: SessionService,
+        worker: BoundedServiceWorker,
+        budget: TurnBudget,
+        *,
+        actions: ActionBridge | None = None,
+        collection: CollectionBridge | None = None,
     ) -> None:
         if budget.clock is not monotonic:
             raise ValueError("SERVICE_BUDGET_REQUIRES_MONOTONIC_CLOCK")
@@ -171,18 +176,23 @@ class SessionServiceAdapter:
             admission,
             session=SessionState.model_validate(admission.session.model_dump(mode="json")),
             request=MessageRequest.model_validate(admission.request.model_dump(mode="json")),
-            result=None if admission.result is None else MessageResult.model_validate(
-                admission.result.model_dump(mode="json")
-            ),
+            result=None
+            if admission.result is None
+            else MessageResult.model_validate(admission.result.model_dump(mode="json")),
         )
 
     async def prepare_actions(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
-        requested: RequestedActions, resolved_ref: InventoryRef | None,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        requested: RequestedActions,
+        resolved_ref: InventoryRef | None,
     ) -> PreparedActions:
         bridge, copied = self._action_bridge(), self._admission(admission)
-        reference = None if resolved_ref is None else InventoryRef.model_validate(
-            resolved_ref.model_dump(mode="json")
+        reference = (
+            None
+            if resolved_ref is None
+            else InventoryRef.model_validate(resolved_ref.model_dump(mode="json"))
         )
         return await self._call(lambda: bridge.prepare(context, copied, requested, reference))
 
@@ -192,55 +202,92 @@ class SessionServiceAdapter:
         return self._collection
 
     async def observe_collection(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
     ) -> CollectionObservation:
         bridge, copied = self._collection_bridge(), self._admission(admission)
         return await self._call(lambda: bridge.observe(context, copied))
 
     async def prepare_collection(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
-        observed: CollectionObservation, requested: CollectionRequest, resolved_ref: InventoryRef | None,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        observed: CollectionObservation,
+        requested: CollectionRequest,
+        resolved_ref: InventoryRef | None,
     ) -> CollectionPlan:
         bridge, copied = self._collection_bridge(), self._admission(admission)
         # These are detached data only: no ticket/capability/ORM object is copied.
         snapshot, language = deepcopy(observed), deepcopy(requested)
-        reference = None if resolved_ref is None else InventoryRef.model_validate(resolved_ref.model_dump(mode="json"))
-        return await self._call(lambda: bridge.prepare(context, copied, snapshot, language, reference))
+        reference = (
+            None
+            if resolved_ref is None
+            else InventoryRef.model_validate(resolved_ref.model_dump(mode="json"))
+        )
+        return await self._call(
+            lambda: bridge.prepare(context, copied, snapshot, language, reference)
+        )
 
     async def complete_collection(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission, plan: CollectionPlan,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        plan: CollectionPlan,
     ) -> MessageResult:
-        bridge, copied, copied_plan = self._collection_bridge(), self._admission(admission), deepcopy(plan)
-        return await self._call(lambda: bridge.complete(context, copied, copied_plan), persistence=True)
+        bridge, copied, copied_plan = (
+            self._collection_bridge(),
+            self._admission(admission),
+            deepcopy(plan),
+        )
+        return await self._call(
+            lambda: bridge.complete(context, copied, copied_plan), persistence=True
+        )
 
     async def complete_actions(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
-        plan: PreparedActions, result: MessageResult, *, update: SessionContent | None = None,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        plan: PreparedActions,
+        result: MessageResult,
+        *,
+        update: SessionContent | None = None,
     ) -> MessageResult:
         bridge, copied = self._action_bridge(), self._admission(admission)
         membership = plan.membership
         copied_plan = replace(
             plan,
-            preference=None if plan.preference is None else PreferencesUpdate.model_validate(
-                plan.preference.model_dump(mode="json")
-            ),
-            membership=None if membership is None else ShortlistChange(
+            preference=None
+            if plan.preference is None
+            else PreferencesUpdate.model_validate(plan.preference.model_dump(mode="json")),
+            membership=None
+            if membership is None
+            else ShortlistChange(
                 ref=InventoryRef.model_validate(membership.ref.model_dump(mode="json")),
-                command=MembershipRequest.model_validate(membership.command.model_dump(mode="json")),
+                command=MembershipRequest.model_validate(
+                    membership.command.model_dump(mode="json")
+                ),
                 desired=membership.desired,
             ),
         )
         copied_result = MessageResult.model_validate(result.model_dump(mode="json"))
-        copied_update = None if update is None else SessionContent.model_validate(
-            update.model_dump(mode="json")
+        copied_update = (
+            None
+            if update is None
+            else SessionContent.model_validate(update.model_dump(mode="json"))
         )
         return await self._call(
-            lambda: bridge.complete(context, copied, copied_plan, copied_result, update=copied_update),
+            lambda: bridge.complete(
+                context, copied, copied_plan, copied_result, update=copied_update
+            ),
             persistence=True,
         )
 
     async def confirm_turn(
-        self, context: AuthorizedOwnerContext, session_id: str, request: MessageRequest,
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        request: MessageRequest,
     ) -> MessageResult:
         bridge = self._action_bridge()
         copied = MessageRequest.model_validate(request.model_dump(mode="json"))
@@ -249,7 +296,9 @@ class SessionServiceAdapter:
         )
 
     async def recall_preferences(
-        self, context: AuthorizedOwnerContext, session: SessionState,
+        self,
+        context: AuthorizedOwnerContext,
+        session: SessionState,
     ) -> str:
         bridge = self._action_bridge()
         copied = SessionState.model_validate(session.model_dump(mode="json"))
@@ -265,6 +314,21 @@ class SessionServiceAdapter:
 
     async def get(self, context: AuthorizedOwnerContext, session_id: str) -> SessionState:
         return await self._call(lambda: self._service.get(context, session_id))
+
+    async def recent_context(
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        *,
+        before_revision: int,
+    ) -> tuple[TranscriptTurn, ...]:
+        return await self._call(
+            lambda: self._service.recent_context(
+                context,
+                session_id,
+                before_revision=before_revision,
+            )
+        )
 
     async def ordinal(
         self, context: AuthorizedOwnerContext, session_id: str, presentation_id: str, ordinal: int
@@ -384,7 +448,8 @@ class AssistantService:
             raise ValueError("COLLECTION_REQUIRES_BOTH_SHARED_DOMAIN_SERVICES")
         self._collection = (
             CollectionBridge(sessions, leads, drafts, drafts.rules)
-            if leads is not None and drafts is not None else None
+            if leads is not None and drafts is not None
+            else None
         )
         self._actions = (
             ActionBridge(

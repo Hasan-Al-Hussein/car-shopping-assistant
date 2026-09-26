@@ -2,7 +2,14 @@ export function CinemaIcon({
   kind,
 }: {
   kind:
-    "spark" | "sparkle" | "robot" | "search" | "compare" | "source" | "arrow";
+    | "spark"
+    | "sparkle"
+    | "robot"
+    | "search"
+    | "compare"
+    | "source"
+    | "arrow"
+    | "settings";
 }) {
   return (
     <svg
@@ -14,7 +21,12 @@ export function CinemaIcon({
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {kind === "robot" ? (
+      {kind === "settings" ? (
+        <>
+          <path d="m9 3-.7 2.1-1.9 1.1-2.2-.4-2 3.4 1.5 1.7v2.2l-1.5 1.7 2 3.4 2.2-.4 1.9 1.1L9 21h4l.7-2.1 1.9-1.1 2.2.4 2-3.4-1.5-1.7v-2.2l1.5-1.7-2-3.4-2.2.4-1.9-1.1L13 3Z" />
+          <circle cx="11" cy="12" r="3" />
+        </>
+      ) : kind === "robot" ? (
         <>
           <rect x="4" y="7" width="16" height="13" rx="5" />
           <path d="M12 7V4M2 12v4m20-4v4M9 16h6" />

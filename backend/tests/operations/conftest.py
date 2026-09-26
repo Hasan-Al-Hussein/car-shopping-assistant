@@ -1,0 +1,3 @@
+from tests.operations.activation_cases import activation_case as activation_case
+from tests.operations.activation_cases import adopted_inputs as adopted_inputs
+from tests.operations.activation_cases import operator_project as operator_project

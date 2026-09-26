@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { BrowserServices } from "../../src/app/BrowserServices";
 import { ClientFailure } from "../../src/shared/api/ClientFailure";
+import { bindOwnerInvalidation } from "../../src/app/ownerInvalidation";
 import type { Schema } from "../../src/shared/api/contracts";
 import { deferred } from "../harness/fixtures";
 import { apiError, identity, meta, schemaFixture } from "./apiFixtures";
@@ -9,6 +10,9 @@ import {
   conversationEnvelope,
   conversationSession,
   otherConversationId,
+  transcriptPage,
+  transcriptTurn,
+  conversationResult,
 } from "./conversationFixtures";
 
 const services: BrowserServices[] = [];
@@ -29,7 +33,7 @@ function setup(
   const read = vi
     .spyOn(service.api, "revalidateIdentity")
     .mockImplementation(async () => {
-      service.owner.accept(service.owner.invalidate(), initial);
+      service.owner.accept(service.owner.capture().epoch, initial);
       return {
         meta: meta(initial.state === "recognized" ? initial.context_id : null),
         data: initial,
@@ -46,6 +50,82 @@ function nextIdentity(service: BrowserServices, value = identity(1)) {
 }
 
 describe("V5 shell identity lifecycle, fake transport only", () => {
+  test("Alt-Tab focus keeps the same conversation, transcript and draft throughout revalidation", async () => {
+    const { service, read } = setup(identity());
+    await flush();
+    const session = conversationSession();
+    session.revision = 1;
+    vi.spyOn(service.api, "read").mockImplementation(async (operation) => {
+      if (operation === "get_session") return conversationEnvelope(session);
+      if (operation === "get_session_messages")
+        return conversationEnvelope(
+          transcriptPage([transcriptTurn(conversationResult())], 1),
+        );
+      throw Error(`UNSCRIPTED:${operation}`);
+    });
+    await service.readSession(session.session_id);
+    await service.conversation.activate(session.session_id);
+    service.conversation.setText(session.session_id, "Keep my follow-up");
+    const epoch = service.owner.capture().epoch;
+    const gate = deferred<void>();
+    read.mockImplementationOnce(async () => {
+      await gate.promise;
+      service.owner.accept(epoch, identity());
+      return { meta: meta(identity().context_id), data: identity() };
+    });
+    const observed: ReturnType<typeof service.getSnapshot>[] = [];
+    const unsubscribe = service.subscribe(() =>
+      observed.push(service.getSnapshot()),
+    );
+    const binding = bindOwnerInvalidation(
+      service.owner,
+      () => service.revalidate(),
+      window,
+    );
+    window.dispatchEvent(new Event("focus"));
+    expect(service.getSnapshot().session?.session_id).toBe(session.session_id);
+    expect(service.conversation.getSnapshot().active?.turns).toHaveLength(1);
+    gate.resolve();
+    await flush();
+    expect(service.owner.capture().epoch).toBe(epoch);
+    expect(
+      observed.every(
+        (view) =>
+          view.phase === "recognized" &&
+          view.session?.session_id === session.session_id,
+      ),
+    ).toBe(true);
+    expect(service.conversation.getSnapshot().active?.text).toBe(
+      "Keep my follow-up",
+    );
+    expect(service.conversation.getSnapshot().active?.turns).toHaveLength(1);
+    binding.dispose();
+    unsubscribe();
+  });
+
+  test("a temporary identity-check failure retains the confirmed chat but actual replacement clears it", async () => {
+    const { service, read } = setup(identity());
+    await flush();
+    const session = conversationSession();
+    vi.spyOn(service.api, "read").mockResolvedValue(
+      conversationEnvelope(session),
+    );
+    await service.readSession(session.session_id);
+    read.mockRejectedValueOnce(new ClientFailure("network", "read"));
+    await service.revalidate();
+    expect(service.getSnapshot().phase).toBe("recognized");
+    expect(service.getSnapshot().session?.session_id).toBe(session.session_id);
+    read.mockImplementationOnce(async () => {
+      service.owner.accept(service.owner.capture().epoch, identity(1));
+      return { meta: meta(identity(1).context_id), data: identity(1) };
+    });
+    await service.revalidate();
+    expect(service.getSnapshot().identity?.context_id).toBe(
+      identity(1).context_id,
+    );
+    expect(service.getSnapshot().session).toBeNull();
+    expect(service.conversation.getSnapshot().active).toBeNull();
+  });
   test("reads attempted during session creation cannot select the old session after the new one publishes", async () => {
     const { service } = setup(identity());
     await flush();

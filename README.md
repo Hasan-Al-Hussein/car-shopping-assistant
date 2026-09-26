@@ -85,19 +85,21 @@ Open **http://127.0.0.1:5173/__app** for the connected application when using `n
 | Client | React, TypeScript, Vite | Responsive browsing, comparison and conversation in one interface. |
 | API | Python, FastAPI, Pydantic | Typed requests and clear service boundaries. |
 | Retrieval | Deterministic SQL/lexical search over the supplied workbook | Fits approximately 100 listings and preserves exact source facts. |
-| Orchestration | Explicit intent routing and validated service calls | Keeps action rules and recovery inspectable without an additional agent framework. |
+| Orchestration | Model interpretation and grounded answer composition, with validated service calls | Supports varied questions and contextual reasoning while keeping retrieval and actions inspectable. |
 | State | SQLite and SQLAlchemy | Stores sessions, explicitly saved preferences and simulated transactions locally. |
-| Language | Free Gemini Developer API, `gemini-3.5-flash-lite` | Interprets requests; strict backend validation and services control facts and writes. |
+| Language | Free Gemini Developer API, `gemini-3.5-flash-lite` | Interprets requests and composes source-grounded answers; backend services perform retrieval, arithmetic and confirmed writes. |
 
 **Frontend decision:** I chose React to give the frontend a richer interface than the original Notebook/Streamlit options. I asked whether I could use this approach, and Priya approved it with the condition that I explain the setup and include a decision note. React adds a Node build step; the [decision note](delivery/decision-note.md) explains the choice. SQLite is explicitly permitted by the assessment. I didn't add an agent framework or vector database because both are optional and unnecessary for this dataset. Dependencies are locked in `backend/uv.lock` and `frontend/package-lock.json`.
 
 ### Implementation decisions and future work
 
-In my implementation, retrieval, conversation, persistence and transaction rules are separate. Gemini returns structured intent; the backend validates it and builds grounded replies from listing evidence. I kept saving explicit so that discussing a preference or enquiry doesn't automatically store it. Booking review and recovery using the original operation prevent an uncertain response from becoming a duplicate appointment.
+In my implementation, retrieval, conversation, persistence and transaction rules are separate. Gemini interprets requests and composes natural answers using retrieved listing facts, relevant description excerpts, computed statistics and recent conversation context. The backend validates source citations and controls retrieval and writes. I kept saving explicit so that discussing a preference or enquiry doesn't automatically store it. Booking review and recovery using the original operation prevent an uncertain response from becoming a duplicate appointment.
 
 For future work, I'd improve verified price and availability coverage, multilingual understanding and evaluation across varied buyer language. I'd also reduce the frontend bundle and API latency and extend the accessibility checks. A shared deployment would require portable storage and locking, authentication and operational changes. These are improvements I'd consider next; they aren't delivered features or enabled integrations.
 
 ### Recorded conversation demonstrations
+
+**Latest check, 26 September:** [Read the actual browser conversations](delivery/evidence/assistant-recovery-20260926.md): Nissan search → newest model → warranty, inventory-wide price counts, a budget clarified and changed across messages, and a saved preference recalled in a new session. The record also covers an unfamiliar make-ranking question, unsupported facts, competitor refusal and a social reply.
 
 These excerpts come from actual FastAPI and Gemini runs. The full logs retain the original responses and session details. The response wording in those historical logs predates the current, shorter chat formatting.
 
@@ -145,7 +147,7 @@ Assistant (excerpt): You saved requirements in another session (soft preference)
 | Persistent preferences | SQLite stores explicitly saved preferences. [New-session recall](delivery/evidence/new-session-recall.md). |
 | Simulated viewing slots | Monday to Saturday, 08:00 to 20:00 Dubai time, using 30-minute slots and an explicit review/confirmation step. [Setup and demo](delivery/demo/README.md). |
 | Qualified leads saved to a local CSV | The enquiry flow records budget and needs. [Actual sample CSV](delivery/evidence/qualified-lead.csv) and [export evidence](delivery/evidence/qualified-enquiry.md). |
-| Automotive scope and competitor restrictions | Fixed scope replies and validated output controls. [Competitor checks and coverage](delivery/evidence/competitor-output-check.md). |
+| Automotive scope and competitor restrictions | Model scope instructions, source validation and output controls; tested refusal without repeating the requested competitor name. [Competitor checks and coverage](delivery/evidence/competitor-output-check.md). |
 | Free Google AI Studio access | The backend uses the configured free Gemini API. There is no paid fallback. |
 
 To try the full flow, browse a car, open the assistant, give your budget and needs, save the enquiry, then review and confirm a simulated viewing. CSV exports are written to the runtime's `exports` folder. Viewing eligibility is a demo policy; no dealer is contacted and no real reservation is made.
@@ -172,11 +174,13 @@ I used the workbook's real car photos for listings. Page headers use separate de
 
 ## 3. Verification and performance
 
+**26 September assistant recovery:** The final assistant suite passed 1,313 tests, including the 46-case composed evaluation; two warnings came from deliberate malformed-model tests. The frontend passed 366 tests, application/test TypeScript checks and its production build. Fourteen real browser conversation messages passed across two accepted live runs. Another 29 isolated browser checks covered assistant settings, focus revalidation and retained drafts. An independent review checked the actual replies, inventory totals, accepted budgets and desktop/mobile screenshots. The [new verification record](delivery/evidence/assistant-recovery-20260926.md) includes the actual responses and limitations. Earlier measurements below remain historical; they are not live-model latency promises.
+
 The [verification summary](delivery/evidence/verification-summary.md) records the scope, dates and remaining limits of the executed checks.
 
 | Check | Recorded result |
 | --- | --- |
-| Current frontend suite | **357 passed**, 28 test files, no failures or skips. |
+| Earlier frontend suite (25 September) | **357 passed**, 28 test files, no failures or skips. |
 | Focused backend answer-readability checks | **183 passed**; not the entire backend suite. |
 | Frontend types and production build | Passed. Scoped lint passed with one existing warning; the earlier full lint run reported **8 warnings**. A large-chunk warning remains. |
 | Responsive checks | **215** earlier controlled checks; separate chat reviews passed **49**, **7** and **7** checks with synthetic conversation fixtures. |
@@ -185,7 +189,7 @@ The [verification summary](delivery/evidence/verification-summary.md) records th
 | Local API pilot | **200/200 valid responses**, zero request errors/timeouts, up to three overlapping requests. |
 | Local API latency | Median **641 ms**, p95 **1,026 ms**, p99 **1,261 ms**. The project's **500 ms p95 target was not met**. |
 
-The latency pilot used the provider-disabled local API, not live AI responses or an internet deployment. The 500 ms target is an additional project goal, not a PDF requirement. The final mobile tray correction passed 13 targeted tests and application/test TypeScript checks after the 357-test run. The latest frontend build reported 829.15 kB minified / 138.84 kB gzip for the warned chunk. The performance target remains unmet; a complete security audit and universal mobile compatibility haven't been established.
+The latency pilot used the provider-disabled local API, not live AI responses or an internet deployment. The 500 ms target is an additional project goal, not a PDF requirement. The final mobile tray correction passed 13 targeted tests and application/test TypeScript checks after the 357-test run. The 26 September frontend build passed, with a bundle-size warning: 862.28 kB minified / 150.37 kB gzip for the largest chunk. The performance target remains unmet; a complete security audit and universal mobile compatibility haven't been established.
 
 The final [competitor-output check](delivery/evidence/competitor-output-check.md) passed **386 focused offline tests** after correcting an evidence/recall edge case. This checks the reviewed names and variants; it is not an exhaustive guarantee for every platform.
 
@@ -237,11 +241,19 @@ The screenshots below show the interface and the main browsing flow. Each captio
 
 *actual public UI, fresh capture.*
 
-### 8. Assistant — a readable car-results conversation, illustrated with synthetic fixture data.
+### 8. Assistant — actual source-grounded conversation.
 
-![Assistant — a readable car-results conversation, illustrated with synthetic fixture data.](delivery/screenshots/08-assistant-example.png)
+![Real Gemini conversation in the assistant panel.](delivery/screenshots/recovery-desktop-live-conversation.png)
 
-*historical synthetic fixture UI render; not live provider proof.*
+*Actual React, FastAPI and Gemini run using a synthetic test user; no response fixture.*
+
+![Compact assistant settings, opened from the gear button.](delivery/screenshots/recovery-desktop-live-settings.png)
+
+*Chat, context and preferences are grouped in a compact settings menu.*
+
+<img src="delivery/screenshots/recovery-mobile-live-new-session-recall.png" alt="Saved preference recalled in a different conversation on mobile." width="320">
+
+*Actual new-session recall for the same synthetic user.*
 
 ### 9. Mobile homepage — compact navigation and responsive car discovery.
 

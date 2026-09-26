@@ -25,7 +25,7 @@ export function bindOwnerInvalidation(
     try {
       await revalidate();
     } catch {
-      /* Failed revalidation leaves private state hidden. */
+      /* Explicit invalidation still hides private state before rechecking. */
     } finally {
       checking = false;
       if (checkAgain && !disposed) {
@@ -35,7 +35,6 @@ export function bindOwnerInvalidation(
     }
   };
   const focus = () => {
-    owner.invalidate();
     void check();
   };
   const hide = () => {
@@ -45,7 +44,10 @@ export function bindOwnerInvalidation(
     if (event.persisted) focus();
   };
   const message = (event: MessageEvent<unknown>) => {
-    if (event.data === "invalidate") focus();
+    if (event.data === "invalidate") {
+      owner.invalidate();
+      void check();
+    }
   };
   target.addEventListener("focus", focus);
   target.addEventListener("pagehide", hide);

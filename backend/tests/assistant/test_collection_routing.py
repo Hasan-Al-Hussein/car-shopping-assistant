@@ -111,7 +111,8 @@ async def test_collection_hint_keeps_the_existing_four_bounded_provider_summarie
     assert len(summaries) == 4 and all(len(item) <= 400 for item in summaries)
     assert "soft_preferences TextPatch" in summaries[0]
     assert "return/session" in summaries[1] and "Active collection: viewing" in summaries[1]
-    assert "AED" in summaries[2] and summaries[3] == question.question
+    assert "AED" in summaries[2] and question.question in summaries[3]
+    assert "viewing_details" in summaries[3]
 
 
 class CompletionSpy:

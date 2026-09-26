@@ -1,0 +1,1231 @@
+{
+  "source": "Records/build/BE-04/evidence/resolved-facts.json",
+  "source_sha256": "923dca87c7573303967740f6870600471509946df57b3573c18369422c03d948",
+  "purpose": "Source-faithful public fact projections; not live listing/availability records",
+  "records": [
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "22"
+      },
+      "public_facts": {
+        "body_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "cash_price": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C23",
+              "evidence_id": "9139efcd-6df4-531f-ade0-ef7d04263675",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "aston martin",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 12,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "aston martin"
+        },
+        "mileage_km": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "model": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "D23",
+              "evidence_id": "bebd5286-5bf6-5130-abe4-43e88a3f6da4",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "dbx",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 3,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "dbx"
+        },
+        "service_history": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G23",
+              "evidence_id": "c3cb3140-284e-553c-86f6-a858bce55a59",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "SERVICING COMPLETED",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 293,
+              "span_start": 274,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "servicing completed; completeness of history not established"
+        },
+        "transmission": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "trim": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "E23",
+              "evidence_id": "6ff3f7c7-391b-5f04-b898-1ec2dcf12ff7",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "707.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 5,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "707"
+        },
+        "warranty": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G23",
+              "evidence_id": "a13aebb9-e3a4-5142-8c03-043b398b6dde",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2 YEAR WARRANTY UNLIMITED KM",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 71,
+              "span_start": 43,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            },
+            {
+              "category": "seller_description",
+              "cell": "G23",
+              "evidence_id": "2744839b-e270-59f0-a39f-0279d7c4c5fc",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "years",
+              "raw_text": "2 YEAR WARRANTY UNLIMITED KM",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 71,
+              "span_start": 43,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            },
+            {
+              "category": "seller_description",
+              "cell": "G23",
+              "evidence_id": "d670221f-f9b2-5115-a057-3fda5dcba8b5",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "km",
+              "raw_text": "2 YEAR WARRANTY UNLIMITED KM",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "warranty_limit",
+              "sheet": "cleaned dataset",
+              "span_end": 71,
+              "span_start": 43,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "2 year warranty; unlimited km; start/current validity not established"
+        },
+        "year": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "B23",
+              "evidence_id": "d7c2a9dc-dc16-5589-ab21-04b978c18e44",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2024.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 2024
+        }
+      }
+    },
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "27"
+      },
+      "public_facts": {
+        "body_type": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "F28",
+              "evidence_id": "e18dd8ef-231a-5887-ac8e-bd8a8fd56b32",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "Coupe",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 22,
+              "span_start": 17,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "coupe"
+        },
+        "cash_price": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C28",
+              "evidence_id": "9869bd05-cdd2-5706-ba25-bce96c645a30",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "mercedes-benz",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 13,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "mercedes-benz"
+        },
+        "mileage_km": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G28",
+              "evidence_id": "ec097fac-9bb0-5980-ac48-f6aa9f0d07b2",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "km",
+              "raw_text": "75500 km",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "vehicle_mileage",
+              "sheet": "cleaned dataset",
+              "span_end": 54,
+              "span_start": 46,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 75500
+        },
+        "model": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "D28",
+              "evidence_id": "6cd7cbdd-e872-51d8-bd6a-2ff87497cf40",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "glc coupe",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 9,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "glc coupe"
+        },
+        "service_history": {
+          "claims": [
+            {
+              "evidence": [
+                {
+                  "category": "seller_description",
+                  "cell": "G28",
+                  "evidence_id": "eba211bb-1af5-5d44-b4ef-db117ce856fd",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "Full Service History",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 139,
+                  "span_start": 119,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "full service history"
+            },
+            {
+              "evidence": [
+                {
+                  "category": "seller_description",
+                  "cell": "F28",
+                  "evidence_id": "91095e77-cb8e-5e0b-aa7e-edac37d139b6",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "Partial Service History",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 51,
+                  "span_start": 28,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "partial service history"
+            }
+          ],
+          "status": "conflicting"
+        },
+        "transmission": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "trim": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "F28",
+              "evidence_id": "eab1983e-4992-582c-a0de-f917e852beaa",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "GLC 250",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 16,
+              "span_start": 9,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "GLC 250"
+        },
+        "warranty": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "year": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "B28",
+              "evidence_id": "1b3f13de-8081-56b2-a5f3-e1ca9cc3508b",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2019.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 2019
+        }
+      }
+    },
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "3"
+      },
+      "public_facts": {
+        "body_type": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "bdbf391f-5115-595d-9fbe-aba01d74c139",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "this SUV",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 378,
+              "span_start": 370,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "SUV"
+        },
+        "cash_price": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "a19ac2d6-c361-5018-bfbd-751746ca7846",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "AED",
+              "raw_text": "AED 119,750.00 in cash",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "cash_price",
+              "sheet": "cleaned dataset",
+              "span_end": 174,
+              "span_start": 152,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": {
+            "basis": "cash",
+            "currency": "AED",
+            "minor_units": 11975000
+          }
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C4",
+              "evidence_id": "041708c1-e077-5a26-99ef-98af793c193d",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "land rover",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 10,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "land rover"
+        },
+        "mileage_km": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "9e15f458-f2d8-59e2-8e5b-b92653759d42",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "km",
+              "raw_text": "Mileage: Just 68,000 km",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "vehicle_mileage",
+              "sheet": "cleaned dataset",
+              "span_end": 443,
+              "span_start": 420,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 68000
+        },
+        "model": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "D4",
+              "evidence_id": "fdb3b13d-e427-53c0-8546-543206b3bc00",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "range rover velar",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 17,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "range rover velar"
+        },
+        "service_history": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "transmission": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "ec69925c-4eec-58c7-b836-131de54c0240",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "Transmission: 8-speed automatic (AT)",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 558,
+              "span_start": 522,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            },
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "e89510d4-f40f-5ad8-b1ae-6b16ed693336",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "gears",
+              "raw_text": "Transmission: 8-speed automatic (AT)",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 558,
+              "span_start": 522,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "automatic"
+        },
+        "trim": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "205c9306-26a6-531f-a57c-44a77c79d223",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "Trim: R-Dynamic SE",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 579,
+              "span_start": 561,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "R-Dynamic SE"
+        },
+        "warranty": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G4",
+              "evidence_id": "32a28c07-5833-59b0-85af-64202ed843f4",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "this vehicle comes with GCC warranty",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 699,
+              "span_start": 663,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "GCC warranty stated; provider, term and current validity not established"
+        },
+        "year": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "B4",
+              "evidence_id": "f44175ec-b16a-54ca-a9b9-311d9b9fc861",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2018.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 2018
+        }
+      }
+    },
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "4"
+      },
+      "public_facts": {
+        "body_type": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "F5",
+              "evidence_id": "1e0aee15-e42e-588b-ab15-1d10c01753e5",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "COUPE",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 20,
+              "span_start": 15,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "coupe"
+        },
+        "cash_price": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C5",
+              "evidence_id": "14fa732f-f4c4-5e1c-975f-d9791dde62d4",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "mercedes-benz",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 13,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "mercedes-benz"
+        },
+        "mileage_km": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G5",
+              "evidence_id": "76cbe8d7-0d98-5abc-a8b2-3ec6b5c3c39c",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "km",
+              "raw_text": "Mileage - 56,000 KM",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "vehicle_mileage",
+              "sheet": "cleaned dataset",
+              "span_end": 32,
+              "span_start": 13,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 56000
+        },
+        "model": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "D5",
+              "evidence_id": "83ece464-3173-5c6c-968f-8a8013205a5b",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "e-class",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 7,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "e-class"
+        },
+        "service_history": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "transmission": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "trim": {
+          "claims": [
+            {
+              "evidence": [
+                {
+                  "category": "structured_source",
+                  "cell": "E5",
+                  "evidence_id": "1fc89c70-fc63-5393-a3a6-c5c212509905",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "e 400",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 5,
+                  "span_start": 0,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "e 400"
+            },
+            {
+              "evidence": [
+                {
+                  "category": "seller_description",
+                  "cell": "F5",
+                  "evidence_id": "9fa8740a-6391-5e4d-9b38-8965f6713597",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "E 450",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 14,
+                  "span_start": 9,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "e 450"
+            }
+          ],
+          "status": "conflicting"
+        },
+        "warranty": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "year": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "B5",
+              "evidence_id": "52805562-462f-5465-b8d3-654170fda76f",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2019.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 2019
+        }
+      }
+    },
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "52"
+      },
+      "public_facts": {
+        "body_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "cash_price": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C53",
+              "evidence_id": "42d21833-9b61-5ab6-a747-cf6afaa7a1c4",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "mercedes-benz",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 13,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "mercedes-benz"
+        },
+        "mileage_km": {
+          "reason": "unsupported",
+          "status": "unknown"
+        },
+        "model": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "D53",
+              "evidence_id": "b7c04585-5538-5a9f-80a5-683a7d4afa7f",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "s-class",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 7,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "s-class"
+        },
+        "service_history": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "transmission": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "trim": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "E53",
+              "evidence_id": "560ba2f7-5a40-5237-8b5a-362a3b1dafe9",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "s 63 amg 4matic",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 15,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "s 63 amg 4matic"
+        },
+        "warranty": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "year": {
+          "claims": [
+            {
+              "evidence": [
+                {
+                  "category": "seller_description",
+                  "cell": "F53",
+                  "evidence_id": "59f40532-fba1-50b6-8450-979ddf32717e",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "2014",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 21,
+                  "span_start": 17,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                },
+                {
+                  "category": "seller_description",
+                  "cell": "G53",
+                  "evidence_id": "bca97627-c230-527f-913a-b95d9d584e78",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "Year Of the Model - 2014",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 50,
+                  "span_start": 26,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": 2014
+            },
+            {
+              "evidence": [
+                {
+                  "category": "structured_source",
+                  "cell": "B53",
+                  "evidence_id": "e1f69b09-d797-5039-b518-1620e4b13a7a",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "2015.0",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 6,
+                  "span_start": 0,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": 2015
+            }
+          ],
+          "status": "conflicting"
+        }
+      }
+    },
+    {
+      "ref": {
+        "namespace": "provided-cars-cleaned",
+        "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3",
+        "source_id": "95"
+      },
+      "public_facts": {
+        "body_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "cash_price": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G96",
+              "evidence_id": "dda10c35-723c-5bfd-8984-d90a43c15c41",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "AED",
+              "raw_text": "AED 95,000 cash",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "cash_price",
+              "sheet": "cleaned dataset",
+              "span_end": 369,
+              "span_start": 354,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": {
+            "basis": "cash",
+            "currency": "AED",
+            "minor_units": 9500000
+          }
+        },
+        "fuel_type": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "location": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "make": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "C96",
+              "evidence_id": "4436ccdc-17e4-5e14-90d9-897a0435ed3d",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "toyota",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "toyota"
+        },
+        "mileage_km": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G96",
+              "evidence_id": "cc4cfe8e-ab3f-558e-8037-0676dfca8de2",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "km",
+              "raw_text": "Odometer : 970 Kms",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "vehicle_mileage",
+              "sheet": "cleaned dataset",
+              "span_end": 53,
+              "span_start": 35,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 970
+        },
+        "model": {
+          "claims": [
+            {
+              "evidence": [
+                {
+                  "category": "structured_source",
+                  "cell": "D96",
+                  "evidence_id": "487351b6-4f32-59d4-85be-9896e41cf98d",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "rav 4",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 5,
+                  "span_start": 0,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "rav 4"
+            },
+            {
+              "evidence": [
+                {
+                  "category": "seller_description",
+                  "cell": "G96",
+                  "evidence_id": "6d3c3e8c-ada4-5a88-95d2-c1342ef850e0",
+                  "extraction_version": "reviewed-claims-2",
+                  "original_unit": null,
+                  "raw_text": "Toyota Wildlander AWD",
+                  "review_status": "reviewed_extraction",
+                  "semantic_role": "other",
+                  "sheet": "cleaned dataset",
+                  "span_end": 21,
+                  "span_start": 0,
+                  "verification": "source_claim",
+                  "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+                }
+              ],
+              "qualifier": "exact",
+              "value": "Wildlander"
+            }
+          ],
+          "status": "conflicting"
+        },
+        "service_history": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "transmission": {
+          "reason": "not_stated",
+          "status": "unknown"
+        },
+        "trim": {
+          "reason": "unparseable",
+          "status": "unknown"
+        },
+        "warranty": {
+          "evidence": [
+            {
+              "category": "seller_description",
+              "cell": "G96",
+              "evidence_id": "c878eb14-2153-5962-9055-2db92080999d",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "Warranty : 3rd Party (2 Years)",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 84,
+              "span_start": 54,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            },
+            {
+              "category": "seller_description",
+              "cell": "G96",
+              "evidence_id": "b137cdab-5d05-567a-99ee-f6376f3873cd",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": "years",
+              "raw_text": "Warranty : 3rd Party (2 Years)",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 84,
+              "span_start": 54,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            },
+            {
+              "category": "seller_description",
+              "cell": "G96",
+              "evidence_id": "f924987e-2cf0-56d0-85b8-e0c4119366fe",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "Warranty : 3rd Party (2 Years)",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 84,
+              "span_start": 54,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": "third-party2year warranty; start/current validity unverified"
+        },
+        "year": {
+          "evidence": [
+            {
+              "category": "structured_source",
+              "cell": "B96",
+              "evidence_id": "4e0dc065-90a3-54cd-8ace-3679f8bd5fa3",
+              "extraction_version": "reviewed-claims-2",
+              "original_unit": null,
+              "raw_text": "2023.0",
+              "review_status": "reviewed_extraction",
+              "semantic_role": "other",
+              "sheet": "cleaned dataset",
+              "span_end": 6,
+              "span_start": 0,
+              "verification": "source_claim",
+              "workbook_sha256": "94a97f84aa742ec8ed526bb14d41ca4134ab8a2e1db1ab7f3d2f03af5c38bbb9"
+            }
+          ],
+          "qualifier": "exact",
+          "status": "known",
+          "value": 2023
+        }
+      }
+    }
+  ]
+}

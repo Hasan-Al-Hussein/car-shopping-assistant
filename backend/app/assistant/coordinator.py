@@ -15,6 +15,7 @@ from app.api.schemas.inventory import (
     HandoffSummary,
     ListingDetail,
     ListingResult,
+    ListingSummary,
     SearchCriteria,
     SearchRequest,
     SearchResult,
@@ -25,6 +26,7 @@ from app.api.schemas.sessions import (
     MessageResult,
     NoPendingIntent,
     SessionState,
+    TranscriptTurn,
     UnresolvedOperationIntent,
     ViewingReviewIntent,
 )
@@ -52,11 +54,13 @@ from .collection_planner import (
     matched_collection_question,
     unresolved_collection_plan,
 )
+from .conversation_read import retrieve_conversation_sources
 from .explicit_field_read import explicit_field_read
 from .grounding import GroundingError
 from .intent import (
     Clarification,
     CriteriaTransition,
+    QuestionRequest,
     ReferenceRequest,
     ResetPatch,
     TurnIntent,
@@ -67,9 +71,10 @@ from .interpretation import interpret
 from .output_policy import safe_assistant_text
 from .provider import GeminiAdapter
 from .read_ports import InventoryReadPort, SessionPort, UnconfiguredInventory
-from .recalled_values import format_recalled_preferences, is_recall_question
+from .recalled_values import format_recalled_preferences
 from .references import AmbiguousReference, ReferenceResolver, listing_ref, ref_key
 from .request_policy import external_source_search, request_routing_eligible
+from .result_analysis import analyze_results
 from .scope import compose_scope
 
 _LISTING: TypeAdapter[ListingResult] = TypeAdapter(ListingResult)
@@ -143,14 +148,21 @@ def _scope_topics(text: str, operation: str) -> tuple[str, ...]:
 
 
 def _mixed_selected_read(
-    intent: TurnIntent, request: MessageRequest, session: SessionState, *, collection_active: bool,
+    intent: TurnIntent,
+    request: MessageRequest,
+    session: SessionState,
+    *,
+    collection_active: bool,
 ) -> TurnIntent:
     """Keep an explicit UI car read when only a recognized trailing scope clause conflicts."""
     if (
         intent.patches
         or request.selected_ref is None
         or not request_routing_eligible(
-            intent, request, session, collection_active=collection_active,
+            intent,
+            request,
+            session,
+            collection_active=collection_active,
         )
     ):
         return intent
@@ -160,13 +172,20 @@ def _mixed_selected_read(
     match = re.fullmatch(
         r"[ ]*show[ ]+(?:me[ ]+)?(?:details[ ]+(?:of|for)[ ]+)?"
         r"(?P<reference>this[ ]+(?:car|listing))[ ]*[.!?]?[ ]*",
-        read.text, re.IGNORECASE | re.ASCII,
+        read.text,
+        re.IGNORECASE | re.ASCII,
     )
     if match is None:
         return intent
-    return TurnIntent(operation="detail", references=[ReferenceRequest(
-        source="request", quote=match.group("reference"),
-    )])
+    return TurnIntent(
+        operation="detail",
+        references=[
+            ReferenceRequest(
+                source="request",
+                quote=match.group("reference"),
+            )
+        ],
+    )
 
 
 def _apply_answer(result: MessageResult, answer: GroundedAnswer, topics: tuple[str, ...]) -> None:
@@ -237,8 +256,12 @@ class ReadCoordinator:
         private_values: tuple[str, ...] = (),
     ) -> MessageResult:
         result = await self._run(
-            context, session_id, request, request_state=request_state,
-            budget=budget, private_values=private_values,
+            context,
+            session_id,
+            request,
+            request_state=request_state,
+            budget=budget,
+            private_values=private_values,
         )
         # Covers completed replays and action/collection delegates as well as read turns.
         return result.model_copy(update={"text": safe_assistant_text(result.text)})
@@ -319,6 +342,21 @@ class ReadCoordinator:
                     f"date {'set' if stored.values.local_date else 'missing'}; "
                     f"time {'set' if stored.values.local_time else 'missing'}."
                 )
+        recent_turns = await self._gate.run(
+            lambda: self.sessions.recent_context(
+                context,
+                session_id,
+                before_revision=session.revision,
+            ),
+            budget,
+        )
+        prior_request = ""
+        if reply_to is not None:
+            for previous in recent_turns:
+                answered = previous.assistant_result
+                if answered is not None and answered.pending_intent == reply_to:
+                    prior_request = previous.user_text
+                    break
         proposal = await interpret(
             self.provider,
             request,
@@ -327,6 +365,7 @@ class ReadCoordinator:
             budget,
             private_values,
             collection_summary=collection_summary,
+            recent_turns=recent_turns,
         )
         latest = await self._gate.run(lambda: self.sessions.get(context, session_id), budget)
         if latest.revision != session.revision:
@@ -356,28 +395,71 @@ class ReadCoordinator:
                 or observed.draft is not None
             )
             if external_source_search(
-                intent, request, session, collection_active=collection_active,
+                intent,
+                request,
+                session,
+                collection_active=collection_active,
             ):
                 result = _result(
-                    admission, text=compose_scope(topics=("unrelated",)).text, provider=True,
+                    admission,
+                    text=compose_scope(topics=("unrelated",)).text,
+                    provider=True,
                 )
                 return await self._complete(context, admission, result, budget)
             intent = _mixed_selected_read(
-                intent, request, session, collection_active=collection_active,
+                intent,
+                request,
+                session,
+                collection_active=collection_active,
             )
             intent = explicit_field_read(
-                intent, request, session,
+                intent,
+                request,
+                session,
                 collection_active=collection_active,
             )
         # A deferred action must not consume a supported read. Explicit collection
         # proposals still require the separate whole-message collection validation.
+        if (
+            reply_to is not None
+            and reply_to.purpose == "search_criteria"
+            and intent.collection is not None
+        ):
+            # A search reply never enters enquiry/viewing validation or mutates its state.
+            result = _result(admission, text=reply_to.question, provider=True)
+            result.state = "clarification"
+            return await self._complete(context, admission, result, budget)
         if intent.collection is not None or (
-            intent.operation not in {"search", "detail", "compare"}
+            intent.operation not in {"search", "detail", "compare", "analyze", "question"}
             and set(intent.deferred).intersection({"viewing", "lead"})
         ):
             return await self._collection_turn(context, admission, intent, observed, budget)
         if set(intent.deferred).intersection({"preferences", "shortlist"}):
             return await self._action_turn(context, admission, intent, budget)
+        if (
+            intent.operation == "smalltalk"
+            and intent.scope == "session"
+            and not intent.patches
+            and not intent.references
+            and not intent.deferred
+            and intent.problem is None
+            and not collection_summary
+            and _scope_topics(request.text, intent.operation) in {("greeting",), ("help",)}
+            and (
+                observed is None
+                or (
+                    observed.snapshot.collection is None
+                    and observed.snapshot.unresolved is None
+                    and observed.draft is None
+                )
+            )
+        ):
+            # Replace the generic social/help fallback with a conversational
+            # answer. Retain explicit scope refusals and sourced term guidance.
+            # This route needs application context, not inventory or an action.
+            intent = intent.model_copy(update={
+                "operation": "question", "question": QuestionRequest(source="application")
+            })
         recall_only = (
             intent.operation == "return"
             and intent.scope == "session"
@@ -385,25 +467,39 @@ class ReadCoordinator:
             and not intent.references
             and not intent.deferred
             and intent.problem is None
-            and is_recall_question(request.text)
         )
         transition = (
             CriteriaTransition(session.criteria, session.criteria, None)
-            if recall_only
-            else apply_intent(session.criteria, intent, request.text)
+            if recall_only or (intent.operation == "question" and not intent.patches)
+            else apply_intent(
+                session.criteria,
+                intent,
+                request.text,
+                clarification_targets=tuple(reply_to.targets)
+                if reply_to is not None and reply_to.purpose == "search_criteria"
+                else (),
+                prior_request=prior_request,
+            )
         )
         update = _content(session, transition.retained)
         result = _result(admission, text="No domain action has been performed.", provider=True)
         if reply_to is not None and reply_to.purpose != "search_criteria":
-            reference_reply = (
-                reply_to.purpose == "listing_reference"
-                and intent.operation in {"detail", "compare"}
+            reference_reply = reply_to.purpose == "listing_reference" and (
+                intent.operation in {"detail", "compare"}
                 and bool(intent.references)
+                or intent.operation == "analyze"
+                and intent.analysis is not None
+                and intent.analysis.scope == "shown"
             )
-            if not reference_reply:
+            independent_analysis = intent.operation in {"analyze", "question"}
+            if not reference_reply and not independent_analysis:
                 result.state, result.text = "clarification", reply_to.question
                 return await self._complete(context, admission, result, budget, update=update)
-        if reply_to is not None and reply_to.purpose == "search_criteria":
+        if (
+            reply_to is not None
+            and reply_to.purpose == "search_criteria"
+            and intent.operation not in {"analyze", "question"}
+        ):
             touched = {patch.field for patch in intent.patches if not isinstance(patch, ResetPatch)}
             if (
                 transition.clarification is not None
@@ -443,7 +539,15 @@ class ReadCoordinator:
         read_completed = False
         try:
             selection = await self._read(
-                context, admission, intent, transition.effective, result, budget
+                context,
+                admission,
+                intent,
+                transition.effective,
+                result,
+                budget,
+                recent_turns=recent_turns,
+                request_state=request_state,
+                private_values=private_values,
             )
             read_completed = True
         except AmbiguousReference:
@@ -486,7 +590,19 @@ class ReadCoordinator:
                 )
             else:
                 raise
-        if reply_to is not None and read_completed and intent.scope == "session":
+        if (
+            reply_to is not None
+            and read_completed
+            and intent.scope == "session"
+            and not (
+                intent.operation in {"analyze", "question"}
+                and (
+                    reply_to.purpose != "listing_reference"
+                    or intent.analysis is None
+                    or intent.analysis.scope != "shown"
+                )
+            )
+        ):
             # The successful matched read resolves its question only in this ticket's
             # completion. A cancelled/late/unavailable turn leaves retained authority.
             update = SessionContent.model_validate(
@@ -495,6 +611,17 @@ class ReadCoordinator:
                     "pending_intent": {"kind": "none"},
                 }
             )
+            result.pending_intent = update.pending_intent
+        if (
+            intent.operation == "question"
+            and read_completed
+            and result.state == "answered"
+            and isinstance(session.pending_intent, ClarificationIntent)
+            and session.pending_intent.purpose in {"search_criteria", "listing_reference"}
+        ):
+            # A self-contained answered question replaces a stale read clarification;
+            # it never dismisses an action review or changes accepted search filters.
+            update = update.model_copy(update={"pending_intent": NoPendingIntent(kind="none")})
             result.pending_intent = update.pending_intent
         if intent.scope == "hypothetical":
             selection = None
@@ -728,12 +855,150 @@ class ReadCoordinator:
         criteria: SearchCriteria,
         result: MessageResult,
         budget: TurnBudget,
+        *,
+        recent_turns: tuple[TranscriptTurn, ...] = (),
+        request_state: MutableMapping[str, Any] | None = None,
+        private_values: tuple[str, ...] = (),
     ) -> InventoryRef | None:
         topics = _scope_topics(admission.request.text, intent.operation)
 
         def deadline() -> float:
             return min(budget.deadline_at, budget.clock() + 2)
 
+        if intent.operation == "question":
+            if intent.collection or intent.deferred:
+                raise GroundingError("QUESTION_CANNOT_EXECUTE_ACTION")
+            question = intent.question or QuestionRequest(source="inventory")
+            sources = await retrieve_conversation_sources(
+                question,
+                context=context,
+                session=admission.session,
+                request=admission.request,
+                criteria=criteria,
+                sessions=self.sessions,
+                inventory=self.inventory,
+                gate=self._gate,
+                budget=budget,
+                recent_turns=recent_turns,
+            )
+            from .grounded_conversation import compose_grounded_answer
+
+            answer = await compose_grounded_answer(
+                self.provider,
+                admission.request,
+                admission.session,
+                recent_turns,
+                sources.rows,
+                scope=sources.scope,
+                complete=sources.complete,
+                total=sources.total,
+                context_note=sources.note,
+                request_state=request_state,
+                budget=budget,
+                private_values=private_values,
+            )
+            if answer is None:
+                result.state, result.provider_state = "provider_unavailable", "unavailable"
+                result.text = (
+                    "I couldn't finish this answer right now. Your conversation is saved; "
+                    "please try again. You can still browse the cars and their listing details."
+                )
+            else:
+                _apply_answer(result, answer, ())
+            return None
+
+        if intent.operation == "analyze":
+            analysis = intent.analysis
+            if (
+                analysis is None
+                or analysis.quote not in admission.request.text
+                or intent.references
+                or intent.collection
+                or intent.deferred
+            ):
+                raise AmbiguousReference
+            items: tuple[ListingResult | ListingSummary, ...]
+            if analysis.scope == "shown":
+                presentation = admission.session.active_presentation_id
+                if presentation is None or intent.patches:
+                    raise AmbiguousReference
+                refs = await self._gate.run(
+                    lambda: self.sessions.original_refs(
+                        context, admission.session.session_id, presentation
+                    ),
+                    budget,
+                    tool=True,
+                )
+                items = await self._gate.run(
+                    lambda: self.inventory.original_batch(refs, deadline_at=deadline()),
+                    budget,
+                    tool=True,
+                )
+                label, complete = "the cars I showed you", True
+            else:
+                if analysis.scope == "inventory" and intent.patches:
+                    raise AmbiguousReference
+                requested = SearchCriteria() if analysis.scope == "inventory" else criteria
+                normalized = normalize_criteria(requested).criteria
+                found_items: list[ListingSummary] = []
+                cursor = None
+                snapshot = None
+                total = None
+                complete = False
+                for _ in range(4):
+                    query = SearchRequest(
+                        **normalized.model_dump(mode="json"),
+                        page_size=50,
+                        cursor=cursor,
+                        snapshot_id=snapshot,
+                        client_request_id=admission.request.client_message_id,
+                    )
+                    found = await self._gate.run(
+                        lambda query=query: self.inventory.search(query, deadline_at=deadline()),
+                        budget,
+                        tool=True,
+                    )
+                    found = SearchResult.model_validate(found.model_dump(mode="json"))
+                    if (
+                        found.applied_criteria != normalized
+                        or found.client_request_id != query.client_request_id
+                    ):
+                        raise GroundingError("ANALYSIS_CRITERIA_MISMATCH")
+                    if total is not None and (
+                        total != found.supported_total or snapshot != found.presentation.snapshot_id
+                    ):
+                        raise GroundingError("ANALYSIS_SNAPSHOT_CHANGED")
+                    total, snapshot = found.supported_total, found.presentation.snapshot_id
+                    found_items.extend(found.items)
+                    cursor = found.next_cursor
+                    if cursor is None:
+                        complete = len(found_items) == total
+                        break
+                items = tuple(found_items)
+                refs = tuple(item.ref for item in found_items)
+                label = (
+                    "the full supplied inventory"
+                    if analysis.scope == "inventory"
+                    else "your matching cars"
+                )
+            answer = analyze_results(
+                items,
+                expected_refs=refs,
+                field=analysis.field,
+                operation=analysis.operation,
+                scope_label=label,
+                complete_scope=complete,
+            )
+            _apply_answer(result, answer.answer, topics)
+            return (
+                answer.selected_refs[0]
+                if (
+                    analysis.scope == "shown"
+                    and analysis.operation != "count_known"
+                    and len(answer.selected_refs) == 1
+                )
+                else None
+            )
         if intent.operation == "search":
             try:
                 search_criteria = normalize_criteria(criteria).criteria

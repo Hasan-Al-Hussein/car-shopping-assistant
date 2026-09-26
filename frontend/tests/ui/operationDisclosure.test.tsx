@@ -39,7 +39,7 @@ async function setup() {
   let gate: Promise<void> | undefined;
   vi.spyOn(service.api, "revalidateIdentity").mockImplementation(async () => {
     await gate;
-    service.owner.accept(service.owner.invalidate(), currentIdentity);
+    service.owner.accept(service.owner.capture().epoch, currentIdentity);
     return { meta: meta(currentIdentity.context_id), data: currentIdentity };
   });
   const read = vi
@@ -99,7 +99,7 @@ async function setup() {
 
 describe("operation disclosure across the real owner gate with synthetic service results", () => {
   test.each([0, 1])(
-    "private content unmounts during recheck; expansion is scoped to resolved owner %s",
+    "recheck retains the confirmed view until resolved; expansion remains scoped to owner %s",
     async (ownerIndex) => {
       const { service, read, write, recheck } = await setup();
       const original = screen
@@ -114,13 +114,13 @@ describe("operation disclosure across the real owner gate with synthetic service
         finished = recheck(ownerIndex, pending.promise);
       });
       await flush();
-      expect(original.isConnected).toBe(false);
+      expect(original.isConnected).toBe(true);
       expect(
         screen.queryByText("Request reference and record details"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.getByText("Checking your local access…"),
       ).toBeInTheDocument();
+      expect(
+        screen.queryByText("Checking your local access…"),
+      ).not.toBeInTheDocument();
       await act(async () => {
         pending.resolve();
         await finished!;
@@ -129,14 +129,15 @@ describe("operation disclosure across the real owner gate with synthetic service
       const replacement = screen
         .getByText("Request reference and record details")
         .closest("details")!;
-      expect(replacement).not.toBe(original);
+      if (ownerIndex === 0) expect(replacement).toBe(original);
+      else expect(replacement).not.toBe(original);
       expect(replacement.open).toBe(ownerIndex === 0);
       expect(service.getSnapshot().identity?.context_id).toBe(
         identity(ownerIndex).context_id,
       );
       expect(
         read.mock.calls.filter(([operation]) => operation === "get_operation"),
-      ).toHaveLength(2);
+      ).toHaveLength(ownerIndex === 0 ? 1 : 2);
       if (ownerIndex === 1) {
         await act(async () => {
           await recheck(0, Promise.resolve());

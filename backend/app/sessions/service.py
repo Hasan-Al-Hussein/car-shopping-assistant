@@ -13,23 +13,23 @@ from app.api.schemas.inventory import PresentationProof
 from app.api.schemas.leads import LeadSaveRequest, LeadUpdateRequest
 from app.api.schemas.memory import MembershipRequest, PreferenceCommand, PreferencesUpdate
 from app.api.schemas.operations import OperationRejected, OperationSucceeded
-from app.api.schemas.viewings import BookingDraftCreate, BookingDraftUpdate, ConfirmRequest
 from app.api.schemas.sessions import (
     ActionRejected,
     ClarificationIntent,
     MessageActionResults,
-    PreferenceActionSucceeded,
-    ShortlistActionSucceeded,
     MessageRequest,
     MessageResult,
     NoPendingIntent,
+    PreferenceActionSucceeded,
     PresentationRegisterRequest,
     SessionCreateRequest,
     SessionSelectionRequest,
     SessionState,
+    ShortlistActionSucceeded,
     TranscriptPage,
     TranscriptTurn,
 )
+from app.api.schemas.viewings import BookingDraftCreate, BookingDraftUpdate, ConfirmRequest
 from app.core.errors import ApiFailure
 from app.database.models import (
     ConversationSession,
@@ -42,14 +42,14 @@ from app.database.models import (
 from app.database.store import StoreError, assert_outside_write_transaction
 from app.identity.authorization import AuthorizationService, AuthorizedOwnerContext, OwnerUnit
 from app.inventory.references import ImmutableInventoryRef
-from app.memory.service import PreferenceRejected, PreferenceService
 from app.leads.service import LeadService
+from app.memory.service import PreferenceRejected, PreferenceService
 from app.sessions import repository as repo
+from app.sessions.collection import CollectionSnapshot, CollectionUpdate, collection_digest
+from app.sessions.collection_state import apply_update, owned_collection, unresolved_command
 from app.sessions.cursors import TranscriptCursor, decode_cursor, encode_cursor
 from app.sessions.inventory import InventoryAdmission, SessionInventory, check_admission
 from app.sessions.state import SessionContent, StoredMessage, copied, fingerprint
-from app.sessions.collection import CollectionSnapshot, CollectionUpdate, collection_digest
-from app.sessions.collection_state import apply_update, owned_collection, unresolved_command
 from app.shortlist.inventory import ReferenceBatch
 from app.shortlist.service import MembershipRejected, ShortlistService
 from app.viewings.confirmation import ConfirmationParticipant
@@ -518,19 +518,32 @@ class SessionService:
         return self._admission(context, self.authorization.write(context, write))
 
     def complete(
-        self, context: AuthorizedOwnerContext, ticket: TurnTicket, result: MessageResult, *,
+        self,
+        context: AuthorizedOwnerContext,
+        ticket: TurnTicket,
+        result: MessageResult,
+        *,
         update: SessionContent | None = None,
         presentation: PresentationProof | None = None,
         selection: InventoryRef | None = None,
         collection_update: CollectionUpdate | None = None,
     ) -> MessageResult:
         return self._complete(
-            context, ticket, result, update=update, presentation=presentation, selection=selection,
+            context,
+            ticket,
+            result,
+            update=update,
+            presentation=presentation,
+            selection=selection,
             collection_update=collection_update,
         )
 
     def complete_action(
-        self, context: AuthorizedOwnerContext, ticket: TurnTicket, result: MessageResult, *,
+        self,
+        context: AuthorizedOwnerContext,
+        ticket: TurnTicket,
+        result: MessageResult,
+        *,
         preference: PreferenceCommand | None = None,
         membership: ShortlistChange | None = None,
         preference_service: PreferenceService | None = None,
@@ -550,20 +563,38 @@ class SessionService:
             from app.sessions.collection_actions import complete_collection_action
 
             return complete_collection_action(
-                self, context, ticket, result, lead=lead, draft=draft,
-                lead_service=lead_service, draft_service=draft_service,
-                update=update, presentation=presentation, selection=selection,
+                self,
+                context,
+                ticket,
+                result,
+                lead=lead,
+                draft=draft,
+                lead_service=lead_service,
+                draft_service=draft_service,
+                update=update,
+                presentation=presentation,
+                selection=selection,
                 collection_update=collection_update,
             )
         return self._complete(
-            context, ticket, result, action_mode=True, preference=preference,
-            membership=membership, preference_service=preference_service,
-            shortlist_service=shortlist_service, update=update,
-            presentation=presentation, selection=selection, collection_update=collection_update,
+            context,
+            ticket,
+            result,
+            action_mode=True,
+            preference=preference,
+            membership=membership,
+            preference_service=preference_service,
+            shortlist_service=shortlist_service,
+            update=update,
+            presentation=presentation,
+            selection=selection,
+            collection_update=collection_update,
         )
 
     def read_collection(
-        self, context: AuthorizedOwnerContext, ticket: TurnTicket,
+        self,
+        context: AuthorizedOwnerContext,
+        ticket: TurnTicket,
     ) -> CollectionSnapshot:
         self._check_collection_ticket(context, ticket)
 
@@ -572,24 +603,39 @@ class SessionService:
             row = repo.live_session(unit, ticket._session_id, now)
             message = unit.message(row.id, ticket._message_id)
             saved = repo.message_content(message)
-            if (message.state != "pending" or saved.worker_epoch != self._epoch
-                or saved.assistant_result is not None or row.revision != message.accepted_revision):
+            if (
+                message.state != "pending"
+                or saved.worker_epoch != self._epoch
+                or saved.assistant_result is not None
+                or row.revision != message.accepted_revision
+            ):
                 raise ApiFailure("REVISION_CONFLICT")
             value = owned_collection(unit, row, generation=context.generation, now=now)
             return CollectionSnapshot(
-                value, collection_digest(value), value is not None and (
+                value,
+                collection_digest(value),
+                value is not None
+                and (
                     datetime.fromisoformat(value.expires_at) <= datetime.fromisoformat(now)
                     or value.store_generation != context.generation
-                ), now, unresolved_command(unit, row.id),
+                ),
+                now,
+                unresolved_command(unit, row.id),
             )
 
         return self.authorization.read(context, read)
 
     def _check_collection_ticket(
-        self, context: AuthorizedOwnerContext, ticket: TurnTicket,
+        self,
+        context: AuthorizedOwnerContext,
+        ticket: TurnTicket,
     ) -> None:
-        if (type(ticket) is not TurnTicket or getattr(ticket, "_issuer", None) is not self._issuer
-            or ticket._context_id != context.context_id or ticket._generation != context.generation):
+        if (
+            type(ticket) is not TurnTicket
+            or getattr(ticket, "_issuer", None) is not self._issuer
+            or ticket._context_id != context.context_id
+            or ticket._generation != context.generation
+        ):
             raise ApiFailure("UNSUPPORTED_STATE")
 
     @staticmethod
@@ -610,7 +656,8 @@ class SessionService:
             parts.append(f"Your preference change was not saved ({actions.preferences.code}).")
         if isinstance(actions.shortlist, ShortlistActionSucceeded):
             parts.append(
-                "This car is on your shortlist." if actions.shortlist.result.saved
+                "This car is on your shortlist."
+                if actions.shortlist.result.saved
                 else "This car is not on your shortlist."
             )
         elif isinstance(actions.shortlist, ActionRejected):
@@ -642,23 +689,23 @@ class SessionService:
             raise ApiFailure("UNSUPPORTED_STATE")
         result = copied(MessageResult, result)
         update = copied(SessionContent, update) if update is not None else None
-        collection_update = copied(CollectionUpdate, collection_update) if collection_update is not None else None
+        collection_update = (
+            copied(CollectionUpdate, collection_update) if collection_update is not None else None
+        )
         if result.search is not None:
             if presentation is not None and presentation != result.search.presentation:
                 raise ApiFailure("PRESENTATION_INVALID")
             presentation = result.search.presentation
         presentation = copied(PresentationProof, presentation) if presentation is not None else None
         selection = copied(InventoryRef, selection) if selection is not None else None
-        material: dict[str, object] = (
-            {
-                "result": result.model_dump(mode="json"),
-                "update": None if update is None else update.model_dump(mode="json", exclude={"collection"}),
-                "presentation": None
-                if presentation is None
-                else presentation.model_dump(mode="json"),
-                "selection": None if selection is None else selection.model_dump(mode="json"),
-            }
-        )
+        material: dict[str, object] = {
+            "result": result.model_dump(mode="json"),
+            "update": None
+            if update is None
+            else update.model_dump(mode="json", exclude={"collection"}),
+            "presentation": None if presentation is None else presentation.model_dump(mode="json"),
+            "selection": None if selection is None else selection.model_dump(mode="json"),
+        }
         if collection_update is not None:
             material["collection_update"] = collection_update.model_dump(mode="json")
         if action_mode:
@@ -667,7 +714,8 @@ class SessionService:
             if preference is None and membership is None:
                 raise ApiFailure("VALIDATION_ERROR")
             if result.operation is not None or any(
-                action["state"] != "not_requested" for action in result.actions.model_dump().values()
+                action["state"] != "not_requested"
+                for action in result.actions.model_dump().values()
             ):
                 raise ApiFailure("VALIDATION_ERROR")
             if preference is not None:
@@ -677,16 +725,23 @@ class SessionService:
                     raise ApiFailure("VALIDATION_ERROR") from None
                 if preference.session_id != ticket._session_id:
                     raise ApiFailure("VALIDATION_ERROR")
-                if preference_service is None or preference_service.authorization is not self.authorization:
+                if (
+                    preference_service is None
+                    or preference_service.authorization is not self.authorization
+                ):
                     raise ApiFailure("UNSUPPORTED_STATE")
             if membership is not None:
                 if type(membership) is not ShortlistChange or type(membership.desired) is not bool:
                     raise ApiFailure("VALIDATION_ERROR")
                 membership = ShortlistChange(
                     copied(InventoryRef, membership.ref),
-                    copied(MembershipRequest, membership.command), membership.desired,
+                    copied(MembershipRequest, membership.command),
+                    membership.desired,
                 )
-                if shortlist_service is None or shortlist_service.authorization is not self.authorization:
+                if (
+                    shortlist_service is None
+                    or shortlist_service.authorization is not self.authorization
+                ):
                     raise ApiFailure("UNSUPPORTED_STATE")
                 # Current A8 emits value commands. Coupled mode changes need a separate contract.
                 if preference is not None and not isinstance(preference, PreferencesUpdate):
@@ -694,9 +749,12 @@ class SessionService:
             material.update(
                 action_mode="session-actions-1",
                 preference=None if preference is None else preference.model_dump(mode="json"),
-                membership=None if membership is None else dict(
+                membership=None
+                if membership is None
+                else dict(
                     ref=membership.ref.model_dump(mode="json"),
-                    command=membership.command.model_dump(mode="json"), desired=membership.desired,
+                    command=membership.command.model_dump(mode="json"),
+                    desired=membership.desired,
                 ),
             )
         completion_hash = fingerprint(material)
@@ -728,7 +786,9 @@ class SessionService:
                 raise ApiFailure("UNSUPPORTED_STATE")
             if saved.collection_command is not None:
                 raise ApiFailure("OPERATION_UNRESOLVED")
-            if (action_mode or collection_update is not None) and row.revision != message.accepted_revision:
+            if (
+                action_mode or collection_update is not None
+            ) and row.revision != message.accepted_revision:
                 raise ApiFailure("REVISION_CONFLICT")
             return row, message, saved, None
 
@@ -788,7 +848,9 @@ class SessionService:
                 except MembershipRejected as exc:
                     if type(exc) is not MembershipRejected:
                         raise
-                    actions.shortlist = self._action_rejected(membership.command.client_action_id, exc)
+                    actions.shortlist = self._action_rejected(
+                        membership.command.client_action_id, exc
+                    )
                 else:
                     # A receipt appeared or denial cleared: retry preparation outside WRITE.
                     raise ApiFailure("REVISION_CONFLICT")
@@ -796,10 +858,14 @@ class SessionService:
             if not superseded:
                 before = repo.content(row)
                 after = before if update is None else update
-                after = SessionContent.model_validate({
-                    **after.model_dump(mode="json"),
-                    "collection": None if before.collection is None else before.collection.model_dump(mode="json"),
-                })
+                after = SessionContent.model_validate(
+                    {
+                        **after.model_dump(mode="json"),
+                        "collection": None
+                        if before.collection is None
+                        else before.collection.model_dump(mode="json"),
+                    }
+                )
                 if (
                     isinstance(before.pending_intent, ClarificationIntent)
                     and result.state == "provider_unavailable"
@@ -841,14 +907,24 @@ class SessionService:
                         }
                     )
                 selected_collection = apply_update(
-                    unit, row, message, generation=context.generation, now=now,
-                    mutation=collection_update, final_revision=message.accepted_revision + 1,
-                    pending=after.pending_intent, selected_ref=after.selected_ref,
+                    unit,
+                    row,
+                    message,
+                    generation=context.generation,
+                    now=now,
+                    mutation=collection_update,
+                    final_revision=message.accepted_revision + 1,
+                    pending=after.pending_intent,
+                    selected_ref=after.selected_ref,
                 )
-                after = SessionContent.model_validate({
-                    **after.model_dump(mode="json"),
-                    "collection": None if selected_collection is None else selected_collection.model_dump(mode="json"),
-                })
+                after = SessionContent.model_validate(
+                    {
+                        **after.model_dump(mode="json"),
+                        "collection": None
+                        if selected_collection is None
+                        else selected_collection.model_dump(mode="json"),
+                    }
+                )
                 repo.protect_operation(before, after)
                 if after != before or presentation is not None:
                     repo.revision(row, message.accepted_revision)
@@ -872,27 +948,38 @@ class SessionService:
                     actions.preferences = self._action_rejected(preference.client_action_id, exc)
                 else:
                     actions.preferences = PreferenceActionSucceeded(
-                        state="succeeded", client_action_id=preference.client_action_id, result=outcome
+                        state="succeeded",
+                        client_action_id=preference.client_action_id,
+                        result=outcome,
                     )
             if membership is not None and prepared_membership is not None:
                 assert shortlist_service is not None
                 try:
                     member_outcome = shortlist_service.change_in_unit(
-                        unit, membership.ref, membership.command, desired=membership.desired,
-                        generation=context.generation, prepared=prepared_membership,
+                        unit,
+                        membership.ref,
+                        membership.command,
+                        desired=membership.desired,
+                        generation=context.generation,
+                        prepared=prepared_membership,
                     )
                 except MembershipRejected as exc:
                     if type(exc) is not MembershipRejected:
                         raise
-                    actions.shortlist = self._action_rejected(membership.command.client_action_id, exc)
+                    actions.shortlist = self._action_rejected(
+                        membership.command.client_action_id, exc
+                    )
                 else:
                     actions.shortlist = ShortlistActionSucceeded(
-                        state="succeeded", client_action_id=membership.command.client_action_id,
+                        state="succeeded",
+                        client_action_id=membership.command.client_action_id,
                         result=member_outcome,
                     )
             finished = result.model_dump(mode="json")
             if action_mode:
-                finished.update(actions=actions.model_dump(mode="json"), text=self._action_text(actions))
+                finished.update(
+                    actions=actions.model_dump(mode="json"), text=self._action_text(actions)
+                )
             original = MessageResult.model_validate(
                 {
                     **finished,
@@ -937,7 +1024,9 @@ class SessionService:
         ):
             raise ApiFailure("VALIDATION_ERROR")
         draft_id = explicit.draft_id
-        command = ConfirmRequest.model_validate(explicit.model_dump(mode="json", exclude={"draft_id"}))
+        command = ConfirmRequest.model_validate(
+            explicit.model_dump(mode="json", exclude={"draft_id"})
+        )
         payload_hash = fingerprint(body.model_dump(mode="json"))
 
         def inspect(unit: OwnerUnit, now: str) -> tuple[ConversationSession, MessageResult | None]:
@@ -966,8 +1055,10 @@ class SessionService:
         replay, terminal_seen = self.authorization.read(context, preflight)
         if replay is not None:
             return replay
-        prepared = None if terminal_seen else participant.prepare(
-            context, draft_id=draft_id, command=command
+        prepared = (
+            None
+            if terminal_seen
+            else participant.prepare(context, draft_id=draft_id, command=command)
         )
 
         def write(unit: OwnerUnit) -> MessageResult:
@@ -977,13 +1068,19 @@ class SessionService:
                 return replay
             # inspect checked new-message expected R; never increment it before actual T7.
             effect = participant.apply_in_unit(
-                unit, draft_id=draft_id, command=command, generation=context.generation,
-                now=now, prepared=prepared,
+                unit,
+                draft_id=draft_id,
+                command=command,
+                generation=context.generation,
+                now=now,
+                prepared=prepared,
             )
             if effect.transition is not None:
                 if effect.replayed or (
-                    effect.transition.owner_id, effect.transition.session_id,
-                    effect.transition.expected_revision, effect.transition.generation,
+                    effect.transition.owner_id,
+                    effect.transition.session_id,
+                    effect.transition.expected_revision,
+                    effect.transition.generation,
                 ) != (unit.owner_id, row.id, body.expected_revision, context.generation):
                     raise StoreError("CONFIRMATION_TRANSITION_INCOMPATIBLE")
                 participant.resolve_session_in_unit(unit, transition=effect.transition)
@@ -997,12 +1094,14 @@ class SessionService:
             operation = effect.terminal
             if isinstance(operation, OperationSucceeded):
                 # New receipt gets a current observation, immutable terminal facts remain untouched.
-                operation = OperationSucceeded.model_validate({
-                    **operation.model_dump(mode="json"),
-                    "csv": participant.observe_csv_in_unit(
-                        unit, generation=context.generation, now=now
-                    ).model_dump(mode="json"),
-                })
+                operation = OperationSucceeded.model_validate(
+                    {
+                        **operation.model_dump(mode="json"),
+                        "csv": participant.observe_csv_in_unit(
+                            unit, generation=context.generation, now=now
+                        ).model_dump(mode="json"),
+                    }
+                )
                 text = "Your simulated viewing is confirmed and your local enquiry is saved."
                 if operation.csv.state == "current":
                     text += " The CSV export is current."
@@ -1011,25 +1110,45 @@ class SessionService:
                 else:
                     text += " The CSV export is pending."
             elif isinstance(operation, OperationRejected):
-                text = f"The viewing was not confirmed ({operation.rejection_code}). No booking was created."
+                text = (
+                    f"The viewing was not confirmed ({operation.rejection_code}). "
+                    "No booking was created."
+                )
             else:
                 raise StoreError("CONFIRMATION_TERMINAL_INCOMPATIBLE")
             original = MessageResult(
-                client_message_id=body.client_message_id, session_id=row.id,
-                turn_revision=row.revision, current_revision=row.revision,
-                state="answered", text=text, pending_intent=content.pending_intent,
-                operation=operation, persistence="saved", provider_state="not_used",
+                client_message_id=body.client_message_id,
+                session_id=row.id,
+                turn_revision=row.revision,
+                current_revision=row.revision,
+                state="answered",
+                text=text,
+                pending_intent=content.pending_intent,
+                operation=operation,
+                persistence="saved",
+                provider_state="not_used",
             )
-            unit.db.add(Message(
-                id=str(uuid4()), owner_id=unit.owner_id, session_id=row.id,
-                client_message_id=body.client_message_id, payload_hash=payload_hash,
-                expected_revision=body.expected_revision, accepted_revision=row.revision,
-                result_json=StoredMessage(
-                    request=body, worker_epoch=self._epoch, assistant_result=original,
-                    completion_hash=fingerprint(dict(kind="confirmation-message-1", request_hash=payload_hash)),
-                ).model_dump(mode="json"),
-                state="completed", created_at=now,
-            ))
+            unit.db.add(
+                Message(
+                    id=str(uuid4()),
+                    owner_id=unit.owner_id,
+                    session_id=row.id,
+                    client_message_id=body.client_message_id,
+                    payload_hash=payload_hash,
+                    expected_revision=body.expected_revision,
+                    accepted_revision=row.revision,
+                    result_json=StoredMessage(
+                        request=body,
+                        worker_epoch=self._epoch,
+                        assistant_result=original,
+                        completion_hash=fingerprint(
+                            dict(kind="confirmation-message-1", request_hash=payload_hash)
+                        ),
+                    ).model_dump(mode="json"),
+                    state="completed",
+                    created_at=now,
+                )
+            )
             return original
 
         return self.authorization.write(context, write)
@@ -1104,6 +1223,51 @@ class SessionService:
             return InventoryRef(
                 namespace=item.namespace, snapshot_id=item.snapshot_id, source_id=item.source_id
             )
+
+        return self.authorization.read(context, read)
+
+    def recent_context(
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        *,
+        before_revision: int,
+    ) -> tuple[TranscriptTurn, ...]:
+        """Last six completed owned turns, before the admitted current message."""
+        session_id = repo.valid_id(session_id)
+
+        def read(unit: OwnerUnit) -> tuple[TranscriptTurn, ...]:
+            row = repo.live_session(unit, session_id, self._now())
+            if not 0 <= before_revision <= row.revision:
+                raise ApiFailure("REVISION_CONFLICT")
+            messages = unit.db.scalars(
+                select(Message)
+                .where(
+                    Message.owner_id == unit.owner_id,
+                    Message.session_id == row.id,
+                    Message.accepted_revision < before_revision,
+                )
+                .order_by(Message.accepted_revision.desc())
+                .limit(6)
+            ).all()
+            turns = []
+            for message in reversed(messages):
+                saved = repo.message_content(message)
+                if saved.assistant_result is None:
+                    continue
+                turns.append(
+                    TranscriptTurn(
+                        message_id=message.id,
+                        client_message_id=message.client_message_id,
+                        session_id=row.id,
+                        accepted_revision=message.accepted_revision,
+                        accepted_at=message.created_at,
+                        user_text=saved.request.text,
+                        state="completed",
+                        assistant_result=saved.assistant_result,
+                    )
+                )
+            return tuple(turns)
 
         return self.authorization.read(context, read)
 

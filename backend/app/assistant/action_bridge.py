@@ -28,7 +28,7 @@ from app.api.schemas.sessions import (
 from app.core.errors import ApiFailure
 from app.identity.authorization import AuthorizedOwnerContext
 from app.memory.service import PreferenceService
-from app.sessions.service import ShortlistChange, SessionService, TurnAdmission
+from app.sessions.service import SessionService, ShortlistChange, TurnAdmission
 from app.sessions.state import SessionContent
 from app.shortlist.service import ShortlistService
 from app.viewings.confirmation import ConfirmationParticipant
@@ -49,8 +49,18 @@ _REMOVE = re.compile(r"(?:please\s+)?remove\s+(.+?)\s+from my shortlist", re.I)
 _QUOTED_VALUE = r'"(?:[^"\\\r\n]|\\["\\/bfnrt]|\\u[0-9a-fA-F]{4})*"'
 _VALUE_SEPARATOR = r"(?:\s*,\s*(?:and\s+)?|\s+and\s+)"
 _COUNTS = {
-    "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
-    "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
 }
 _SUPPLIED = re.compile(
     r"(?:please\s+)?(?:explicitly\s+)?(?P<verb>remember|save|correct|update)\s+"
@@ -62,7 +72,73 @@ _SUPPLIED = re.compile(
     r"\s*\.?(?:\s+Save these preferences now\.?)?",
     re.I,
 )
-_HARD_VALUE = re.compile(r"\b(?:only|must|required|mandatory|at least|at most|no more than)\b", re.I)
+_HARD_VALUE = re.compile(
+    r"\b(?:only|must|required|mandatory|at least|at most|no more than)\b", re.I
+)
+_NATURAL_SAVE = re.compile(
+    r"(?:please\s+)?(?:explicitly\s+)?(?P<verb>remember|save|correct|update)\s+(?P<body>.+)",
+    re.I,
+)
+_SAVE_CANCELLATION = re.compile(
+    r"\b(?:if|unless|maybe|perhaps|cancel|discard|undo)\b|"
+    r"\b(?:do\s+not|don't|never|without|not\s+to)\s+"
+    r"(?:(?:actually|really|permanently)\s+)?"
+    r"(?:save|saving|remember|remembering|store|storing|persist|persisting|"
+    r"record|recording|update|updating|correct|correcting)\b",
+    re.I,
+)
+_OTHER_SAVE_EFFECT = re.compile(
+    r"(?:[.!?;]|\b(?:and|also|then|but)\b)\s*(?:please\s+)?"
+    r"(?:book|reserve|schedule|submit|send|add|remove|delete|save|remember|correct|update)\b",
+    re.I,
+)
+
+
+def _natural_values(text: str, patch: TextPatch) -> tuple[str, ...] | None:
+    """Check buyer authorization and literal values; the model supplies their meaning."""
+    matched = _NATURAL_SAVE.fullmatch(text)
+    if matched is None:
+        return None
+    body = matched.group("body")
+    if re.match(r"(?:what|when|which|whether|how)\b", body, re.I):
+        return None
+    if _SAVE_CANCELLATION.search(body) or _OTHER_SAVE_EFFECT.search(body):
+        return None
+    # A buyer may explicitly distinguish a preference from a required filter.
+    strength_text = re.sub(
+        r"\bnot\s+(?:a\s+)?(?:hard|required|mandatory)(?:\s+(?:filter|requirement))?\b",
+        "",
+        body,
+        flags=re.I,
+    )
+    if re.search(r"\bhard\b", strength_text, re.I) or _HARD_VALUE.search(strength_text):
+        return None
+    values: list[str] = []
+    for proposed in patch.values:
+        value = re.search(r"(?<!\w)" + re.escape(proposed) + r"(?!\w)", patch.quote, re.I)
+        if value is None:
+            return None
+        values.append(value.group())
+    # Quoted/count-bearing lists retain their complete-list proof rather than
+    # allowing this flexible path to save a model-selected subset.
+    quoted = re.findall(_QUOTED_VALUE, body)
+    if quoted:
+        try:
+            if [json.loads(value) for value in quoted] != values:
+                return None
+        except ValueError:
+            return None
+    counted = re.search(
+        r"\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d{1,2})"
+        r"\s+(?:soft\s+)?(?:preferences|requirements)\b",
+        body,
+        re.I,
+    )
+    if counted:
+        count = counted.group(1).casefold()
+        if (_COUNTS[count] if count in _COUNTS else int(count)) != len(values):
+            return None
+    return tuple(values)
 
 
 class ActionClarification(Exception):
@@ -97,10 +173,12 @@ def _supplied_requirements(admission: TurnAdmission, intent: TurnIntent) -> Requ
     These are independent durable values, not a retagged search transition. Current
     criteria are never changed or used as substitutes for omitted/new buyer values.
     """
-    matched = _SUPPLIED.fullmatch(admission.request.text.strip())
-    if matched is None:
+    text = admission.request.text.strip()
+    matched = _SUPPLIED.fullmatch(text)
+    natural = _NATURAL_SAVE.fullmatch(text) if matched is None and intent.patches else None
+    if matched is None and natural is None:
         return None
-    problem = "State the exact soft requirements to remember as quoted values; no changes were made."
+    problem = "Tell me the soft preferences you want to save; no changes were made."
     if set(intent.deferred) != {"preferences"} or intent.references or len(intent.patches) != 1:
         raise ActionClarification(problem)
     pending = admission.session.pending_intent
@@ -108,33 +186,53 @@ def _supplied_requirements(admission: TurnAdmission, intent: TurnIntent) -> Requ
         raise ActionClarification(pending.question)
     patch = intent.patches[0]
     if (
-        not isinstance(patch, TextPatch) or patch.field != "soft_preferences"
+        not isinstance(patch, TextPatch)
+        or patch.field != "soft_preferences"
         or patch.operation not in {"add", "replace"}
         or patch.quote not in admission.request.text
     ):
         raise ActionClarification(problem)
-    literals = re.findall(_QUOTED_VALUE, matched.group("values"))
-    try:
-        values = tuple(json.loads(literal) for literal in literals)
-    except ValueError:
-        raise ActionClarification(problem) from None
+    if matched is not None:
+        literals = re.findall(_QUOTED_VALUE, matched.group("values"))
+        try:
+            values = tuple(json.loads(literal) for literal in literals)
+        except ValueError:
+            raise ActionClarification(problem) from None
+        if list(values) != patch.values or any(literal not in patch.quote for literal in literals):
+            raise ActionClarification(problem)
+        count = matched.group("count")
+        if count is not None and (
+            _COUNTS[count.casefold()] if count.casefold() in _COUNTS else int(count)
+        ) != len(values):
+            raise ActionClarification(problem)
+        command, names_saved = matched.group("verb"), matched.group("saved") is not None
+    else:
+        assert natural is not None
+        natural_values = _natural_values(text, patch)
+        if natural_values is None:
+            raise ActionClarification(problem)
+        values = natural_values
+        command = natural.group("verb")
+        names_saved = re.search(r"\bsaved\b", natural.group("body"), re.I) is not None
     if (
-        not 1 <= len(values) <= 12 or list(values) != patch.values
-        or any(literal not in patch.quote for literal in literals)
-        or any(not value.strip() or len(value) > 200 or _HARD_VALUE.search(value) for value in values)
+        not 1 <= len(values) <= 12
+        or any(
+            not value.strip() or len(value) > 200 or _HARD_VALUE.search(value) for value in values
+        )
         or len({value.casefold() for value in values}) != len(values)
     ):
         raise ActionClarification(problem)
-    count = matched.group("count")
-    if count is not None and (
-        _COUNTS[count.casefold()] if count.casefold() in _COUNTS else int(count)
-    ) != len(values):
-        raise ActionClarification(problem)
-    correcting = matched.group("verb").casefold() in {"correct", "update"}
-    if matched.group("saved") is not None and not correcting:
+    correcting = command.casefold() in {"correct", "update"}
+    if names_saved and not correcting:
         raise ActionClarification("To replace saved values, explicitly ask to correct them.")
-    existing = next((entry.preference for entry in admission.session.recalled_preferences.entries
-                     if entry.preference.key == "requirements"), None)
+    existing = next(
+        (
+            entry.preference
+            for entry in admission.session.recalled_preferences.entries
+            if entry.preference.key == "requirements"
+        ),
+        None,
+    )
     if existing is not None and (
         existing.strength == "hard" or (existing.value != list(values) and not correcting)
     ):
@@ -143,7 +241,8 @@ def _supplied_requirements(admission: TurnAdmission, intent: TurnIntent) -> Requ
             "to replace it; this request cannot silently overwrite other saved requirements."
         )
     return RequestedActions(
-        preference_target="requirements", preference_intent="correct" if correcting else "remember",
+        preference_target="requirements",
+        preference_intent="correct" if correcting else "remember",
         supplied_requirements=values,
     )
 
@@ -182,7 +281,7 @@ def requested_actions(admission: TurnAdmission, intent: TurnIntent) -> Requested
         return supplied
     if intent.patches:
         raise ActionClarification(
-            "State exact new soft requirements in an explicit quoted save request, or first "
+            "Tell me the new soft preferences to save, or first "
             "settle changed search criteria before asking to remember the current values."
         )
     target: PreferenceTarget | None = None
@@ -213,11 +312,10 @@ def requested_actions(admission: TurnAdmission, intent: TurnIntent) -> Requested
             else:
                 target = "preferences"
             if save.group("verb").casefold() in {"correct", "update"}:
-                if (
-                    save.group("suffix") or ""
-                ).casefold() != " to my current search":
+                if (save.group("suffix") or "").casefold() != " to my current search":
                     raise ActionClarification(
-                        "Say explicitly that saved preferences should be updated to your current search."
+                        "Say explicitly that saved preferences should be updated "
+                        "to your current search."
                     )
                 preference_intent = "correct"
             elif save.group("saved") is not None:
@@ -235,14 +333,16 @@ def requested_actions(admission: TurnAdmission, intent: TurnIntent) -> Requested
             desired = add is not None
         else:
             raise ActionClarification(
-                "Please explicitly name the current budget, makes or soft requirements to remember, "
+                "Please name the current budget, makes or soft requirements to remember, "
                 "or ask to add/remove an exact car from your shortlist. No change was made."
             )
     parsed = ({"preferences"} if target is not None else set()) | (
         {"shortlist"} if reference is not None else set()
     )
     if parsed != domains or (reference is None and intent.references):
-        raise ActionClarification("Please separate or clarify the requested changes; none were applied.")
+        raise ActionClarification(
+            "Please separate or clarify the requested changes; none were applied."
+        )
     if (
         isinstance(pending, ClarificationIntent)
         and pending.purpose == "listing_reference"
@@ -268,15 +368,21 @@ def _preference_changes(session: SessionState, target: PreferenceTarget) -> list
         )
     changes: list[PreferenceValue] = []
     if target in {"preferences", "budget"} and criteria.filters.budget is not None:
-        changes.append(BudgetPreference(key="budget", value=criteria.filters.budget, strength="hard"))
+        changes.append(
+            BudgetPreference(key="budget", value=criteria.filters.budget, strength="hard")
+        )
     if target in {"preferences", "makes"} and criteria.filters.makes:
-        changes.append(CategoryPreference(key="makes", value=criteria.filters.makes, strength="hard"))
+        changes.append(
+            CategoryPreference(key="makes", value=criteria.filters.makes, strength="hard")
+        )
     if target in {"preferences", "requirements"} and criteria.soft_preferences:
         changes.append(
             CategoryPreference(key="requirements", value=criteria.soft_preferences, strength="soft")
         )
     if not changes:
-        raise ActionClarification("State the preference for this search before asking to remember it.")
+        raise ActionClarification(
+            "State the preference for this search before asking to remember it."
+        )
     return changes
 
 
@@ -313,9 +419,14 @@ class ActionBridge:
                 intent=requested.preference_intent,
                 changes=(
                     _preference_changes(admission.session, requested.preference_target)
-                    if requested.supplied_requirements is None else [CategoryPreference(
-                        key="requirements", value=list(requested.supplied_requirements), strength="soft"
-                    )]
+                    if requested.supplied_requirements is None
+                    else [
+                        CategoryPreference(
+                            key="requirements",
+                            value=list(requested.supplied_requirements),
+                            strength="soft",
+                        )
+                    ]
                 ),
             )
             preference = PreferencesUpdate.model_validate(preference.model_dump(mode="json"))
@@ -338,8 +449,11 @@ class ActionBridge:
         elif resolved_ref is not None:
             raise ApiFailure("VALIDATION_ERROR")
         return PreparedActions(
-            admission.message_id, admission.request.client_message_id,
-            admission.session.session_id, preference, membership,
+            admission.message_id,
+            admission.request.client_message_id,
+            admission.session.session_id,
+            preference,
+            membership,
         )
 
     def complete(
@@ -355,23 +469,39 @@ class ActionBridge:
     ) -> MessageResult:
         if plan.preference is None and plan.membership is None:
             raise ApiFailure("VALIDATION_ERROR")
-        if admission.ticket is None or (
-            plan.message_id, plan.client_message_id, plan.session_id
-        ) != (
-            admission.message_id, admission.request.client_message_id, admission.session.session_id
-        ) or (result.client_message_id, result.session_id, result.turn_revision) != (
-            admission.request.client_message_id, admission.session.session_id, admission.session.revision
+        if (
+            admission.ticket is None
+            or (plan.message_id, plan.client_message_id, plan.session_id)
+            != (
+                admission.message_id,
+                admission.request.client_message_id,
+                admission.session.session_id,
+            )
+            or (result.client_message_id, result.session_id, result.turn_revision)
+            != (
+                admission.request.client_message_id,
+                admission.session.session_id,
+                admission.session.revision,
+            )
         ):
             raise ApiFailure("VALIDATION_ERROR")
-        if any(action["state"] != "not_requested" for action in result.actions.model_dump().values()):
+        if any(
+            action["state"] != "not_requested" for action in result.actions.model_dump().values()
+        ):
             raise ApiFailure("VALIDATION_ERROR")
         # P14 supplies actual outcomes AND acknowledgement before persisting the receipt.
         # Never patch the returned text/result or swallow an unknown/commit failure here.
         return self.sessions.complete_action(
-            context, admission.ticket, result,
-            preference=plan.preference, membership=plan.membership,
-            preference_service=self.preferences, shortlist_service=self.shortlist,
-            update=update, presentation=presentation, selection=selection,
+            context,
+            admission.ticket,
+            result,
+            preference=plan.preference,
+            membership=plan.membership,
+            preference_service=self.preferences,
+            shortlist_service=self.shortlist,
+            update=update,
+            presentation=presentation,
+            selection=selection,
         )
 
     def confirm(
@@ -382,7 +512,9 @@ class ActionBridge:
         # The real P14 wrapper validates combinations, projects ConfirmRequest, preserves
         # reviewed R, invokes T7 and stores exactly one message/session advancement.
         copied = MessageRequest.model_validate(request.model_dump(mode="json"))
-        return self.sessions.confirm_turn(context, session_id, copied, participant=self.confirmation)
+        return self.sessions.confirm_turn(
+            context, session_id, copied, participant=self.confirmation
+        )
 
     def recall(self, context: AuthorizedOwnerContext, session: SessionState) -> str:
         # Partial read/confirmation compositions can still present the owned admission
@@ -391,14 +523,20 @@ class ActionBridge:
             session.recalled_preferences
             if self.preferences is None
             else self.preferences.recall(
-                context, keys=("budget", "makes", "use_cases", "requirements"), current_keys=(),
+                context,
+                keys=("budget", "makes", "use_cases", "requirements"),
+                current_keys=(),
             )
         )
         authorization = (
-            self.sessions.authorization if self.preferences is None else self.preferences.authorization
+            self.sessions.authorization
+            if self.preferences is None
+            else self.preferences.authorization
         )
         return format_recalled_preferences(
-            record, session_id=session.session_id, criteria=session.criteria,
+            record,
+            session_id=session.session_id,
+            criteria=session.criteria,
             now=authorization.identity.now_text(),
         )
 
@@ -407,19 +545,32 @@ class ActionPort(Protocol):
     """Bounded async facade; production composition delegates to the concrete bridge."""
 
     async def prepare_actions(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
-        requested: RequestedActions, resolved_ref: InventoryRef | None,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        requested: RequestedActions,
+        resolved_ref: InventoryRef | None,
     ) -> PreparedActions: ...
 
     async def complete_actions(
-        self, context: AuthorizedOwnerContext, admission: TurnAdmission,
-        plan: PreparedActions, result: MessageResult, *, update: SessionContent | None = None,
+        self,
+        context: AuthorizedOwnerContext,
+        admission: TurnAdmission,
+        plan: PreparedActions,
+        result: MessageResult,
+        *,
+        update: SessionContent | None = None,
     ) -> MessageResult: ...
 
     async def confirm_turn(
-        self, context: AuthorizedOwnerContext, session_id: str, request: MessageRequest,
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        request: MessageRequest,
     ) -> MessageResult: ...
 
     async def recall_preferences(
-        self, context: AuthorizedOwnerContext, session: SessionState,
+        self,
+        context: AuthorizedOwnerContext,
+        session: SessionState,
     ) -> str: ...

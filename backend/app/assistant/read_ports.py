@@ -11,7 +11,7 @@ from app.api.schemas.inventory import (
     SearchRequest,
     SearchResult,
 )
-from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState
+from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState, TranscriptTurn
 from app.core.errors import ApiFailure
 from app.identity.authorization import AuthorizedOwnerContext
 from app.sessions.service import TurnAdmission, TurnTicket
@@ -29,6 +29,13 @@ class SessionPort(Protocol):
         self, context: AuthorizedOwnerContext, session_id: str, request: MessageRequest
     ) -> TurnAdmission: ...
     async def get(self, context: AuthorizedOwnerContext, session_id: str) -> SessionState: ...
+    async def recent_context(
+        self,
+        context: AuthorizedOwnerContext,
+        session_id: str,
+        *,
+        before_revision: int,
+    ) -> tuple[TranscriptTurn, ...]: ...
     async def ordinal(
         self, context: AuthorizedOwnerContext, session_id: str, presentation_id: str, ordinal: int
     ) -> InventoryRef: ...

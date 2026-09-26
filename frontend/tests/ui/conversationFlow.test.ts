@@ -163,6 +163,65 @@ describe("U3 synthetic controller regressions; no live provider or persistence p
       "context changed",
     );
   });
+  test("a natural follow-up carries result history without echoing a prior selected car as a new choice", async () => {
+    const ref = searchResult().data.presentation.ordered_refs[0]!;
+    const subject = setup({
+      ...conversationSession(),
+      selected_ref: ref,
+      active_presentation_id: otherConversationId,
+    });
+    await prime(subject, "Which of these has the newest model year?");
+    await subject.flow.send(id, null, null);
+    expect(subject.write).toHaveBeenCalledTimes(1);
+    expect(subject.write.mock.calls[0]).toMatchObject([
+      "submit_message",
+      {
+        body: {
+          text: "Which of these has the newest model year?",
+          selected_ref: null,
+          presentation_id: otherConversationId,
+        },
+      },
+    ]);
+    expect(subject.state.session.selected_ref).toEqual(ref);
+  });
+  test("Ask about this still submits an explicitly staged car and does not pin the following question", async () => {
+    const ref = searchResult().data.presentation.ordered_refs[0]!;
+    const subject = setup();
+    await prime(subject, "What does its listing say?");
+    const originalWrite = subject.write.getMockImplementation()!;
+    subject.write.mockImplementation(async (operation, input) => {
+      if (operation === "select_session_listing") {
+        subject.state.session = {
+          ...subject.state.session,
+          revision: 1,
+          selected_ref: ref,
+        };
+        return envelope(subject.state.session);
+      }
+      return originalWrite(operation, input);
+    });
+    subject.flow.stageContext(id, {
+      label: "Chosen car",
+      selectedRef: ref,
+      presentation: null,
+    });
+    await subject.flow.send(id, null, null);
+    expect(subject.write.mock.calls.map((call) => call[0])).toEqual([
+      "select_session_listing",
+      "submit_message",
+    ]);
+    expect(subject.write.mock.calls[1]).toMatchObject([
+      "submit_message",
+      { body: { selected_ref: ref } },
+    ]);
+    subject.flow.setText(id, "How many cars are there in total?");
+    await subject.flow.send(id, null, null);
+    expect(subject.write.mock.calls[2]).toMatchObject([
+      "submit_message",
+      { body: { selected_ref: null } },
+    ]);
+  });
   test("a proof-only change cannot silently clear an unrelated selected car", async () => {
     const proof = searchResult().data.presentation,
       subject = setup({

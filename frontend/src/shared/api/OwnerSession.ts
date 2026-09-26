@@ -90,12 +90,17 @@ export class OwnerSession {
       this.invalidate();
       throw new ClientFailure("stale-owner", "reidentify");
     }
-    this.#epoch += 1;
+    const contextChanged =
+      (identity.state === "recognized" ? identity.context_id : null) !==
+      (this.#identity?.context_id ?? null);
+    if (contextChanged) this.#epoch += 1;
     this.#identity =
       identity.state === "recognized" ? structuredClone(identity) : null;
     clearTimeout(this.#expiryTimer);
     this.#scheduleExpiry();
-    for (const listener of this.#listeners) listener();
+    // A successful focus check of the same browser context refreshes its expiry
+    // and token without cancelling requests, emptying caches or remounting chat.
+    if (contextChanged) for (const listener of this.#listeners) listener();
   }
 
   #scheduleExpiry(): void {

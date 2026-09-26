@@ -52,7 +52,7 @@ async function setup() {
     healthReason: null as string | null,
   };
   vi.spyOn(service.api, "revalidateIdentity").mockImplementation(async () => {
-    service.owner.accept(service.owner.invalidate(), identity());
+    service.owner.accept(service.owner.capture().epoch, identity());
     return envelope(identity());
   });
   const read = vi
@@ -124,6 +124,9 @@ describe("U3 actual conversation components with synthetic services; no rendered
       state.healthReason = reason;
       render(<Harness service={service} />);
       await flush();
+      fireEvent.click(
+        screen.getByRole("button", { name: "Assistant settings" }),
+      );
       expect(
         screen.getByText("Ask about a car, or explore your options."),
       ).toBeInTheDocument();
@@ -191,7 +194,7 @@ describe("U3 actual conversation components with synthetic services; no rendered
     expect(write).not.toHaveBeenCalled();
   });
 
-  test("one transcript region contains secondary tools but leaves the composer outside it", async () => {
+  test("settings stay outside the transcript and composer, and close with Escape", async () => {
     const { service, write } = await setup();
     render(<Harness service={service} />);
     await flush();
@@ -205,11 +208,28 @@ describe("U3 actual conversation components with synthetic services; no rendered
       screen.getAllByRole("region", { name: "Conversation transcript" }),
     ).toHaveLength(1);
     expect(region.contains(composer)).toBe(false);
+    expect(screen.queryByText("Conversation options")).not.toBeInTheDocument();
+    const settings = screen.getByRole("button", { name: "Assistant settings" });
+    expect(region.contains(settings)).toBe(false);
+    fireEvent.click(settings);
+    await flush();
+    const popup = screen.getByRole("dialog", { name: "Assistant settings" });
+    expect(region.contains(popup)).toBe(false);
+    expect(screen.getByRole("tab", { name: "Chat" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Chat" }), {
+      key: "ArrowRight",
+    });
+    expect(screen.getByRole("tab", { name: "Context" })).toHaveFocus();
+    expect(screen.getByRole("tab", { name: "Context" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    fireEvent.keyDown(popup, { key: "Escape" });
+    await flush();
     expect(
-      region.contains(
-        screen.getByText("Conversation options", { selector: "summary" }),
-      ),
-    ).toBe(true);
+      screen.queryByRole("dialog", { name: "Assistant settings" }),
+    ).not.toBeInTheDocument();
+    expect(settings).toHaveFocus();
     expect(composer.closest(".conversation-workspace")).toBe(
       region.parentElement,
     );
@@ -228,7 +248,7 @@ describe("U3 actual conversation components with synthetic services; no rendered
       render(<Harness service={service} />);
       await flush();
       fireEvent.click(
-        screen.getByText("Conversation options", { selector: "summary" }),
+        screen.getByRole("button", { name: "Assistant settings" }),
       );
       refresh.mockClear();
       const composer = screen.getByLabelText(
@@ -380,6 +400,7 @@ describe("U3 actual conversation components with synthetic services; no rendered
     expect(
       screen.getByLabelText("Message the car-shopping assistant"),
     ).toHaveValue("Keep my question until I send it");
+    fireEvent.click(screen.getByRole("button", { name: "Assistant settings" }));
     expect(
       screen.getByRole("button", { name: "Check assistant service" }),
     ).toBeEnabled();
@@ -480,6 +501,118 @@ describe("U3 actual conversation components with synthetic services; no rendered
     expect(region.scrollTop).toBe(1000);
     expect(region).toHaveFocus();
   });
+  test("explicitly sending resumes following after a long answer while later deliberate scrolling still pauses it", async () => {
+    const { service, state } = await setup();
+    const send = vi.spyOn(service.conversation, "send").mockResolvedValue();
+    render(<Harness service={service} />);
+    await flush();
+    const region = screen.getByRole("region", {
+      name: "Conversation transcript",
+    });
+    const composer = screen.getByLabelText(
+      "Message the car-shopping assistant",
+    );
+    Object.defineProperties(region, {
+      scrollHeight: { configurable: true, value: 2400 },
+      clientHeight: { configurable: true, value: 400 },
+    });
+    region.scrollTop = 100;
+    fireEvent.scroll(region);
+    state.session.revision = 1;
+    state.page = transcriptPage([transcriptTurn(conversationResult())], 1);
+    await act(async () => {
+      await service.conversation.refresh(id);
+    });
+    expect(
+      screen.getByRole("button", { name: "New response — show latest" }),
+    ).toBeInTheDocument();
+    fireEvent.change(composer, { target: { value: "Which one is newest?" } });
+    composer.focus();
+    fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+    expect(send).toHaveBeenCalledOnce();
+    expect(
+      screen.queryByRole("button", { name: "New response — show latest" }),
+    ).not.toBeInTheDocument();
+    const bounds = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        return new DOMRect(
+          0,
+          this === region
+            ? 200
+            : this.classList.contains("conversation-assistant-message")
+              ? 900
+              : 0,
+          300,
+          100,
+        );
+      });
+    try {
+      state.session.revision = 2;
+      const second = transcriptTurn(
+        conversationResult(undefined, {
+          client_message_id: crypto.randomUUID(),
+          turn_revision: 2,
+          current_revision: 2,
+          text: "The newest one is the 2022 model.",
+        }),
+      );
+      state.page = transcriptPage([...state.page.items, second], 2);
+      await act(async () => {
+        await service.conversation.refresh(id);
+      });
+      expect(region.scrollTop).toBe(800);
+      expect(composer).toHaveFocus();
+      expect(
+        screen.queryByRole("button", { name: "New response — show latest" }),
+      ).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole("button", { name: "Send message" }));
+      region.scrollTop = 50;
+      fireEvent.scroll(region);
+      state.session.revision = 3;
+      state.page = transcriptPage(
+        [
+          ...state.page.items,
+          transcriptTurn(
+            conversationResult(undefined, {
+              client_message_id: crypto.randomUUID(),
+              turn_revision: 3,
+              current_revision: 3,
+              text: "Its listing does not mention a warranty.",
+            }),
+          ),
+        ],
+        3,
+      );
+      await act(async () => {
+        await service.conversation.refresh(id);
+      });
+      expect(region.scrollTop).toBe(50);
+      expect(
+        screen.getByRole("button", { name: "New response — show latest" }),
+      ).toBeInTheDocument();
+    } finally {
+      bounds.mockRestore();
+    }
+  });
+  test("settings hide an old conversation-start notice once messages exist", async () => {
+    const { service, state } = await setup();
+    const notice =
+      "A new local conversation has started. Saved preferences remain separate; no earlier selected car has been imported.";
+    vi.spyOn(service, "getSnapshot").mockReturnValue({
+      ...service.getSnapshot(),
+      notice,
+    });
+    state.session.revision = 1;
+    state.page = transcriptPage([transcriptTurn(conversationResult())], 1);
+    render(<Harness service={service} />);
+    await flush();
+    fireEvent.click(screen.getByRole("button", { name: "Assistant settings" }));
+    expect(screen.queryByText(notice)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "New conversation" }),
+    ).toBeInTheDocument();
+  });
   test("enlarged outer scrolling preserves a reader then jumps the actual scroll owner", async () => {
     const { service, state } = await setup();
     render(<Harness service={service} />);
@@ -516,9 +649,8 @@ describe("U3 actual conversation components with synthetic services; no rendered
     const { service } = await setup();
     render(<Harness service={service} />);
     await flush();
-    fireEvent.click(
-      screen.getByText("Saved preferences recalled in this conversation"),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Assistant settings" }));
+    fireEvent.click(screen.getByRole("tab", { name: "Preferences" }));
     expect(screen.getByText(/makes: Synthetic · soft/)).toBeInTheDocument();
     expect(
       screen.getByText(/Cash budget \(AED\): any–20000/),

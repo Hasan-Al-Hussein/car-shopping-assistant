@@ -501,7 +501,10 @@ export class ConversationFlow {
         });
         return;
       }
-      let selected = context?.selectedRef ?? session.selected_ref,
+      // An existing server selection is history, not a fresh user instruction.
+      // Only explicit staged/page context should override language such as
+      // “which of these is newest?” on this turn.
+      let selected = context?.selectedRef ?? null,
         presentationId = session.active_presentation_id;
       if (context?.presentation) {
         const request: RequestOf<"register_presentation"> = {

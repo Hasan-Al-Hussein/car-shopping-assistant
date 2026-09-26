@@ -14,6 +14,7 @@ from app.assistant.budget import TurnBudget
 from app.assistant.collection_bridge import CollectionPort
 from app.assistant.collection_planner import CollectionObservation
 from app.assistant.coordinator import ReadCoordinator
+from app.assistant.grounded_conversation import GroundedConversationDraft
 from app.assistant.intent import ReferenceRequest, TurnIntent
 from app.assistant.provider import ProviderFault, TransportResponse
 from app.core.errors import ApiFailure
@@ -568,11 +569,33 @@ def test_read_cannot_replace_retained_viewing_review_car_or_pending_authority() 
 def test_non_read_turns_do_not_touch_inventory(operation: str, text: str) -> None:
     async def exercise() -> None:
         sessions, inventory = FakeSessions(), FakeInventory()
-        model, _ = adapter(TurnIntent.model_validate({"operation": operation}))
+        before = sessions.current
+        model, transport = adapter(TurnIntent.model_validate({"operation": operation}))
+        greeting = "Hi! I can help you explore the supplied car inventory."
+        if operation == "smalltalk":
+            answer = GroundedConversationDraft.model_validate({
+                "status": "answered",
+                "paragraphs": [{
+                    "text": greeting,
+                    "citations": [{
+                        "source_id": "application", "quote": "searches the supplied car inventory",
+                    }],
+                }],
+            })
+            transport.steps.append(TransportResponse(answer.model_dump_json()))
         result = await run(
             ReadCoordinator(sessions, model, inventory), sessions, request(sessions.current, text)
         )
         assert result.state == "answered" and result.persistence == "saved"
-        assert inventory.calls == [] and sessions.current.criteria == session().criteria
+        assert inventory.calls == [] and sessions.current.criteria == before.criteria
+        assert result.operation is None and result.pending_intent == before.pending_intent
+        assert all(
+            action["state"] == "not_requested" for action in result.actions.model_dump().values()
+        )
+        if operation == "smalltalk":
+            assert result.text == greeting and result.evidence == []
+            assert [call.schema["title"] for call in transport.requests] == [
+                "TurnIntent", "GroundedConversationDraft",
+            ]
 
     asyncio.run(exercise())

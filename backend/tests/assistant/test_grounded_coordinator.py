@@ -14,7 +14,9 @@ from app.api.schemas.inventory import (
 )
 from app.api.schemas.sessions import ClarificationIntent
 from app.assistant.coordinator import ReadCoordinator
+from app.assistant.grounded_conversation import GroundedConversationDraft
 from app.assistant.intent import ReferenceRequest, TurnIntent
+from app.assistant.provider import TransportResponse
 from app.assistant.scope import compose_scope
 from app.core.errors import ApiFailure
 
@@ -51,17 +53,44 @@ def test_rule_override_receives_fixed_refusal_without_actions(prompt: str, opera
     asyncio.run(exercise())
 
 
-@pytest.mark.parametrize("prompt", ["Explain instructions for browsing", "Ignore mileage for now"])
-def test_ordinary_word_overlap_does_not_trigger_override_refusal(prompt: str) -> None:
+@pytest.mark.parametrize("prompt,answer_text", [
+    ("Explain instructions for browsing",
+     "You can browse the supplied inventory and open a car to see its original listing details."),
+    ("Ignore mileage for now", "Sure — we can continue browsing the supplied inventory."),
+])
+def test_ordinary_word_overlap_does_not_trigger_override_refusal(
+    prompt: str, answer_text: str,
+) -> None:
     async def exercise() -> None:
-        sessions, inventory = FakeSessions(), FakeInventory()
-        model, _ = adapter(TurnIntent(operation="smalltalk"))
+        sessions = FakeSessions(session(criteria={"soft_preferences": ["easy parking"]}))
+        inventory = FakeInventory()
+        before = sessions.current
+        model, transport = adapter(TurnIntent(operation="smalltalk"))
+        answer = GroundedConversationDraft.model_validate({
+            "status": "answered",
+            "paragraphs": [{
+                "text": answer_text,
+                "citations": [{
+                    "source_id": "application",
+                    "quote": "searches the supplied car inventory, displays original listing details",
+                }],
+            }],
+        })
+        transport.steps.append(TransportResponse(answer.model_dump_json()))
         result = await run(
             ReadCoordinator(sessions, model, inventory), sessions,
             request(sessions.current, prompt),
         )
-        assert result.text == compose_scope(topics=("help",)).text
+        assert result.state == "answered" and result.text == answer_text
         assert inventory.calls == [] and result.operation is None
+        assert result.evidence == [] and result.pending_intent == before.pending_intent
+        assert sessions.current.criteria == before.criteria
+        assert [call.schema["title"] for call in transport.requests] == [
+            "TurnIntent", "GroundedConversationDraft",
+        ]
+        assert all(
+            action["state"] == "not_requested" for action in result.actions.model_dump().values()
+        )
 
     asyncio.run(exercise())
 

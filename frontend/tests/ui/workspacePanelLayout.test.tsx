@@ -247,7 +247,7 @@ describe("Workspace nonmodal panel integration; painted layout needs browser pro
     expect(mutate).not.toHaveBeenCalled();
   });
 
-  test("anonymous window-focus revalidation advances the real owner epoch without dropping public comparison", async () => {
+  test("anonymous window-focus revalidation retains the owner epoch and public comparison", async () => {
     const { service, identityReads, pauseIdentity, mutate } =
       await mountWorkspace("anonymous");
     expect(service.getSnapshot().phase).toBe("anonymous");
@@ -267,7 +267,7 @@ describe("Workspace nonmodal panel integration; painted layout needs browser pro
       }),
     );
     act(() => window.dispatchEvent(new Event("focus")));
-    expect(service.owner.capture().epoch).toBeGreaterThan(before);
+    expect(service.owner.capture().epoch).toBe(before);
     expect(service.getSnapshot().identity).toBeNull();
     expect(
       screen.getByRole("link", { name: "Compare cars →" }),
@@ -275,7 +275,7 @@ describe("Workspace nonmodal panel integration; painted layout needs browser pro
     release();
     await flush();
     expect(identityReads()).toBe(beforeReads + 1);
-    expect(service.owner.capture().epoch).toBeGreaterThan(before);
+    expect(service.owner.capture().epoch).toBe(before);
     expect(service.getSnapshot().phase).toBe("anonymous");
     expect(
       screen.getByRole("link", { name: "Compare cars →" }),
@@ -289,7 +289,7 @@ describe("Workspace nonmodal panel integration; painted layout needs browser pro
     expect(mutate).not.toHaveBeenCalled();
   });
 
-  test("pending recognized-owner revalidation still purges private cache while public comparison remains", async () => {
+  test("pending same-owner revalidation retains private cache and public comparison", async () => {
     const { service, pauseIdentity, mutate } =
       await mountWorkspace("recognized");
     expect(service.getSnapshot().phase).toBe("recognized");
@@ -311,16 +311,16 @@ describe("Workspace nonmodal panel integration; painted layout needs browser pro
       }),
     );
     act(() => window.dispatchEvent(new Event("focus")));
-    expect(service.owner.capture().contextId).toBeNull();
-    expect(service.getSnapshot().identity).toBeNull();
-    expect(service.queries.client.getQueryData(key)).toBeUndefined();
+    expect(service.owner.capture().contextId).toBe(identity().context_id);
+    expect(service.getSnapshot().identity?.context_id).toBe(identity().context_id);
+    expect(service.queries.client.getQueryData(key)).toBeDefined();
     expect(
       screen.getByRole("link", { name: "Compare cars →" }),
     ).toHaveAttribute("href", href);
     release();
     await flush();
     expect(service.getSnapshot().phase).toBe("recognized");
-    expect(service.queries.client.getQueryData(key)).toBeUndefined();
+    expect(service.queries.client.getQueryData(key)).toBeDefined();
     expect(
       screen.getByRole("link", { name: "Compare cars →" }),
     ).toHaveAttribute("href", href);

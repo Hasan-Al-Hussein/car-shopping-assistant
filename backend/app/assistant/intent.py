@@ -47,9 +47,10 @@ class TextPatch(FrozenSettings):
     field: TextField
     operation: Literal["add", "replace", "remove", "clear"]
     values: Annotated[list[ValueText], Field(max_length=12)] = Field(
-        default_factory=list, description="Exclude explicit make/model/trim field labels. "
+        default_factory=list,
+        description="Exclude explicit make/model/trim field labels. "
         "model 7 => models=['7']; model 'Model 7' => models=['Model 7']; "
-        "trim 2.5 => trims=['2.5']. Keep full quoted/numeric text; infer no make."
+        "trim 2.5 => trims=['2.5']. Keep full quoted/numeric text; infer no make.",
     )
     quote: Quote = Field(description="Exact buyer-message span supporting this change.")
 
@@ -88,8 +89,9 @@ class ReferenceRequest(FrozenSettings):
         "Missing fact rows do not invalidate an ordinal. Non-ordinal: position=make=null."
     )
     page: Literal["active", "request"] = Field(
-        default="active", description="For ordinal: active original results, or explicitly "
-        "supplied request results page. Never infer a different page."
+        default="active",
+        description="For ordinal: active original results, or explicitly "
+        "supplied request results page. Never infer a different page.",
     )
     position: Annotated[int, Field(ge=0, le=49)] | None = Field(
         default=None, description="Zero-based position, within the ORIGINAL order or named make."
@@ -110,9 +112,17 @@ class CollectionProposal(FrozenSettings):
     """Cited non-contact collection proposal; never command or permission material."""
 
     command: Literal[
-        "start_enquiry", "start_viewing", "fields", "review_enquiry", "save_enquiry",
-        "correct_enquiry", "prepare_viewing", "refresh_viewing", "stop_enquiry",
-        "stop_viewing", "discard_draft",
+        "start_enquiry",
+        "start_viewing",
+        "fields",
+        "review_enquiry",
+        "save_enquiry",
+        "correct_enquiry",
+        "prepare_viewing",
+        "refresh_viewing",
+        "stop_enquiry",
+        "stop_viewing",
+        "discard_draft",
     ] = Field(
         description="Local enquiry review/save/correct map to review_enquiry/save_enquiry/"
         "correct_enquiry, fields=[]. 'Save this local enquiry' is save_enquiry, never "
@@ -120,6 +130,35 @@ class CollectionProposal(FrozenSettings):
     )
     fields: Annotated[list[CollectionFieldProposal], Field(max_length=4)] = Field(
         default_factory=list
+    )
+
+
+class AnalysisRequest(FrozenSettings):
+    """Semantic read request; all arithmetic and factual output are computed locally."""
+
+    operation: Literal["count_known", "minimum", "maximum"]
+    field: Literal["year", "cash_price", "mileage_km"]
+    scope: Literal["shown", "inventory", "matching"] = Field(
+        description="shown: these/those cars in the last displayed results, preserving that set. "
+        "inventory: explicit total/all inventory, independent of earlier filters. "
+        "matching: all cars matching the current search and any explicit patches."
+    )
+    quote: Quote = Field(description="Verbatim question span requesting this analysis.")
+
+
+class QuestionRequest(FrozenSettings):
+    """Open-ended read-only reasoning over retrieved sources."""
+
+    source: Literal["inventory", "matching", "shown", "selected", "application"] = Field(
+        description="inventory: whole inventory or questions about cars we have; matching: "
+        "accepted search filters; shown: these/those/options from preceding displayed results, "
+        "including comparisons; selected: explicit page car or previously selected car; "
+        "application: how this app works or greetings. Use conversation history."
+    )
+    include_descriptions: bool = Field(
+        default=True,
+        description="Retrieve descriptions for features/condition and questions beyond basic "
+        "make/model/year/price/mileage. False for basic inventory statistics.",
     )
 
 
@@ -135,30 +174,56 @@ class TurnIntent(FrozenSettings):
     permissions or receipts.
     """
 
-    model_config = ConfigDict(json_schema_extra={"examples": [
-        {
-            "operation": "smalltalk", "scope": "session", "patches": [], "references": [],
-            "problem": None, "problem_target": "query", "deferred": ["lead"],
-            "collection": {"command": "start_enquiry", "fields": [
-                {"field": "budget", "quote": "My cash budget is AED 47000"},
-                {"field": "requirements", "quote": 'My needs are "wide doors"'},
-            ]},
-        },
-    ]})
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "operation": "smalltalk",
+                    "scope": "session",
+                    "patches": [],
+                    "references": [],
+                    "problem": None,
+                    "problem_target": "query",
+                    "deferred": ["lead"],
+                    "collection": {
+                        "command": "start_enquiry",
+                        "fields": [
+                            {"field": "budget", "quote": "My cash budget is AED 47000"},
+                            {"field": "requirements", "quote": 'My needs are "wide doors"'},
+                        ],
+                    },
+                },
+            ]
+        }
+    )
 
-    operation: Literal["search", "detail", "compare", "return", "smalltalk", "unsupported"] = Field(
-        description="search: local inventory only. External-site searches are unsupported; "
+    operation: Literal[
+        "search", "detail", "compare", "analyze", "question", "return", "smalltalk", "unsupported"
+    ] = Field(
+        description="question: DEFAULT for natural questions, explanations, recommendations, "
+        "counts, reasoning about source data and follow-ups; populate question. Do not set "
+        "problem merely because make/model/budget is absent. Choose shown for 'which of these' "
+        "or questions about preceding results; answerer resolves names/ordinals from those facts. "
+        "search: buyer asks to browse/find/list cars. External-site searches are unsupported; "
         "no car pointers. detail: one cited car or its attributes; unknown/conflicting facts; "
         "no patches or deferred writes. "
-        "Ordinal follow-ups use detail, never repeat search. compare: two/three cited cars. "
-        "return: saved preferences. smalltalk: collections, greeting/app help or generic "
-        "automotive explanations. These: session, no references/patches/deferred/"
+        "Prefer question/shown for conversational ordinal or comparative follow-ups; "
+        "detail/compare are reserved for explicitly requested structured detail views. "
+        "analyze is a legacy structured statistics view; prefer question for conversational "
+        "counts, rankings and comparisons so the answerer can reason over all source facts. "
+        "return: saved preferences. question/application: greetings or app help. "
+        "smalltalk: explicit collections only. Social/app turns: session, "
+        "no references/patches/deferred/"
         "collection, problem=null even with a selected car. unsupported: coding, world history, "
         "unrelated topics or requests about other marketplaces. problem=reference: "
         "unresolved/competing references, not absent facts. "
         "Unknown facts aren't unsupported hard search requirements."
     )
-    scope: Literal["session", "hypothetical", "durable", "unclear"] = "session"
+    scope: Literal["session", "hypothetical", "durable", "unclear"] = Field(
+        default="session",
+        description="Preference lifetime, not inventory scope. Use session for normal questions. "
+        "Inventory/matching/shown/selected belong only in question.source.",
+    )
     patches: Annotated[list[Patch], Field(max_length=12)] = Field(default_factory=list)
     references: Annotated[list[ReferenceRequest], Field(max_length=3)] = Field(default_factory=list)
     problem: (
@@ -167,6 +232,7 @@ class TurnIntent(FrozenSettings):
             "basis",
             "conflict",
             "unsupported_attribute",
+            "unsupported",
             "reference",
             "persistence",
             "meaning",
@@ -179,12 +245,18 @@ class TurnIntent(FrozenSettings):
         Field(max_length=5),
     ] = Field(default_factory=list)
     collection: CollectionProposal | None = Field(
-        default=None, description="Enquiry/viewing: smalltalk/session, patches=[], problem=null, "
+        default=None,
+        description="ONLY explicit enquiry/viewing preparation: smalltalk/session, "
+        "patches=[], problem=null, "
         "deferred=[] or lead/viewing only; references only if cited. Budget/requirements go to "
-        "fields with complete-clause quotes, not search or saved preferences. "
+        "fields ONLY within that preparation. Shopping/search budgets and replies to search "
+        "clarifications belong in search RangePatch, never collection. "
+        "Collection is not search or saved preferences. "
         "Example is a shape, not permission; "
-        "quote only the current buyer."
+        "quote only the current buyer.",
     )
+    analysis: AnalysisRequest | None = None
+    question: QuestionRequest | None = None
 
 
 @dataclass(frozen=True)
@@ -237,11 +309,13 @@ _CUES: dict[str, tuple[str, ...]] = {
 _AED_CUE = re.compile(r"\b(?:AED|Dhs|(?:UAE\s+)?dirhams?)\b", re.I)
 _FOREIGN_CUE = re.compile(
     r"\b(?:USD|EUR|GBP|SAR|QAR|KWD|BHD|OMR|MAD|CAD|AUD|INR|PKR|JPY|CHF|"
-    r"Morocc\w*|dollars?|euros?|pounds?|rupees?|riyals?|dinars?|yen)\b", re.I,
+    r"Morocc\w*|dollars?|euros?|pounds?|rupees?|riyals?|dinars?|yen)\b",
+    re.I,
 )
 _PAYMENT_CUE = re.compile(
     r"\b(?:month(?:ly)?|instalments?|installments?|down\s*payment|deposit|"
-    r"financ\w*|payments?|weekly|annual|loan|interest|apr)\b", re.I,
+    r"financ\w*|payments?|weekly|annual|loan|interest|apr)\b",
+    re.I,
 )
 _CURRENCY_TOKEN = r"(?:[A-Za-z]{3}|(?:UAE\s+)?dirhams?)"
 
@@ -251,8 +325,9 @@ def _purchase_budget(quote: str, message: str) -> bool:
         re.search(r"\b(?:cash|total|purchase price)\b|\bbudget(?=\b|\d)", quote, re.I)
         or (
             re.search(r"\b(?:cars?|vehicles?|buy|buying|shopping)\b", message, re.I)
-            and re.search(r"\b(?:under|below|within|up to|at most|at least|from|over|above)\b",
-                          quote, re.I)
+            and re.search(
+                r"\b(?:under|below|within|up to|at most|at least|from|over|above)\b", quote, re.I
+            )
         )
     )
 
@@ -356,9 +431,14 @@ def _bound_cited(patch: RangePatch, token: NumberToken, *, lower: bool) -> bool:
 
 
 def _number(token: NumberToken, quote: str, *, cash: bool, lower: bool) -> int:
-    cited = _contains(token.text, quote) or (cash and re.search(
-        r"\bbudget" + re.escape(token.text) + r"(?!\w)", quote, re.I,
-    ))
+    cited = _contains(token.text, quote) or (
+        cash
+        and re.search(
+            r"\bbudget" + re.escape(token.text) + r"(?!\w)",
+            quote,
+            re.I,
+        )
+    )
     if not _NUMBER.fullmatch(token.text) or not cited:
         raise ValueError("UNSUPPORTED_NUMBER")
     value = token.text.replace(",", "").replace(" ", "").lower()
@@ -422,7 +502,14 @@ def _text(values: dict[str, object], patch: TextPatch) -> None:
         ]
 
 
-def _range(values: dict[str, object], patch: RangePatch, message: str) -> None:
+def _range(
+    values: dict[str, object],
+    patch: RangePatch,
+    message: str,
+    *,
+    clarified: bool = False,
+    prior_request: str = "",
+) -> None:
     if _VETO.search(patch.quote):
         raise ValueError("NEGATED_CHANGE")
     filters = values["filters"]
@@ -435,24 +522,51 @@ def _range(values: dict[str, object], patch: RangePatch, message: str) -> None:
         return
     if patch.minimum is None and patch.maximum is None:
         raise ValueError("NO_BOUND")
+    if clarified and patch.field == "budget":
+        current_bound = re.sub(r"\bno more than\b", "at most", message, flags=re.I)
+        current_bound = re.sub(r"\bno less than\b", "at least", current_bound, flags=re.I)
+        if re.search(r"\b(?:not|no|never|don't)\b", current_bound, re.I):
+            raise ValueError("NEGATED_CHANGE")
+        interval = re.search(
+            r"\d[\d,.]*\s*k?\s*(?:to|and|[-–])\s*(?:AED\s*)?\d", prior_request, re.I
+        )
+        if (
+            interval
+            and (patch.minimum is None or patch.maximum is None)
+            and not _CORRECT.search(message)
+        ):
+            raise ValueError("UNCLEAR_BOUND")
     if patch.operation == "correct" and old is not None and not _CORRECT.search(patch.quote):
         raise ValueError("UNCONFIRMED_CORRECTION")
     result = dict(old) if isinstance(old, dict) else {}
     if patch.field == "budget":
-        if patch.basis == "monthly_finance" or _PAYMENT_CUE.search(message):
+        explicit_cash = bool(
+            re.search(r"\b(?:cash|total purchase|purchase price)\b", message, re.I)
+        )
+        prior_payment = clarified and _PAYMENT_CUE.search(prior_request) and not explicit_cash
+        if patch.basis == "monthly_finance" or _PAYMENT_CUE.search(message) or prior_payment:
             raise ValueError("BUDGET_BASIS")
-        aed_cited = _AED_CUE.search(patch.quote) is not None
+        cited_context = (prior_request + " " + message) if clarified else patch.quote
+        aed_cited = _AED_CUE.search(cited_context) is not None
+        prior_foreign = clarified and _FOREIGN_CUE.search(prior_request)
+        currency_corrected = bool(_CORRECT.search(message) and _AED_CUE.search(message))
         if aed_cited and (
-            _FOREIGN_CUE.search(message) or patch.currency not in {None, "AED"}
+            _FOREIGN_CUE.search(message)
+            or patch.currency not in {None, "AED"}
+            or (prior_foreign and not currency_corrected)
         ):
             raise ValueError("BUDGET_CURRENCY")
         currency = patch.currency or ("AED" if aed_cited else result.get("currency"))
         if currency is None or (
             currency != result.get("currency")
-            and not (_contains(str(currency), patch.quote) or (currency == "AED" and aed_cited))
+            and not (_contains(str(currency), cited_context) or (currency == "AED" and aed_cited))
         ):
             raise ValueError("BUDGET_CURRENCY")
-        if result.get("basis") != "cash" and not _purchase_budget(patch.quote, message):
+        if result.get("basis") != "cash" and not (
+            _purchase_budget(patch.quote, message)
+            or clarified
+            or (patch.basis == "cash" and aed_cited)
+        ):
             raise ValueError("BUDGET_BASIS")
         if old and currency != result.get("currency") and patch.operation != "correct":
             raise ValueError("BUDGET_CURRENCY")
@@ -472,11 +586,60 @@ def _range(values: dict[str, object], patch: RangePatch, message: str) -> None:
     for name, token in (("minimum", patch.minimum), ("maximum", patch.maximum)):
         if token is None:
             continue
-        if not _bound_cited(patch, token, lower=name == "minimum"):
+        # A clarification can supply only currency/payment basis. The amount still
+        # belongs to the original buyer request; do not require it to be repeated.
+        numeric_quote = patch.quote
+        if clarified and patch.field == "budget" and _NUMBER.search(message):
+            # A newly stated amount takes precedence over an older clarification
+            # request. A stale proposal must never silently retain the old amount.
+            if not _contains(token.text, message):
+                raise ValueError("UNSUPPORTED_NUMBER")
+            numeric_quote = message
+        if (
+            clarified and patch.field == "budget"
+            and not _NUMBER.search(message)
+            and _contains(token.text, prior_request)
+        ):
+            numeric_quote = prior_request
+        inherited_bound = False
+        if clarified and patch.field == "budget":
+            # A short reply fills missing information without changing an earlier bound.
+            for match in _NUMBER.finditer(prior_request):
+                previous_token = NumberToken(text=match.group().strip(), inclusive=token.inclusive)
+                try:
+                    same_amount = _number(
+                        previous_token, prior_request, cash=True, lower=name == "minimum"
+                    ) == _number(token, numeric_quote, cash=True, lower=name == "minimum")
+                except ValueError:
+                    continue
+                if same_amount and _bound_cited(
+                    patch.model_copy(update={"quote": prior_request}),
+                    previous_token,
+                    lower=name == "minimum",
+                ):
+                    inherited_bound = True
+                    break
+        directional = (
+            r"\b(?:not|no|never|over|above|under|below|less|more|least|from|minimum|between)\b|[<>]"
+        )
+        implicit_budget_answer = (
+            patch.field == "budget"
+            and name == "maximum"
+            and patch.minimum is None
+            and token.inclusive
+            and (clarified or result.get("basis") == "cash")
+            and len(_NUMBER.findall(numeric_quote)) == 1
+            and not re.search(
+                directional, numeric_quote + " " + message + (" " + prior_request if clarified else ""), re.I
+            )
+        )
+        if not _bound_cited(patch, token, lower=name == "minimum") and not (
+            implicit_budget_answer or inherited_bound
+        ):
             raise ValueError("UNCLEAR_BOUND")
         if patch.field == "years" and not re.fullmatch(r"\d{4}", token.text):
             raise ValueError("YEAR_TOKEN")
-        number = _number(token, patch.quote, cash=patch.field == "budget", lower=name == "minimum")
+        number = _number(token, numeric_quote, cash=patch.field == "budget", lower=name == "minimum")
         previous = result.get(name)
         if patch.operation == "refine" and previous is not None:
             if (name == "minimum" and number < int(previous)) or (
@@ -489,17 +652,28 @@ def _range(values: dict[str, object], patch: RangePatch, message: str) -> None:
     filters[patch.field] = checked.model_dump(mode="json")
 
 
-def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> CriteriaTransition:
+def apply_intent(
+    current: SearchCriteria,
+    intent: TurnIntent,
+    message: str,
+    *,
+    clarification_targets: tuple[str, ...] = (),
+    prior_request: str = "",
+) -> CriteriaTransition:
     """Only supported, cited changes apply; unresolved edits cannot erase accepted criteria."""
     effective = SearchCriteria.model_validate(current.model_dump(mode="json"))
     budget_hint = intent.problem in {"currency", "basis"} and intent.problem_target == "budget"
     budget_hint = budget_hint and any(
         isinstance(patch, RangePatch) and patch.field == "budget" for patch in intent.patches
     )
+    refusal = intent.operation == "unsupported" and intent.problem == "unsupported"
     problem = (
-        issue(intent.problem_target, intent.problem) if intent.problem and not budget_hint else None
+        issue(intent.problem_target, intent.problem)
+        if intent.problem and not budget_hint and not refusal else None
     )
-    if intent.patches and _VETO.search(message):
+    # Indifference is not negation of a requested filter (e.g. any brand).
+    negation_message = re.sub(r"\b(?:don't|dont|do not) mind\b", "accept", message, flags=re.I)
+    if intent.patches and _VETO.search(negation_message):
         # The model cannot omit negation by citing only the positive suffix.
         return CriteriaTransition(current, current, issue("query"))
     # Omission is also an untrusted proposal. Explicit hard markers must be accounted
@@ -575,7 +749,10 @@ def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> C
     for patch in intent.patches:
         target: Target = "query" if isinstance(patch, ResetPatch) else patch.field
         key = "reset" if isinstance(patch, ResetPatch) else patch.field
-        if patch.quote not in message or fields.count(key) > 1:
+        matched_context = key in clarification_targets
+        if (
+            patch.quote not in message and not (matched_context and patch.quote in prior_request)
+        ) or fields.count(key) > 1:
             problem = problem or issue(target)
             continue
         if (
@@ -593,7 +770,9 @@ def apply_intent(current: SearchCriteria, intent: TurnIntent, message: str) -> C
             elif isinstance(patch, TextPatch):
                 _text(values, patch)
             else:
-                _range(values, patch, message)
+                _range(
+                    values, patch, message, clarified=matched_context, prior_request=prior_request
+                )
             effective = SearchCriteria.model_validate(values)
         except (ValueError, ValidationError) as error:
             reason = {

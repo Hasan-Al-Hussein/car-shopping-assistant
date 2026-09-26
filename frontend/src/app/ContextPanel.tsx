@@ -60,6 +60,9 @@ export function ContextPanel({
   const narrow = useSyncExternalStore(subscribeMedia, getNarrow);
   const identity = useIdentity();
   const content = useRef<HTMLDivElement>(null);
+  const [chatHeaderTools, setChatHeaderTools] = useState<HTMLDivElement | null>(
+    null,
+  );
   const previousKind = useRef(kind);
   useLayoutEffect(() => {
     // A panel switch removes its initiating control without closing the dialog.
@@ -123,6 +126,12 @@ export function ContextPanel({
             ) : (
               <Dialog.Title>{kind ? titles[kind] : "Context"}</Dialog.Title>
             )}
+            {kind === "assistant" && (
+              <div
+                className="conversation-header-tools"
+                ref={setChatHeaderTools}
+              />
+            )}
             <Dialog.Close asChild>
               <Button variant="quiet" aria-label="Close">
                 {kind === "assistant" ? "×" : "Close"}
@@ -145,6 +154,7 @@ export function ContextPanel({
               key={identity.epoch}
               openIdentity={openIdentity}
               close={close}
+              headerTools={chatHeaderTools}
             />
           )}
           {kind === "help" && (

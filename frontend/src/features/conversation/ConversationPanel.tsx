@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -7,6 +8,8 @@ import {
   type ReactNode,
 } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { createPortal } from "react-dom";
+import * as Popover from "@radix-ui/react-popover";
 import { Link, useLocation } from "react-router";
 import type { Schema } from "../../shared/api/contracts";
 import { useIdentity, useServices } from "../../app/ServicesProvider";
@@ -58,9 +61,11 @@ export function pageConversationContext(
 export function ConversationPanel({
   openIdentity,
   close,
+  headerTools,
 }: {
   openIdentity: () => void;
   close: () => void;
+  headerTools?: HTMLElement | null;
 }) {
   const services = useServices(),
     identity = useIdentity(),
@@ -79,6 +84,12 @@ export function ConversationPanel({
       void services.conversation.activate(sessionId);
   }, [services, identity.phase, sessionId]);
   const active = view.active?.sessionId === sessionId ? view.active : null;
+  const hasMessages = !!(active?.turns.length || active?.localTurns.length);
+  const accountNotice =
+    hasMessages &&
+    identity.notice?.startsWith("A new local conversation has started.")
+      ? null
+      : identity.notice;
   const browseKey =
     location.pathname === "/" || location.pathname === "/cars"
       ? location.key
@@ -167,21 +178,17 @@ export function ConversationPanel({
         </div>
       ) : (
         <div className="conversation-account-options">
-          <p>
-            A new conversation keeps permitted saved preferences and starts
-            without the previous car selection.
-          </p>
           <Button
             variant="quiet"
             disabled={identity.pending}
             onClick={() => void services.createSession()}
           >
-            Start a new conversation
+            New conversation
           </Button>
           <Button variant="quiet" onClick={openIdentity}>
-            Manage browser access
+            Browser access
           </Button>
-          {identity.notice && <p role="status">{identity.notice}</p>}
+          {accountNotice && <p role="status">{accountNotice}</p>}
         </div>
       )}
       {view.recoverableSessions
@@ -216,6 +223,7 @@ export function ConversationPanel({
           comparison={comparison}
           serviceReady={serviceReady}
           close={close}
+          headerTools={headerTools}
           options={
             <>
               {serviceReady ? serviceNotice : null}
@@ -230,9 +238,9 @@ export function ConversationPanel({
           {serviceNotice}
           {identity.phase !== "recognized" ? (
             <ChatOnboarding openIdentity={openIdentity} />
-          ) : (
+          ) : !sessionId ? (
             accountControls
-          )}
+          ) : null}
           {sessionId && identity.phase === "recognized" ? (
             <p role="status">Reading this conversation…</p>
           ) : null}
@@ -348,6 +356,7 @@ function ConversationWorkspace({
   options,
   serviceNotice,
   footer,
+  headerTools,
 }: {
   active: ConversationSessionView;
   pageContext: ConversationContext | null;
@@ -357,6 +366,7 @@ function ConversationWorkspace({
   options: ReactNode;
   serviceNotice: ReactNode;
   footer: ReactNode;
+  headerTools?: HTMLElement | null;
 }) {
   const services = useServices(),
     flow = services.conversation;
@@ -384,8 +394,7 @@ function ConversationWorkspace({
       ? `Conversation listing ${session.selected_ref.source_id}`
       : session?.active_presentation_id
         ? "Original conversation result order"
-        : (pageContext?.label ??
-          "No exact car context; the assistant may ask you to clarify"));
+        : (pageContext?.label ?? "Using this conversation’s history"));
   const busy =
     active.commandBusy ||
     active.phase === "sending" ||
@@ -456,6 +465,11 @@ function ConversationWorkspace({
   };
   const submit = () => {
     if (composing.current || busy || !serviceReady || !session) return;
+    // Sending is an explicit return to the current exchange, even if the last
+    // long answer was aligned at its beginning. Subsequent user scrolling can
+    // still pause following while the response is in flight.
+    nearEnd.current = true;
+    setNewResponse(false);
     void flow.send(active.sessionId, pageContext, reply);
   };
   const localIds = new Set(
@@ -483,6 +497,93 @@ function ConversationWorkspace({
   ].sort((a, b) => a.revision - b.revision);
   return (
     <div className="conversation-workspace">
+      <ConversationSettings
+        headerTools={headerTools}
+        general={
+          <>
+            {options}
+            <Button
+              variant="quiet"
+              aria-disabled={reading}
+              aria-busy={reading}
+              onClick={() => void refreshConversation()}
+            >
+              Refresh conversation
+            </Button>
+            <p className="conversation-settings-help">
+              A new chat keeps saved preferences and starts with no selected
+              car. Unsent text stays here when you close the panel.
+            </p>
+            <details className="conversation-draft-note">
+              <summary>Privacy and messages</summary>
+              <p>
+                Messages use a hosted AI assistant. Keep contacts and documents
+                out of chat. Ending browser access clears unsent text.
+              </p>
+            </details>
+          </>
+        }
+        context={
+          <div className="conversation-settings-context">
+            <p className="conversation-settings-label">For your next message</p>
+            <p>{contextLabel}</p>
+            {session?.selected_ref && (
+              <Link to={listingPath(session.selected_ref)} onClick={close}>
+                View selected car
+              </Link>
+            )}
+            {active.stagedContext?.presentation &&
+              !active.stagedContext.selectedRef &&
+              session?.selected_ref && (
+                <p className="conversation-settings-help">
+                  Listing {session.selected_ref.source_id} stays selected if it
+                  belongs to this result order.
+                </p>
+              )}
+            {pageContext && (
+              <Button
+                variant="secondary"
+                disabled={busy}
+                onClick={() => stage(pageContext)}
+              >
+                Use this page
+              </Button>
+            )}
+            {!!comparison?.length && (
+              <div className="conversation-settings-car-options">
+                <p className="conversation-settings-label">
+                  Cars you’re comparing
+                </p>
+                {comparison.map((ref) => (
+                  <Button
+                    key={refKey(ref)}
+                    variant="quiet"
+                    disabled={busy}
+                    onClick={() =>
+                      stage({
+                        label: `Comparison listing ${ref.source_id}`,
+                        selectedRef: ref,
+                        presentation: null,
+                      })
+                    }
+                  >
+                    {`Use listing ${ref.source_id}`}
+                  </Button>
+                ))}
+              </div>
+            )}
+            <p className="conversation-settings-help">
+              Choosing context does not send a message. You can also ask about
+              cars from the conversation directly.
+            </p>
+          </div>
+        }
+        preferences={
+          session ? (
+            <RememberedPreferences record={session.recalled_preferences} />
+          ) : null
+        }
+      />
       <div
         className="conversation-transcript"
         ref={scroll}
@@ -565,7 +666,7 @@ function ConversationWorkspace({
             </li>
           ))}
         </ol>
-        {!active.turns.length && !active.localTurns.length && (
+        {!reading && !active.turns.length && !active.localTurns.length && (
           <div className="conversation-empty">
             <span className="conversation-avatar">
               <CinemaIcon kind="sparkle" />
@@ -652,93 +753,6 @@ function ConversationWorkspace({
             direct car tools remain available.
           </p>
         )}
-        <details className="conversation-tools">
-          <summary>Conversation options</summary>
-          {options}
-          <Button
-            variant="quiet"
-            aria-disabled={reading}
-            aria-busy={reading}
-            onClick={() => void refreshConversation()}
-          >
-            Refresh conversation
-          </Button>
-          <details className="conversation-draft-note">
-            <summary>About your messages</summary>
-            <p>
-              Close and reopen to keep unsent text in this browser context.
-              Ending or resetting access clears it. Messages use a hosted AI
-              assistant; keep contacts and documents out of chat.
-            </p>
-          </details>
-          <details
-            className="conversation-context"
-            aria-label="Message context"
-          >
-            <summary>
-              Message context <span>{contextLabel}</span>
-            </summary>
-            {session?.selected_ref && (
-              <Link to={listingPath(session.selected_ref)} onClick={close}>
-                Inspect the exact conversation car
-              </Link>
-            )}
-            {active.stagedContext?.presentation &&
-              !active.stagedContext.selectedRef &&
-              session?.selected_ref && (
-                <p>
-                  The current listing {session.selected_ref.source_id} stays
-                  selected if it belongs to this result order. Otherwise choose
-                  an exact returned car or start a new conversation.
-                </p>
-              )}
-            <p>
-              Sending uses the car or list named above. Choosing a car or list
-              does not send a message.
-            </p>
-            {pageContext && (
-              <Button
-                variant="quiet"
-                disabled={busy}
-                onClick={() => stage(pageContext)}
-              >
-                Use this page for my next message
-              </Button>
-            )}
-            {!!comparison?.length && (
-              <details>
-                <summary>Cars in the current comparison</summary>
-                <ul>
-                  {comparison.map((ref) => (
-                    <li key={refKey(ref)}>
-                      <Button
-                        variant="quiet"
-                        disabled={busy}
-                        onClick={() =>
-                          stage({
-                            label: `Comparison listing ${ref.source_id}`,
-                            selectedRef: ref,
-                            presentation: null,
-                          })
-                        }
-                      >{`Use listing ${ref.source_id} as context`}</Button>
-                    </li>
-                  ))}
-                </ul>
-                <p>
-                  Choose a car by its listing reference. ‘The first car’ in chat
-                  does not refer to this comparison’s order.
-                </p>
-              </details>
-            )}
-          </details>
-          {session && (
-            <details className="conversation-memory-options">
-              <summary>Saved preferences recalled in this conversation</summary>
-              <RememberedPreferences record={session.recalled_preferences} />
-            </details>
-          )}
-        </details>
         {footer}
       </div>
       {newResponse && (
@@ -798,5 +812,123 @@ function ConversationWorkspace({
         </p>
       </form>
     </div>
+  );
+}
+
+function ConversationSettings({
+  headerTools,
+  general,
+  context,
+  preferences,
+}: {
+  headerTools?: HTMLElement | null;
+  general: ReactNode;
+  context: ReactNode;
+  preferences: ReactNode;
+}) {
+  const [tab, setTab] = useState<"conversation" | "context" | "preferences">(
+    "conversation",
+  );
+  const id = useId();
+  const tabs = ["conversation", "context", "preferences"] as const;
+  const trigger = (
+    <Popover.Trigger asChild>
+      <button
+        type="button"
+        className="folio-button folio-button--quiet conversation-settings-trigger"
+        aria-label="Assistant settings"
+        title="Assistant settings"
+      >
+        <CinemaIcon kind="settings" />
+      </button>
+    </Popover.Trigger>
+  );
+  return (
+    <Popover.Root>
+      {headerTools ? (
+        createPortal(trigger, headerTools)
+      ) : (
+        <div className="conversation-settings-toolbar">{trigger}</div>
+      )}
+      <Popover.Portal
+        container={
+          headerTools?.closest<HTMLElement>(".workspace-panel") ?? undefined
+        }
+      >
+        <Popover.Content
+          className="conversation-settings-popover"
+          aria-label="Assistant settings"
+          side="bottom"
+          align="end"
+          sideOffset={8}
+          collisionPadding={16}
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            document.getElementById(`${id}-${tab}`)?.focus();
+          }}
+        >
+          <div className="conversation-settings-heading">
+            <h3>Assistant settings</h3>
+            <Popover.Close asChild>
+              <button type="button" aria-label="Close assistant settings">
+                ×
+              </button>
+            </Popover.Close>
+          </div>
+          <div
+            className="conversation-settings-tabs"
+            role="tablist"
+            aria-label="Settings sections"
+          >
+            {tabs.map((item, index) => (
+              <button
+                type="button"
+                key={item}
+                id={`${id}-${item}`}
+                role="tab"
+                aria-selected={item === tab}
+                aria-controls={`${id}-panel`}
+                tabIndex={item === tab ? 0 : -1}
+                onClick={() => setTab(item)}
+                onKeyDown={(event) => {
+                  const next =
+                    event.key === "ArrowRight"
+                      ? (index + 1) % tabs.length
+                      : event.key === "ArrowLeft"
+                        ? (index + tabs.length - 1) % tabs.length
+                        : event.key === "Home"
+                          ? 0
+                          : event.key === "End"
+                            ? tabs.length - 1
+                            : null;
+                  if (next === null) return;
+                  event.preventDefault();
+                  setTab(tabs[next]!);
+                  document.getElementById(`${id}-${tabs[next]}`)?.focus();
+                }}
+              >
+                {item === "conversation"
+                  ? "Chat"
+                  : item === "context"
+                    ? "Context"
+                    : "Preferences"}
+              </button>
+            ))}
+          </div>
+          <div
+            id={`${id}-panel`}
+            role="tabpanel"
+            aria-labelledby={`${id}-${tab}`}
+            className="conversation-settings-body"
+          >
+            {tab === "conversation"
+              ? general
+              : tab === "context"
+                ? context
+                : preferences}
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
