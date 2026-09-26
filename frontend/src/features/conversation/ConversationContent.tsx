@@ -101,7 +101,10 @@ function templateValue(value: string | number | Schema<"CashMoney">) {
 }
 
 /** Exact current backend template; unfamiliar wording safely remains expanded. */
-function currentSearchTemplate(search: Schema<"SearchResult">) {
+function currentSearchTemplate(
+  search: Schema<"SearchResult">,
+  includeBudget = true,
+) {
   const factText = (label: string, fact: ResultFact) => {
     const claim = (
       value: string | number | Schema<"CashMoney">,
@@ -135,6 +138,11 @@ function currentSearchTemplate(search: Schema<"SearchResult">) {
   const lines = [
     `Found ${search.supported_total} matching ${search.supported_total === 1 ? "car" : "cars"} in the supplied listings.`,
   ];
+  const budget = search.applied_criteria.filters?.budget;
+  if (includeBudget && budget)
+    lines.push(
+      `Budget currency: ${budget.currency}. Prices in other currencies are not converted.`,
+    );
   if (search.supported_total !== search.items.length)
     lines.push(`This result page contains ${search.items.length}.`);
   search.items
@@ -198,7 +206,7 @@ function legacySearchTemplate(search: Schema<"SearchResult">) {
   );
   return lines.join("\n");
 }
-/** Fold only complete deterministic search templates, never arbitrary prose. */
+/** Replace only complete duplicate search templates with the result cards. */
 function isDeterministicSearchAnswer(result: Schema<"MessageResult">) {
   const search = result.search;
   if (
@@ -216,6 +224,7 @@ function isDeterministicSearchAnswer(result: Schema<"MessageResult">) {
     return false;
   return (
     result.text === currentSearchTemplate(search) ||
+    result.text === currentSearchTemplate(search, false) ||
     result.text === legacySearchTemplate(search)
   );
 }
@@ -311,7 +320,7 @@ export function ConversationAnswer({
     comparison = result.comparison,
     pending = result.pending_intent;
   const operationHref = resultOperationPath(result);
-  const legacySearch = isDeterministicSearchAnswer(result);
+  const cardsReplaceText = isDeterministicSearchAnswer(result);
   const open = (to: string) => (
     <Link to={to} onClick={close}>
       Read original viewing outcome
@@ -319,7 +328,7 @@ export function ConversationAnswer({
   );
   return (
     <div className="conversation-answer">
-      {!legacySearch && (
+      {!cardsReplaceText && (
         <p className="conversation-text" dir="auto">
           {result.text}
         </p>
@@ -339,21 +348,23 @@ export function ConversationAnswer({
       {result.persistence === "not_saved" && (
         <p>This response was not saved in the server transcript.</p>
       )}
-      {!!result.evidence?.length && (
-        <details>
-          <summary>Listing evidence for this answer</summary>
-          <ul>
-            {result.evidence.map((item) => (
-              <li key={refKey(item.ref)}>
-                <Link to={listingPath(item.ref)} onClick={close}>
-                  Listing {item.ref.source_id}
-                </Link>
-                {item.attributes.length > 0 &&
-                  ` · ${item.attributes.join(", ")}`}
-              </li>
-            ))}
-          </ul>
-        </details>
+      {!search && !comparison && !!result.evidence?.length && (
+        <div
+          className="chat-result-actions"
+          aria-label="Cars mentioned in this answer"
+        >
+          {result.evidence.map((item, index) => (
+            <Link
+              key={refKey(item.ref)}
+              to={listingPath(item.ref)}
+              onClick={close}
+            >
+              {result.evidence.length === 1
+                ? "View car"
+                : `View car ${index + 1}`}
+            </Link>
+          ))}
+        </div>
       )}
       {search && (
         <section
@@ -365,6 +376,12 @@ export function ConversationAnswer({
               ? `${search.supported_total} matching ${search.supported_total === 1 ? "car" : "cars"}`
               : `${search.items.length} of ${search.supported_total} matching cars`}
           </h4>
+          {cardsReplaceText && search.applied_criteria.filters?.budget && (
+            <p className="chat-results-note">
+              Budget currency: {search.applied_criteria.filters.budget.currency}
+              . Prices in other currencies are not converted.
+            </p>
+          )}
           <p className="chat-results-note">
             Listing claims only. Live availability and vehicle condition are not
             verified.
@@ -414,28 +431,6 @@ export function ConversationAnswer({
                     Ask about this
                   </Button>
                 </div>
-                <details className="chat-result-source">
-                  <summary>Listing source details</summary>
-                  {listing.trim.status === "unknown" && (
-                    <p>
-                      Trim: <QualifiedFact fact={listing.trim} />
-                    </p>
-                  )}
-                  <p>
-                    Listing {listing.ref.source_id} · position {index + 1} in
-                    this answer’s original order.
-                  </p>
-                  <p dir="auto">{listing.title}</p>
-                  {!!listing.evidence_warnings?.length && (
-                    <ul>
-                      {listing.evidence_warnings.map(
-                        (warning, warningIndex) => (
-                          <li key={warningIndex}>{warning}</li>
-                        ),
-                      )}
-                    </ul>
-                  )}
-                </details>
               </li>
             ))}
           </ol>
@@ -451,30 +446,7 @@ export function ConversationAnswer({
               {search.unsupported_constraints.join("; ")}.
             </p>
           )}
-          <details className="chat-search-details">
-            <summary>Search criteria and source coverage</summary>
-            <p>
-              Your required conditions were not relaxed. Numbers follow this
-              answer’s original result order. “Ask about this” sets the next
-              message context; it does not send a message.
-            </p>
-            <ul>
-              {describeCriteria(search.applied_criteria).map(
-                (criterion, index) => (
-                  <li key={index}>{criterion}</li>
-                ),
-              )}
-            </ul>
-            {search.evidence_coverage.map((coverage) => (
-              <p key={coverage.attribute}>
-                {coverage.attribute.replaceAll("_", " ")}: {coverage.supported}{" "}
-                of {coverage.source_total} listings have usable evidence;{" "}
-                {coverage.excluded_unknown} unknown,{" "}
-                {coverage.excluded_conflicting} conflicting and{" "}
-                {coverage.excluded_unsupported_qualifier} unsupported qualifiers
-                excluded.
-              </p>
-            ))}
+          {search.next_cursor !== null && (
             <Button
               variant="secondary"
               onClick={() => {
@@ -489,31 +461,10 @@ export function ConversationAnswer({
                 close();
               }}
             >
-              Use these search criteria
+              Browse all matches
             </Button>
-            <Button
-              variant="quiet"
-              disabled={contextDisabled}
-              onClick={() =>
-                onContext({
-                  label: "Original result order from this answer",
-                  selectedRef: null,
-                  presentation: search.presentation,
-                })
-              }
-            >
-              Use this original result order
-            </Button>
-          </details>
+          )}
         </section>
-      )}
-      {legacySearch && (
-        <details className="conversation-original-answer">
-          <summary>Original answer details</summary>
-          <p className="conversation-text" dir="auto">
-            {result.text}
-          </p>
-        </details>
       )}
       {comparison && (
         <section aria-label="Returned comparison">
@@ -570,11 +521,14 @@ export function ConversationAnswer({
           </ul>
         </section>
       )}
-      {pending.kind === "clarification" && (
-        <p className="conversation-clarification">
-          Clarification: {pending.question}
-        </p>
-      )}
+      {pending.kind === "clarification" &&
+        !result.text
+          .replace(/\s+/g, " ")
+          .includes(pending.question.replace(/\s+/g, " ")) && (
+          <p className="conversation-clarification">
+            Clarification: {pending.question}
+          </p>
+        )}
       {pending.kind === "viewing_review" && (
         <p>
           <Link

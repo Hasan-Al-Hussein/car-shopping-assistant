@@ -1,7 +1,7 @@
 {
   "format": "CSA-GITHUB-SOURCE-1",
   "scope": "Public local assessment source; not a deployment or full release acceptance.",
-  "source_manifest_sha256": "ccd8689b78bcfca80a37b1f8ebf904645f658e31b8c0befa75dbdc2f7fc987ee",
+  "source_manifest_sha256": "060abaeb57c8e3113c2e3a7381ccc189c3d9ddd104bc4c8f144521376e765a4d",
   "files": [
     {
       "path": ".gitignore",
@@ -10,8 +10,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 21443,
-      "sha256": "243565bbc4b3cb85ca1c2f306a010614e79059eaa57fcc27ca2f5db697f0102c"
+      "bytes": 22727,
+      "sha256": "0d84faf9f52f830f7bc122f0c80396ba9e38971c6906a124bbbcba80c325dd45"
     },
     {
       "path": "Records/build/BE-04/evidence/accepted-inventory-integrity.json",
@@ -225,8 +225,8 @@
     },
     {
       "path": "backend/app/assistant/answer_assembly.py",
-      "bytes": 13673,
-      "sha256": "08a8b4a1357ad474fb5e091a2846b0d489a5c4e22686970004fdddb2c9a6faf8"
+      "bytes": 13921,
+      "sha256": "b348f79b789510772a005f3919b69b6f0e0084c69cccfb1a4db4512576cc99be"
     },
     {
       "path": "backend/app/assistant/bounded_calls.py",
@@ -265,8 +265,8 @@
     },
     {
       "path": "backend/app/assistant/coordinator.py",
-      "bytes": 48230,
-      "sha256": "9448d238bf8327838c0da60e03f8f46ab4be7c3318d471d5fb3265a44b20822d"
+      "bytes": 52764,
+      "sha256": "34ab2506ebb64d6989dd3e5c23d257403ef71a8ef499ed320f907a64f3e0d13a"
     },
     {
       "path": "backend/app/assistant/evaluation/__init__.py",
@@ -320,13 +320,13 @@
     },
     {
       "path": "backend/app/assistant/explicit_field_read.py",
-      "bytes": 1946,
-      "sha256": "9467e251ce40f40f4844eea0d6585d08d6a250ec90244b7eaf89205bd8c9ff50"
+      "bytes": 1940,
+      "sha256": "b473db25d7f934a3a2dc95cc3a0f85353413f7e3200922610702e1c81beddf3d"
     },
     {
       "path": "backend/app/assistant/grounded_conversation.py",
-      "bytes": 30874,
-      "sha256": "22ca96c193f5e36c916a1e28bfa11cf121bc8b1cad3c6afb0492ac3b58c0dc5b"
+      "bytes": 32056,
+      "sha256": "8fc5f16962d6a7028664bed20ea99bdf74874ce6dbeee2c5cec6b2c872d6a16d"
     },
     {
       "path": "backend/app/assistant/grounding.py",
@@ -335,13 +335,13 @@
     },
     {
       "path": "backend/app/assistant/intent.py",
-      "bytes": 33610,
-      "sha256": "a31078854fab1dceb0ae85162ffe40d2cb7d34c9e3b9e716c828670d0bb61c6f"
+      "bytes": 34757,
+      "sha256": "71e3b20ef01e3abcaba7d08aea7d6904115369ba8495a3ddf0400d178f7bfa13"
     },
     {
       "path": "backend/app/assistant/interpretation.py",
-      "bytes": 4592,
-      "sha256": "cfa2915acd9d2e615b69c41d08bf8c2b21285ed97c840b663853e8fee0e5579a"
+      "bytes": 6106,
+      "sha256": "f2424701b2a3d3b6d4e55cd9a0c2128a322ba32e2a189711ca79beabb63d945b"
     },
     {
       "path": "backend/app/assistant/output_policy.py",
@@ -350,8 +350,8 @@
     },
     {
       "path": "backend/app/assistant/packet.py",
-      "bytes": 10882,
-      "sha256": "e7454eb08e32ca7752ab4d363e7d9ca3983c53d1658c592435ee2a398344cf63"
+      "bytes": 13058,
+      "sha256": "57d4ff4a11e77c6179d7be8a9a81366f5b805002eff40dc28d9f480947b177ae"
     },
     {
       "path": "backend/app/assistant/provider.py",
@@ -360,8 +360,8 @@
     },
     {
       "path": "backend/app/assistant/read_ports.py",
-      "bytes": 3467,
-      "sha256": "82862c8233b9ac8f424832f15ba6d4ab23be9bfea8aa9a57f6d616fc014219d9"
+      "bytes": 3821,
+      "sha256": "e9bce3314ec2be783b8e319c24bc1174499d83039cec63840b130e6178504167"
     },
     {
       "path": "backend/app/assistant/recalled_values.py",
@@ -394,9 +394,14 @@
       "sha256": "33d3bb5f1fe2253108faa7c6c17527746efd8590fab01d051a115bfbd00627e8"
     },
     {
+      "path": "backend/app/assistant/semantic_search.py",
+      "bytes": 8848,
+      "sha256": "12fdc2ac83be23bff921eb63348b519ace5bac5cacbdc317c7dca9d2d8713ec3"
+    },
+    {
       "path": "backend/app/assistant/service_adapters.py",
-      "bytes": 18722,
-      "sha256": "495c3ca5cff12faa137e859fb28b351248ecf94254a77c408bd66f1f74c09198"
+      "bytes": 19199,
+      "sha256": "885306ab76a69279bb9d40405b2053fa829a4c34d1eee57424abd8daf144eac9"
     },
     {
       "path": "backend/app/assistant/transport.py",
@@ -640,8 +645,8 @@
     },
     {
       "path": "backend/app/inventory/search_service.py",
-      "bytes": 8422,
-      "sha256": "54e999fd78dce7b33fdde9067e7abbcb640299f6f4fe160a49315c188ab148db"
+      "bytes": 12740,
+      "sha256": "e9a6dcedcf5d8d571152a685cd331278a5cf075405401def3ccebbb56a4d492a"
     },
     {
       "path": "backend/app/inventory/search_sql.py",
@@ -1160,8 +1165,8 @@
     },
     {
       "path": "backend/tests/assistant/test_conversation_followups.py",
-      "bytes": 15188,
-      "sha256": "f452d1ad36a5ceac307784a9922bf7a69866f5d30368d8e3b556495c3716957b"
+      "bytes": 19181,
+      "sha256": "6be9660f3f77b5974b7de8141a764f5a85d5d9a1e5ccd228cd04f85f15667f27"
     },
     {
       "path": "backend/tests/assistant/test_coordinator.py",
@@ -1175,8 +1180,8 @@
     },
     {
       "path": "backend/tests/assistant/test_explicit_field_read.py",
-      "bytes": 12329,
-      "sha256": "d74a6e9357041844b2dd9d247da1b171b3ae9552df997ec5a2007728897ebbc3"
+      "bytes": 12281,
+      "sha256": "0b6002f3e574cab9b7b10c8c082ffd14f5429062c114c99a02fa48007a8d313d"
     },
     {
       "path": "backend/tests/assistant/test_failure_telemetry.py",
@@ -1190,8 +1195,8 @@
     },
     {
       "path": "backend/tests/assistant/test_grounded_conversation.py",
-      "bytes": 37946,
-      "sha256": "b884638b2162e90a04686a7a291b11adc7833a247122f4857417aa2ef988979a"
+      "bytes": 39310,
+      "sha256": "44188b53368588b52cfe8183059f35c96002e1f9dc92aa4209809c775bc40233"
     },
     {
       "path": "backend/tests/assistant/test_grounded_coordinator.py",
@@ -1202,6 +1207,11 @@
       "path": "backend/tests/assistant/test_intent.py",
       "bytes": 15725,
       "sha256": "e82d605b166f7314f68d083613edcfa1f595eb569c3578a7dca2fec4aea278b6"
+    },
+    {
+      "path": "backend/tests/assistant/test_intent_coherence.py",
+      "bytes": 3053,
+      "sha256": "4c8655d23e1ca1b1673e1de97d8bfac08c0300f25731e9a4df8e8f444b6e0cfa"
     },
     {
       "path": "backend/tests/assistant/test_listing_attribute_guidance.py",
@@ -1232,6 +1242,11 @@
       "path": "backend/tests/assistant/test_provider_lifecycle.py",
       "bytes": 6393,
       "sha256": "c4df6fc5049f238b6ceed1dca8f83768beb56596e857bad2b0f8d987d042a097"
+    },
+    {
+      "path": "backend/tests/assistant/test_query_vocabulary.py",
+      "bytes": 2453,
+      "sha256": "e0f53fc8cc989288f3ab311b59d3e0794520d6949073203337ea7f6d68c8fabc"
     },
     {
       "path": "backend/tests/assistant/test_real_service_composition.py",
@@ -1267,6 +1282,16 @@
       "path": "backend/tests/assistant/test_scope.py",
       "bytes": 3351,
       "sha256": "205f6dae22f4cb9148d15f254bb9a6d96b2c8d3b604403cd148d33bbb38504ec"
+    },
+    {
+      "path": "backend/tests/assistant/test_semantic_conversation_flow.py",
+      "bytes": 23578,
+      "sha256": "c6893b3f9a7fdf6169c4abc12873ac43b8ebe481d2dc2934f55b7af5c68548f8"
+    },
+    {
+      "path": "backend/tests/assistant/test_semantic_search.py",
+      "bytes": 19336,
+      "sha256": "06637e4c743004eb2638a9b06d996466a07fc8359f44a4c37796f134b98a4e69"
     },
     {
       "path": "backend/tests/assistant/test_service_worker.py",
@@ -1337,6 +1362,11 @@
       "path": "backend/tests/inventory/test_bootstrap_boundary.py",
       "bytes": 3364,
       "sha256": "60ae95d6a9f7245d5a7841a95f1e19b577d09933ad41bed74c3d098d6fb97c9a"
+    },
+    {
+      "path": "backend/tests/inventory/test_catalog_vocabulary.py",
+      "bytes": 4046,
+      "sha256": "f63a495787c2748944868bd5856213b16652386e360183b17b02d29297a0663f"
     },
     {
       "path": "backend/tests/inventory/test_compact_integrity.py",
@@ -2119,6 +2149,11 @@
       "sha256": "7f80e37d25071a02c0cc0b205a25ba4786f6b85a9b217d229b997c61749d212c"
     },
     {
+      "path": "delivery/evidence/semantic-conversation-20260926.md",
+      "bytes": 8622,
+      "sha256": "95a0da95b9a70acaa7568313c2c85fc1c47a760979564ad144c1a7b973464495"
+    },
+    {
       "path": "delivery/evidence/verification-summary.md",
       "bytes": 8133,
       "sha256": "3702bd1ba474147c8b3e557d834557a5f309e2724592d8cdce860eabe2242a08"
@@ -2214,9 +2249,24 @@
       "sha256": "01569ab16c31a66aeb70448f679fc3961fae8ebbad553c78bb4239c8537bb19b"
     },
     {
+      "path": "delivery/screenshots/semantic-correction-preserves-budget.png",
+      "bytes": 764781,
+      "sha256": "7d99830c775f19728bd508e5cd1f798abfccba1a629f9b495c0fb76471f37332"
+    },
+    {
+      "path": "delivery/screenshots/semantic-mobile-answer.png",
+      "bytes": 78350,
+      "sha256": "ba61705ad41ad21772ae767a25d442392e269eec839dcef140c5b3d0b13fbb21"
+    },
+    {
+      "path": "delivery/screenshots/semantic-typo-and-history.png",
+      "bytes": 770375,
+      "sha256": "2e91d868fbbddff79682a69a22ea9d508f59779b60993b2966cb6008055ecacf"
+    },
+    {
       "path": "fixtures/assistant/evaluation/corpus-v1.json",
-      "bytes": 440773,
-      "sha256": "4e7c180e60013eb41af01c36d3079dc6a57c5a7e55a8d54b413c16a92324e557"
+      "bytes": 443091,
+      "sha256": "86849fd307a9450232188fbee6ac31fe67b624dedcb55e3315661d4484847a41"
     },
     {
       "path": "fixtures/shared/harness-seed.json",
@@ -2450,23 +2500,23 @@
     },
     {
       "path": "frontend/src/features/conversation/ConversationContent.tsx",
-      "bytes": 23928,
-      "sha256": "19c7a78969e764775c920d3a52fdea72a732a3f406c5f823f3979c5f95128ba7"
+      "bytes": 21949,
+      "sha256": "19a5e72c5f401a7301a4cc9934196d7c5da50306ea869dbbfd6463979dbac983"
     },
     {
       "path": "frontend/src/features/conversation/ConversationFlow.ts",
-      "bytes": 30725,
-      "sha256": "ac7851ce9c5c0230dab0273a815851f3fbfe059b68d7b980f3886915d57312b9"
+      "bytes": 30679,
+      "sha256": "f4ff4684f0d655a383e38b46368a847fcbee40bcc808cac4c90b2fdc200d02b5"
     },
     {
       "path": "frontend/src/features/conversation/ConversationPanel.tsx",
-      "bytes": 30780,
-      "sha256": "cdd5f6e610f4de6a2c5eb88c5efaac81c129e728f9813b2950e586f1a6cdca32"
+      "bytes": 31270,
+      "sha256": "dbd7c88867efe008979bb87b52b99b082828744a881cafd3f27edd18b55cd03d"
     },
     {
       "path": "frontend/src/features/conversation/conversation-results.css",
-      "bytes": 2401,
-      "sha256": "e0ae6a1904a3fbd0d947540fb3e95a2b2a75634dfe8086906f5e9e8198b70f36"
+      "bytes": 1931,
+      "sha256": "a5a33f7286913a0a8ed10501da0a900d82db209c3043c2d9b97adfa8116b48f5"
     },
     {
       "path": "frontend/src/features/conversation/conversation.css",
@@ -2805,8 +2855,8 @@
     },
     {
       "path": "frontend/tests/ui/conversationContent.test.tsx",
-      "bytes": 16510,
-      "sha256": "5144de20a461e1705a4d5871d47caa715c6ee4f9527de2c690e9943cf8b19671"
+      "bytes": 17408,
+      "sha256": "39a039fad84ddbebb5ec30f76c008f3eac80be398495bd357ad19d05394e571b"
     },
     {
       "path": "frontend/tests/ui/conversationFixtures.ts",
@@ -2815,13 +2865,13 @@
     },
     {
       "path": "frontend/tests/ui/conversationFlow.test.ts",
-      "bytes": 22262,
-      "sha256": "ea2b604c2ecc99455ebcaea170407e6487a223109bb1f205fea01ecfd2b98c9f"
+      "bytes": 22328,
+      "sha256": "0ab2fe7f1f48362d3c8646ad7305f94520bdbd2f7dfca0fc84c2e7992baf020f"
     },
     {
       "path": "frontend/tests/ui/conversationPanel.test.tsx",
-      "bytes": 29281,
-      "sha256": "26b68188f22f0abfeaa77475786f74161aed1e6acd7d8592ed2fa3ccbdbec86d"
+      "bytes": 30618,
+      "sha256": "ff633edf9947d14996360af457a6225e304c0ba35beb3fc44ee42803a6046675"
     },
     {
       "path": "frontend/tests/ui/criteria.test.ts",

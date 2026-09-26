@@ -43,16 +43,11 @@
 }
 .chat-result-price > span:first-child,
 .chat-results-note,
-.chat-result-missing,
-.chat-result-source,
-.chat-search-details,
-.conversation-original-answer {
+.chat-result-missing {
   font-size: 0.875rem;
 }
 .chat-result-price > span:first-child,
-.chat-results-note,
-.chat-result-source,
-.chat-search-details {
+.chat-results-note {
   color: var(--chat-muted, inherit);
 }
 .chat-result-price .proof-fact-value {
@@ -92,20 +87,4 @@
 }
 .conversation-answer .chat-result-actions .folio-button {
   margin: 0;
-}
-.chat-result-source p,
-.chat-search-details p {
-  margin-block: 0.6rem;
-}
-.chat-result-source summary,
-.chat-search-details summary,
-.conversation-original-answer summary {
-  padding-block: 0.5rem;
-  cursor: pointer;
-}
-.chat-result-source summary {
-  padding-block: 0.2rem;
-}
-.conversation-original-answer > .conversation-text {
-  margin-top: 0.7rem;
 }

@@ -184,6 +184,7 @@ describe("U3 synthetic controller regressions; no live provider or persistence p
       },
     ]);
     expect(subject.state.session.selected_ref).toEqual(ref);
+    expect(subject.flow.getSnapshot().active?.notice).toBeNull();
   });
   test("Ask about this still submits an explicitly staged car and does not pin the following question", async () => {
     const ref = searchResult().data.presentation.ordered_refs[0]!;

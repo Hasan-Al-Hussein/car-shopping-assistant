@@ -50,7 +50,10 @@ class TextPatch(FrozenSettings):
         default_factory=list,
         description="Exclude explicit make/model/trim field labels. "
         "model 7 => models=['7']; model 'Model 7' => models=['Model 7']; "
-        "trim 2.5 => trims=['2.5']. Keep full quoted/numeric text; infer no make.",
+        "trim 2.5 => trims=['2.5']. Preserve numeric model/trim labels. Interpret obvious "
+        "spelling mistakes and unambiguous aliases as the intended name; values need not "
+        "be verbatim, but quote must cite the actual buyer wording; infer no make "
+        "merely from a model or substitute a different car when meaning is ambiguous.",
     )
     quote: Quote = Field(description="Exact buyer-message span supporting this change.")
 
@@ -68,6 +71,17 @@ class RangePatch(FrozenSettings):
     operation: Literal["refine", "correct", "clear"]
     minimum: NumberToken | None = None
     maximum: NumberToken | None = None
+    clear_minimum: bool = Field(
+        default=False,
+        description="Only with correct: remove an existing lower bound when the buyer "
+        "changes to an open-ended range. Otherwise omitted endpoints are preserved. "
+        "Cannot accompany a minimum token.",
+    )
+    clear_maximum: bool = Field(
+        default=False,
+        description="Only with correct: remove an existing upper bound when requested. "
+        "Cannot accompany a maximum token. Use clear to remove the whole range.",
+    )
     currency: Annotated[str, Field(pattern=r"^[A-Z]{3}$")] | None = None
     basis: Literal["cash", "monthly_finance", "unknown"] = "unknown"
     quote: Quote
@@ -163,10 +177,12 @@ class QuestionRequest(FrozenSettings):
 
 
 class TurnIntent(FrozenSettings):
-    """Extract one supported shopping read and explicit buyer-cited criteria changes.
+    """Understand the current shopping request using the conversation and accepted criteria.
 
-    Browse without a questionnaire. Keep unspecified criteria. Correct/replace only explicit
-    corrections; refine tighter numeric bounds; clear only explicit removals. Keep numeric
+    Browse without a questionnaire. Keep unspecified criteria. Infer corrections, alternatives,
+    removals and hypothetical changes from meaning, not special command words. A correction
+    replaces the mistaken criterion rather than adding a second one. Refine tighter numeric
+    bounds; correct bounds when the buyer revises them. Keep numeric
     tokens verbatim, exclusive bounds. Dhs/dirhams=AED; car budgets=purchase unless finance/payment.
     Subjective wishes stay soft; unsupported hard search requirements and competing references
     need clarification. Distinguish hypothetical/session/durable intent. Enquiry/viewing uses
@@ -510,6 +526,9 @@ def _range(
     clarified: bool = False,
     prior_request: str = "",
 ) -> None:
+    if patch.clear_minimum or patch.clear_maximum:
+        # Endpoint removal belongs to the semantic read boundary, never a mixed action.
+        raise ValueError("UNSUPPORTED_RANGE_EDIT")
     if _VETO.search(patch.quote):
         raise ValueError("NEGATED_CHANGE")
     filters = values["filters"]

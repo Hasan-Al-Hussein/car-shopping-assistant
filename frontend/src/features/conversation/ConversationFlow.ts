@@ -669,7 +669,7 @@ export class ConversationFlow {
           ? "The assistant could not complete this answer. Your direct car tools remain available."
           : result.state === "superseded"
             ? "This reply belongs to an earlier conversation revision. Current selections and filters were not replaced."
-            : "A response to the original message is available.",
+            : null,
     });
     this.changed(id);
   }

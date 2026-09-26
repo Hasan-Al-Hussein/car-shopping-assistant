@@ -2,6 +2,7 @@
 
 import re
 from collections.abc import MutableMapping
+from contextlib import suppress
 from datetime import UTC, datetime
 from typing import Any, Literal
 from uuid import uuid4
@@ -76,6 +77,7 @@ from .references import AmbiguousReference, ReferenceResolver, listing_ref, ref_
 from .request_policy import external_source_search, request_routing_eligible
 from .result_analysis import analyze_results
 from .scope import compose_scope
+from .semantic_search import apply_search_intent
 
 _LISTING: TypeAdapter[ListingResult] = TypeAdapter(ListingResult)
 _SCOPE_CLAUSE = re.compile(
@@ -351,12 +353,32 @@ class ReadCoordinator:
             budget,
         )
         prior_request = ""
-        if reply_to is not None:
+        question_context = reply_to
+        if (
+            question_context is None
+            and isinstance(session.pending_intent, ClarificationIntent)
+            and session.pending_intent.purpose == "search_criteria"
+        ):
+            question_context = session.pending_intent
+        if question_context is not None:
             for previous in recent_turns:
                 answered = previous.assistant_result
-                if answered is not None and answered.pending_intent == reply_to:
+                if answered is not None and answered.pending_intent == question_context:
                     prior_request = previous.user_text
                     break
+        # Query vocabulary gives the interpreter the source's spelling for filter
+        # values. It is advisory schema context, never evidence of matching cars.
+        catalog_vocabulary = None
+        catalog_reader = getattr(self.inventory, "catalog_vocabulary", None)
+        if catalog_reader is not None:
+            # Normal retrieval still establishes facts or reports unavailability.
+            with suppress(ApiFailure):
+                catalog_vocabulary = await self._gate.run(
+                    lambda: catalog_reader(
+                        deadline_at=min(budget.deadline_at, budget.clock() + 2)
+                    ),
+                    budget,
+                )
         proposal = await interpret(
             self.provider,
             request,
@@ -366,6 +388,7 @@ class ReadCoordinator:
             private_values,
             collection_summary=collection_summary,
             recent_turns=recent_turns,
+            catalog_vocabulary=catalog_vocabulary,
         )
         latest = await self._gate.run(lambda: self.sessions.get(context, session_id), budget)
         if latest.revision != session.revision:
@@ -460,6 +483,57 @@ class ReadCoordinator:
             intent = intent.model_copy(update={
                 "operation": "question", "question": QuestionRequest(source="application")
             })
+        if (
+            intent.operation == "analyze"
+            and intent.analysis is not None
+            and intent.analysis.quote in request.text
+            and intent.scope == "session"
+            and not intent.references
+            and not intent.collection
+            and not intent.deferred
+            and intent.problem is None
+            and (intent.analysis.scope == "matching" or not intent.patches)
+        ):
+            # Statistics are computed from retrieved facts, but the model writes
+            # the conversational answer instead of selecting a canned response.
+            intent = intent.model_copy(update={
+                "operation": "question",
+                "question": QuestionRequest(source=intent.analysis.scope),
+            })
+        if (
+            intent.scope == "session"
+            and not intent.patches
+            and not intent.collection
+            and not intent.deferred
+            and intent.problem in {None, "reference"}
+            and request.selected_ref is None
+            and session.selected_ref is None
+            and session.active_presentation_id is not None
+            and (
+                intent.operation == "question"
+                and intent.question is not None
+                and intent.question.source == "selected"
+                or intent.operation in {"detail", "compare"}
+                and all(reference.source == "selected" for reference in intent.references)
+            )
+        ):
+            # Conversational references do not require a UI-selected car. Let the
+            # answer model resolve them from the owned displayed set and history.
+            intent = intent.model_copy(update={
+                "operation": "question", "question": QuestionRequest(source="shown"),
+                "references": [], "problem": None,
+            })
+        if (
+            intent.operation == "question"
+            and intent.question is not None
+            and intent.question.source == "inventory"
+            and intent.patches
+        ):
+            # A factual request introducing filters must retrieve under those
+            # filters. An inventory-wide question with no edits stays global.
+            intent = intent.model_copy(update={
+                "question": intent.question.model_copy(update={"source": "matching"}),
+            })
         recall_only = (
             intent.operation == "return"
             and intent.scope == "session"
@@ -468,10 +542,33 @@ class ReadCoordinator:
             and not intent.deferred
             and intent.problem is None
         )
+        semantic_read = (
+            intent.operation in {"search", "question", "analyze"}
+            and intent.scope in {"session", "hypothetical"}
+            and not intent.collection
+            and not intent.deferred
+        )
+        if (
+            reply_to is None
+            and semantic_read
+            and intent.operation == "search"
+            and intent.scope == "session"
+            and isinstance(question_context, ClarificationIntent)
+            and question_context.purpose == "search_criteria"
+            and (
+                any(isinstance(patch, ResetPatch) for patch in intent.patches)
+                or set(question_context.targets) <= {
+                    patch.field for patch in intent.patches if not isinstance(patch, ResetPatch)
+                }
+            )
+        ):
+            # A contextual search answer needs no UI checkbox. It still has to
+            # validate and complete retrieval before its old question is cleared.
+            reply_to = question_context
         transition = (
             CriteriaTransition(session.criteria, session.criteria, None)
             if recall_only or (intent.operation == "question" and not intent.patches)
-            else apply_intent(
+            else (apply_search_intent if semantic_read else apply_intent)(
                 session.criteria,
                 intent,
                 request.text,

@@ -113,6 +113,53 @@ function Harness({ service }: { service: BrowserServices }) {
 }
 
 describe("U3 actual conversation components with synthetic services; no rendered-browser claim", () => {
+  test.each(["current", "absent", "old"] as const)(
+    "pending clarification stays visible without duplication: %s transcript",
+    async (history) => {
+      const { service, state } = await setup();
+      const question = "Which currency should I use?";
+      const pending = {
+        kind: "clarification" as const,
+        intent_id: "90000000-0000-4000-8000-000000000001",
+        created_revision: 1,
+        purpose: "search_criteria" as const,
+        targets: ["budget" as const],
+        question,
+      };
+      state.session = {
+        ...state.session,
+        revision: 1,
+        pending_intent: pending,
+      };
+      const result = {
+        ...conversationResult(),
+        text: question,
+        pending_intent: {
+          ...pending,
+          intent_id:
+            history === "old"
+              ? "90000000-0000-4000-8000-000000000002"
+              : pending.intent_id,
+        },
+      };
+      state.page = transcriptPage(
+        history === "absent" ? [] : [transcriptTurn(result)],
+        1,
+      );
+      await service.readSession(id);
+      render(<Harness service={service} />);
+      await flush();
+      expect(screen.getAllByText(question)).toHaveLength(
+        history === "old" ? 2 : 1,
+      );
+      const reply = screen.getByRole("checkbox", {
+        name: "Reply to this exact clarification",
+      });
+      expect(reply).toBeChecked();
+      fireEvent.click(reply);
+      expect(reply).not.toBeChecked();
+    },
+  );
   test.each([
     "configured_not_verified",
     "Assistant access is configured but not yet verified.",
@@ -750,14 +797,9 @@ describe("U3 actual conversation components with synthetic services; no rendered
         </MemoryRouter>
       </ServicesProvider>,
     );
-    fireEvent.click(
-      screen.getByText("Search criteria and source coverage", {
-        selector: "summary",
-      }),
-    );
     expect(
-      screen.getByRole("button", { name: "Use this original result order" }),
-    ).toBeDisabled();
+      screen.queryByText("Search criteria and source coverage"),
+    ).not.toBeInTheDocument();
     for (const button of screen.getAllByRole("button", {
       name: "Ask about this",
     }))

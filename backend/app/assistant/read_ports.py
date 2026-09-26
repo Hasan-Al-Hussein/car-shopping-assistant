@@ -72,11 +72,22 @@ class InventoryReadPort(Protocol):
         ...
 
 
+class CatalogVocabularyPort(Protocol):
+    """Optional advisory labels, not proof of inventory matches or complete coverage."""
+
+    async def catalog_vocabulary(
+        self, *, deadline_at: float
+    ) -> dict[str, tuple[str, ...]]: ...
+
+
 class UnconfiguredInventory:
     """Honest unavailable boundary, not a permissive production fake."""
 
     async def search(self, request: SearchRequest, *, deadline_at: float) -> SearchResult:
         raise ApiFailure("STORE_UNAVAILABLE")
+
+    async def catalog_vocabulary(self, *, deadline_at: float) -> dict[str, tuple[str, ...]]:
+        return {}
 
     async def detail(self, ref: InventoryRef, *, deadline_at: float) -> ListingResult:
         raise ApiFailure("STORE_UNAVAILABLE")

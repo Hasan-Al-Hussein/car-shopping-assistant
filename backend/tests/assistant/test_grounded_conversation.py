@@ -107,6 +107,40 @@ def test_all_rows_and_exact_stats_are_kept_without_a_question_specific_route() -
     assert nissan["count"] == 2 and nissan["cash_price"]["exact"] == 1
 
 
+def test_every_published_row_column_has_a_citation_binding() -> None:
+    source = corpus(car(95, year=2023), car(61, year=2018))
+    value = json.loads(source.context)
+    for row in value["rows"]:
+        for field in value["columns"]:
+            assert f"{row[0]}.{field}" in source.sources
+    answer = validate_grounded_draft(
+        draft("Listing 95 has model year 2023.",
+              ("car1.listing_id", "95"), ("car1.year", "2023")), source,
+    )
+    assert answer is not None
+    assert {claim.attribute for claim in answer.claims} == {"year"}
+
+
+@pytest.mark.parametrize("citation", [
+    ("car1.listing_id", "61"), ("car2.listing_id", "95"),
+    ("car3.listing_id", "95"), ("car1.invented_id", "95"),
+    ("car1.listing_id", "5"),
+])
+def test_identity_citations_cannot_borrow_other_rows_or_invent_fields(citation) -> None:
+    source = corpus(car(95, year=2023), car(61, year=2018))
+    assert validate_grounded_draft(draft("This is listing 95.", citation), source) is None
+
+
+@pytest.mark.parametrize("text", [
+    "The cash price is AED 95.", "The model year is 95.", "The mileage is 95 km.",
+    "Listing 95 costs AED 95.", "This is listing 95,000.",
+])
+def test_identity_digits_cannot_support_vehicle_facts(text) -> None:
+    assert validate_grounded_draft(
+        draft(text, ("car1.listing_id", "95")), corpus(car(95, year=2023)),
+    ) is None
+
+
 def test_hundred_full_rows_fit_existing_input_budget() -> None:
     source = corpus(*(car(index, price=3_500_000 + index * 1000) for index in range(1, 101)))
     packet = EvidencePacket(

@@ -10,16 +10,21 @@ from app.api.schemas.inventory import SearchCriteria
 from app.api.schemas.sessions import ClarificationIntent
 from app.assistant.coordinator import ReadCoordinator
 from app.assistant.intent import TurnIntent, apply_intent
+from app.assistant.provider import TransportResponse
 
 from .conversation_fakes import (
     CONTEXT,
     FakeInventory,
     FakeSessions,
+    ScriptedTransport,
     adapter,
     budget,
+    provider,
     request,
+    response,
     state,
 )
+from .test_grounded_conversation import car, draft
 
 
 def budget_intent(text: str, *, token: str = "50000", problem: str | None = None) -> TurnIntent:
@@ -179,13 +184,32 @@ def test_currency_only_answer_can_resolve_amount_in_the_pending_request() -> Non
 def test_context_does_not_overrule_currency_payment_or_negation(text: str) -> None:
     async def exercise() -> None:
         original = "Help me find a car within my budget 50000"
-        model, _ = adapter(budget_intent(original, problem="currency"), budget_intent(text))
+        # The semantic planner now owns language interpretation; these proposals
+        # represent the actual meanings rather than deliberately labeling every
+        # utterance as AED/cash. Live checks cover the real provider's interpretation.
+        interpreted = budget_intent(text).model_dump(mode="json")
+        if "Moroccan" in text:
+            interpreted["patches"][0]["currency"] = "MAD"
+        elif "monthly" in text:
+            interpreted["patches"][0]["basis"] = "monthly_finance"
+        else:
+            interpreted.update(patches=[], problem="meaning", problem_target="budget")
+        model, _ = adapter(
+            budget_intent(original, problem="currency"), TurnIntent.model_validate(interpreted)
+        )
         sessions, inventory = FakeSessions(), FakeInventory()
         coordinator = ReadCoordinator(sessions, model, inventory)
         first = await send(coordinator, sessions, original)
         result = await send(coordinator, sessions, text)
-        assert result.state == "clarification" and result.pending_intent == first.pending_intent
-        assert sessions.current.criteria.filters.budget is None and not inventory.calls
+        if "Moroccan" in text:
+            assert result.state == "answered" and result.pending_intent.kind == "none"
+            assert sessions.current.criteria.filters.budget.currency == "MAD"
+            assert sessions.current.criteria.filters.budget.maximum == 5_000_000
+            assert inventory.searches[0].filters.budget.currency == "MAD"
+            assert inventory.searches[0].filters.budget.maximum == 5_000_000
+        else:
+            assert result.state == "clarification" and result.pending_intent == first.pending_intent
+            assert sessions.current.criteria.filters.budget is None and not inventory.calls
 
     asyncio.run(exercise())
 
@@ -218,9 +242,20 @@ def test_analysis_uses_original_results_not_a_new_search() -> None:
                 },
             }
         )
-        model, transport = adapter(search, analysis)
-        sessions, inventory = FakeSessions(), FakeInventory()
-        coordinator = ReadCoordinator(sessions, model, inventory)
+        transport = ScriptedTransport(
+            response(search), response(analysis),
+            TransportResponse(draft(
+                "The Nissan Sentra has the newest stated model year, 2022.",
+                ("car2.make", "Nissan"), ("car2.model", "Sentra"),
+                ("car2.year", "2022"), ("stats.year", '"maximum":2022'),
+            ).model_dump_json()),
+        )
+        sessions = FakeSessions()
+        inventory = FakeInventory(
+            car(1, make="Nissan", model="Altima", year=2018),
+            car(2, make="Nissan", model="Sentra", year=2022),
+        )
+        coordinator = ReadCoordinator(sessions, provider(transport), inventory)
         await send(coordinator, sessions, "what Nissan cars do u have?")
         result = await send(coordinator, sessions, question)
         assert result.state == "answered" and result.pending_intent.kind == "none"
@@ -228,6 +263,12 @@ def test_analysis_uses_original_results_not_a_new_search() -> None:
         contents = json.loads(transport.requests[1].contents)
         assert "Displayed search" in contents["conversation"][1]["text"]
         assert "Nissan" in contents["accepted_criteria"]
+        assert "2022" in result.text and "Sentra" in result.text
+        assert any(item.ref.source_id == "2" and "year" in item.attributes
+                   for item in result.evidence)
+        source = json.loads(json.loads(transport.requests[2].contents)["source_context"])
+        assert source["scope"]["scope"] == "shown" and source["scope"]["rows"] == 2
+        assert sessions.current.selected_ref is None
 
     asyncio.run(exercise())
 
@@ -235,8 +276,7 @@ def test_analysis_uses_original_results_not_a_new_search() -> None:
 def test_total_known_price_question_ignores_earlier_make_filter_without_erasing_it() -> None:
     async def exercise() -> None:
         question = "how many cars do u have in total that have a clear stated price ?"
-        model, _ = adapter(
-            TurnIntent.model_validate(
+        intent = TurnIntent.model_validate(
                 {
                     "operation": "analyze",
                     "analysis": {
@@ -247,14 +287,25 @@ def test_total_known_price_question_ignores_earlier_make_filter_without_erasing_
                     },
                 }
             )
+        transport = ScriptedTransport(
+            response(intent), TransportResponse(draft(
+                "None of the two supplied listings has a stated cash price.",
+                ("stats.cash_price", '"exact":0'), ("scope", '"rows":2'),
+            ).model_dump_json()),
         )
-        sessions, inventory = FakeSessions(), FakeInventory()
+        sessions = FakeSessions()
+        inventory = FakeInventory(car(1, make="Nissan"), car(2, make="Toyota"))
         sessions.current.criteria.filters.makes.append("Nissan")
-        result = await send(ReadCoordinator(sessions, model, inventory), sessions, question)
+        result = await send(
+            ReadCoordinator(sessions, provider(transport), inventory), sessions, question,
+        )
         assert result.state == "answered" and result.pending_intent.kind == "none"
         assert inventory.searches[0].filters.makes == []
         assert sessions.current.criteria.filters.makes == ["Nissan"]
-        assert "0" in result.text and "price" in result.text.lower()
+        assert "None" in result.text and "price" in result.text.lower()
+        source = json.loads(json.loads(transport.requests[1].contents)["source_context"])
+        assert source["scope"]["scope"] == "inventory"
+        assert source["statistics"]["stats.cash_price"]["exact"] == 0
 
     asyncio.run(exercise())
 
@@ -311,8 +362,7 @@ def test_short_answer_can_inherit_original_bound(operator, lower, inclusive, exp
 def test_inventory_count_can_answer_despite_checked_old_listing_question() -> None:
     async def exercise() -> None:
         question = "how many cars do u have in total that have a clear stated price ?"
-        model, _ = adapter(
-            TurnIntent.model_validate(
+        intent = TurnIntent.model_validate(
                 {
                     "operation": "analyze",
                     "analysis": {
@@ -323,8 +373,14 @@ def test_inventory_count_can_answer_despite_checked_old_listing_question() -> No
                     },
                 }
             )
+        transport = ScriptedTransport(
+            response(intent), TransportResponse(draft(
+                "None of the two supplied listings has a stated cash price.",
+                ("stats.cash_price", '"exact":0'), ("scope", '"rows":2'),
+            ).model_dump_json()),
         )
-        sessions, inventory = FakeSessions(), FakeInventory()
+        sessions = FakeSessions()
+        inventory = FakeInventory(car(1, make="Nissan"), car(2, make="Toyota"))
         pending = ClarificationIntent(
             kind="clarification",
             intent_id=str(uuid4()),
@@ -334,10 +390,15 @@ def test_inventory_count_can_answer_despite_checked_old_listing_question() -> No
             question="Which listing and original results page do you mean?",
         )
         sessions.current.pending_intent = pending
-        result = await send(ReadCoordinator(sessions, model, inventory), sessions, question)
+        result = await send(
+            ReadCoordinator(sessions, provider(transport), inventory), sessions, question,
+        )
         assert result.state == "answered" and "price" in result.text.lower()
-        assert result.pending_intent == pending
-        assert inventory.calls == ["search"]
+        assert result.pending_intent.kind == "none"
+        assert inventory.calls == ["search", "original_batch"]
+        source = json.loads(json.loads(transport.requests[1].contents)["source_context"])
+        assert source["scope"]["scope"] == "inventory"
+        assert source["statistics"]["stats.cash_price"]["exact"] == 0
 
     asyncio.run(exercise())
 
@@ -348,9 +409,7 @@ def test_inventory_count_can_answer_despite_checked_old_listing_question() -> No
 def test_shown_analysis_does_not_clear_unrelated_question(purpose, target) -> None:
     async def exercise() -> None:
         question = "which of these is newest?"
-        model, _ = adapter(
-            TurnIntent(operation="search"),
-            TurnIntent.model_validate(
+        intent = TurnIntent.model_validate(
                 {
                     "operation": "analyze",
                     "analysis": {
@@ -360,10 +419,18 @@ def test_shown_analysis_does_not_clear_unrelated_question(purpose, target) -> No
                         "quote": question,
                     },
                 }
-            ),
+            )
+        transport = ScriptedTransport(
+            response(TurnIntent(operation="search")), response(intent),
+            TransportResponse(draft(
+                "The Nissan Sentra has the newest stated model year, 2022.",
+                ("car1.make", "Nissan"), ("car1.model", "Sentra"),
+                ("car1.year", "2022"), ("stats.year", '"maximum":2022'),
+            ).model_dump_json()),
         )
-        sessions, inventory = FakeSessions(), FakeInventory()
-        coordinator = ReadCoordinator(sessions, model, inventory)
+        sessions = FakeSessions()
+        inventory = FakeInventory(car(1, make="Nissan", model="Sentra", year=2022))
+        coordinator = ReadCoordinator(sessions, provider(transport), inventory)
         await send(coordinator, sessions, "show cars")
         pending = ClarificationIntent(
             kind="clarification",
@@ -377,5 +444,9 @@ def test_shown_analysis_does_not_clear_unrelated_question(purpose, target) -> No
         result = await send(coordinator, sessions, question)
         assert result.state == "answered" and result.pending_intent == pending
         assert sessions.current.pending_intent == pending
+        assert "2022" in result.text and "Sentra" in result.text
+        assert sessions.current.selected_ref is None
+        source = json.loads(json.loads(transport.requests[2].contents)["source_context"])
+        assert source["scope"]["scope"] == "shown" and source["scope"]["rows"] == 1
 
     asyncio.run(exercise())

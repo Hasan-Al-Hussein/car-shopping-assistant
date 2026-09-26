@@ -99,7 +99,9 @@ For future work, I'd improve verified price and availability coverage, multiling
 
 ### Recorded conversation demonstrations
 
-**Latest check, 26 September:** [Read the actual browser conversations](delivery/evidence/assistant-recovery-20260926.md): Nissan search → newest model → warranty, inventory-wide price counts, a budget clarified and changed across messages, and a saved preference recalled in a new session. The record also covers an unfamiliar make-ranking question, unsupported facts, competitor refusal and a social reply.
+**Latest semantic check, 26 September:** [Read the real conversations](delivery/evidence/semantic-conversation-20260926.md): misspelled makes, contextual corrections, retained budgets, newest-model reasoning, year/price follow-ups and explicit currency changes.
+
+**Earlier recovery check, 26 September:** [Read the actual browser conversations](delivery/evidence/assistant-recovery-20260926.md): Nissan search → newest model → warranty, inventory-wide price counts, a budget clarified and changed across messages, and a saved preference recalled in a new session. The record also covers an unfamiliar make-ranking question, unsupported facts, competitor refusal and a social reply.
 
 These excerpts come from actual FastAPI and Gemini runs. The full logs retain the original responses and session details. The response wording in those historical logs predates the current, shorter chat formatting.
 
@@ -164,9 +166,10 @@ I added these to make the prototype useful beyond a basic chat window:
 | Saved shortlist | Keep cars for later using the same local browser identity. |
 | Filters with counts | Choose makes, models, trims and years from the supplied inventory; remove applied filters individually. |
 | Spelling suggestions | Recover from searches such as `nisan` with a suggested inventory term. |
-| Source details | Expand the evidence behind a fact and see missing or conflicting information. |
+| Source details | View car opens the full listing facts and their evidence; missing or conflicting information stays visible. |
 | Responsive interface | Desktop and mobile layouts, consistent navigation, keyboard focus and reduced-motion support. |
-| Readable assistant panel | One conversation scroll area, clear replies and linked car results alongside the page. |
+| Readable assistant panel | Compact settings, one conversation scroll area, clear replies and linked car results. Full details live on the car page rather than in repeated chat dropdowns. |
+| Contextual understanding | The model interprets misspellings and corrections, keeps unrelated filters and uses the preceding results for follow-up questions. |
 | Natural budget wording | `My budget is 20k dirhams` means an AED 20,000 purchase limit; ambiguous payment amounts still get a clarification. |
 | Recovery for interrupted actions | Review the original operation or export status instead of accidentally creating a duplicate enquiry or viewing. |
 
@@ -174,7 +177,9 @@ I used the workbook's real car photos for listings. Page headers use separate de
 
 ## 3. Verification and performance
 
-**26 September assistant recovery:** The final assistant suite passed 1,313 tests, including the 46-case composed evaluation; two warnings came from deliberate malformed-model tests. The frontend passed 366 tests, application/test TypeScript checks and its production build. Fourteen real browser conversation messages passed across two accepted live runs. Another 29 isolated browser checks covered assistant settings, focus revalidation and retained drafts. An independent review checked the actual replies, inventory totals, accepted budgets and desktop/mobile screenshots. The [new verification record](delivery/evidence/assistant-recovery-20260926.md) includes the actual responses and limitations. Earlier measurements below remain historical; they are not live-model latency promises.
+**Latest semantic update, 26 September:** The full assistant run passed 1,412 checks; two outdated fixtures were corrected in a 50-check passing rerun, and six new catalogue tests passed. Final purchase-default/semantic/conversation checks passed 112 tests and 101 grounding checks passed after the citation fix; frontend type checking and 55 focused conversation tests passed. The subsequent chat cleanup passed 78 content/panel/flow checks and TypeScript checking; these overlapping test totals are not additive. All eight messages in the repeated real browser run passed the checked criteria, result and evidence assertions. [Actual replies, screenshots, timings and limits](delivery/evidence/semantic-conversation-20260926.md).
+
+**Earlier 26 September assistant recovery:** The final assistant suite passed 1,313 tests, including the 46-case composed evaluation; two warnings came from deliberate malformed-model tests. The frontend passed 366 tests, application/test TypeScript checks and its production build. Fourteen real browser conversation messages passed across two accepted live runs. Another 29 isolated browser checks covered assistant settings, focus revalidation and retained drafts. An independent review checked the actual replies, inventory totals, accepted budgets and desktop/mobile screenshots. The [new verification record](delivery/evidence/assistant-recovery-20260926.md) includes the actual responses and limitations. Earlier measurements below remain historical; they are not live-model latency promises.
 
 The [verification summary](delivery/evidence/verification-summary.md) records the scope, dates and remaining limits of the executed checks.
 

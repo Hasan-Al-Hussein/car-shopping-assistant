@@ -40,6 +40,27 @@ const legacyText = [
   "Static source matches do not verify live stock, inspection or finance approval.",
 ].join("\n");
 
+test.each([true, false])(
+  "clarification appears once when already in prose: %s",
+  (inProse) => {
+    const question = "Which currency should I use?";
+    const result = conversationResult();
+    result.text = inProse ? question : "I need one detail to search.";
+    result.pending_intent = {
+      kind: "clarification",
+      intent_id: "90000000-0000-4000-8000-000000000001",
+      created_revision: 1,
+      purpose: "search_criteria",
+      targets: ["budget"],
+      question,
+    };
+    renderAnswer(result);
+    expect(
+      screen.getAllByText(new RegExp(question.replace("?", "\\?"))),
+    ).toHaveLength(1);
+  },
+);
+
 const currentText = [
   "Found 1 matching car in the supplied listings.",
   "",
@@ -136,17 +157,43 @@ describe("Conversation structured results; synthetic component evidence only", (
       ) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
-  test("the complete current DTO-derived search template folds without changing saved text", () => {
-    renderAnswer(resultWithSearch(currentText));
-    const original = screen
-      .getByText("Original answer details")
-      .closest("details")!;
-    expect(original).not.toHaveAttribute("open");
-    expect(original.querySelector("p")!.textContent).toBe(currentText);
+  test("result cards replace duplicate template text without changing the saved reply", () => {
+    const result = resultWithSearch(currentText);
+    renderAnswer(result);
+    expect(
+      screen.queryByText("Original answer details"),
+    ).not.toBeInTheDocument();
+    expect(result.text).toBe(currentText);
     expect(
       screen.getByRole("heading", { name: "1 matching car" }),
     ).toBeVisible();
   });
+
+  test.each([true, false])(
+    "budget currency stays visible with new or saved search text: %s",
+    (withNote) => {
+      const note =
+        "Budget currency: AED. Prices in other currencies are not converted.";
+      const text = withNote
+        ? currentText.replace("listings.\n", `listings.\n${note}\n`)
+        : currentText;
+      const result = resultWithSearch(text);
+      result.search!.applied_criteria.filters = {
+        budget: {
+          minimum: null,
+          maximum: 5000000,
+          currency: "AED",
+          basis: "cash",
+        },
+      };
+      renderAnswer(result);
+      expect(
+        screen.queryByText("Original answer details"),
+      ).not.toBeInTheDocument();
+      expect(result.text).toBe(text);
+      expect(screen.getByText(note)).toBeVisible();
+    },
+  );
 
   test("non-AED cash remains explicit in minor units when exact current wording is folded", () => {
     const result = resultWithSearch(
@@ -163,8 +210,8 @@ describe("Conversation structured results; synthetic component evidence only", (
     };
     renderAnswer(result);
     expect(
-      screen.getByText("Original answer details").closest("details"),
-    ).not.toHaveAttribute("open");
+      screen.queryByText("Original answer details"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("JPY 10,000 minor units cash")).toBeVisible();
     expect(screen.getByText("Approximately")).toBeVisible();
     expect(screen.queryByText("JPY 100")).not.toBeInTheDocument();
@@ -187,8 +234,8 @@ describe("Conversation structured results; synthetic component evidence only", (
     ].join("\n");
     renderAnswer({ ...conversationResult(), search: orderedSearch(), text });
     expect(
-      screen.getByText("Original answer details").closest("details"),
-    ).not.toHaveAttribute("open");
+      screen.queryByText("Original answer details"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("Conflicting source claims")).toBeVisible();
   });
 
@@ -253,19 +300,16 @@ describe("Conversation structured results; synthetic component evidence only", (
     },
   );
 
-  test("only the complete legacy search template is folded and original text stays exact", () => {
-    renderAnswer(resultWithSearch(legacyText));
-    const original = screen
-      .getByText("Original answer details")
-      .closest("details")!;
-    expect(original).not.toHaveAttribute("open");
-    expect(original.querySelector("p")!.textContent).toBe(legacyText);
+  test("saved legacy search text is replaced by cards without changing the saved reply", () => {
+    const result = resultWithSearch(legacyText);
+    renderAnswer(result);
+    expect(
+      screen.queryByText("Original answer details"),
+    ).not.toBeInTheDocument();
+    expect(result.text).toBe(legacyText);
     expect(
       screen.getByRole("heading", { name: "1 matching car" }),
     ).toBeVisible();
-    fireEvent.click(within(original).getByText("Original answer details"));
-    expect(original).toHaveAttribute("open");
-    expect(original.querySelector("p")).toBeVisible();
   });
 
   test.each([
@@ -408,14 +452,12 @@ describe("Conversation structured results; synthetic component evidence only", (
       ],
     };
     renderAnswer({ ...conversationResult(), search });
-    const optionalTrim = screen.getByText("Not applicable in the source");
-    expect(optionalTrim).not.toBeVisible();
-    fireEvent.click(
-      within(optionalTrim.closest("details")!).getByText(
-        "Listing source details",
-      ),
-    );
-    expect(optionalTrim).toBeVisible();
+    expect(
+      screen.queryByText("Not applicable in the source"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Listing source details"),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByText(
         (_, element) =>
@@ -431,7 +473,7 @@ describe("Conversation structured results; synthetic component evidence only", (
     ).toBeVisible();
   });
 
-  test("unknown optional trim stays in source details while known trim and trim conflicts remain primary", () => {
+  test("optional trim details stay on the car page while trim conflicts remain visible", () => {
     const search = orderedSearch();
     search.items[0]!.trim = { status: "unknown", reason: "not_stated" };
     search.items[1]!.trim = {
@@ -445,13 +487,12 @@ describe("Conversation structured results; synthetic component evidence only", (
     const rows = within(
       screen.getByRole("list", { name: "Matching cars in original order" }),
     ).getAllByRole("listitem");
-    const firstSource = within(rows[0]!)
-      .getByText("Listing source details")
-      .closest("details")!;
-    const missingTrim = within(firstSource).getByText("Not stated");
-    expect(missingTrim).not.toBeVisible();
-    fireEvent.click(within(firstSource).getByText("Listing source details"));
-    expect(missingTrim).toBeVisible();
+    expect(
+      within(rows[0]!).queryByText("Listing source details"),
+    ).not.toBeInTheDocument();
+    expect(
+      within(rows[0]!).getByRole("link", { name: "View car" }),
+    ).toHaveAttribute("href", listingPath(search.items[0]!.ref));
     expect(
       within(rows[1]!).getByText("Conflicting source claims"),
     ).toBeVisible();

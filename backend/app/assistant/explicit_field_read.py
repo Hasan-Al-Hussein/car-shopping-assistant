@@ -22,7 +22,7 @@ def explicit_field_read(
     *,
     collection_active: bool,
 ) -> TurnIntent:
-    """Decline every workflow ambiguity; unchanged apply_intent still owns criteria."""
+    """Recover literal field references; decline every workflow ambiguity."""
     if (
         request.clarification_reply is not None
         or request.explicit_confirmation is not None
@@ -50,7 +50,7 @@ def explicit_field_read(
     return TurnIntent(
         operation="search",
         patches=[TextPatch(
-            kind="text", field=_FIELDS[match.group("field").casefold()], operation="add",
+            kind="text", field=_FIELDS[match.group("field").casefold()], operation="replace",
             values=[value], quote=request.text,
         )],
     )

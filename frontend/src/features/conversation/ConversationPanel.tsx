@@ -495,6 +495,16 @@ function ConversationWorkspace({
       state: "local",
     })),
   ].sort((a, b) => a.revision - b.revision);
+  const clarificationInTranscript =
+    clarification &&
+    turns.some((turn) => {
+      const shown = turn.result?.pending_intent;
+      return (
+        shown?.kind === "clarification" &&
+        shown.intent_id === clarification.intent_id &&
+        shown.question === clarification.question
+      );
+    });
   return (
     <div className="conversation-workspace">
       <ConversationSettings
@@ -701,12 +711,20 @@ function ConversationWorkspace({
             Load more messages
           </Button>
         )}
-        <p className="conversation-notice" role="status" aria-atomic="true">
+        <p
+          className={
+            reading || active.notice
+              ? "conversation-notice"
+              : "conversation-sr-only"
+          }
+          role="status"
+          aria-atomic="true"
+        >
           {reading ? "Reading this conversation…" : (active.notice ?? "")}
         </p>
         {clarification && (
           <div className="conversation-clarification">
-            <p>{clarification.question}</p>
+            {!clarificationInTranscript && <p>{clarification.question}</p>}
             <label>
               <input
                 type="checkbox"

@@ -140,6 +140,7 @@ class SourceSupport:
     evidence_ids: tuple[str, ...] = ()
     qualifier: str | None = None
     buyer_owned: bool = False
+    identity_kind: Literal["row", "listing"] | None = None
 
 
 @dataclass(frozen=True)
@@ -299,6 +300,14 @@ def build_grounded_corpus(
     for index, row in enumerate(rows, 1):
         row_id = f"car{index}"
         values: list[object] = [row_id, refs[index - 1].source_id]
+        # Every published column has a citation binding. Identity metadata refers
+        # to this exact listing; it does not manufacture a vehicle-attribute claim.
+        sources[f"{row_id}.id"] = SourceSupport(
+            row_id, (refs[index - 1],), identity_kind="row"
+        )
+        sources[f"{row_id}.listing_id"] = SourceSupport(
+            refs[index - 1].source_id, (refs[index - 1],), identity_kind="listing"
+        )
         for field in fields:
             value, support = _cell(row, field, bindings, private_values)
             values.append(value)
@@ -486,6 +495,8 @@ def _cash_expression(text: str) -> tuple[str, Decimal] | None:
 
 
 def _quote_matches(quote: str, source: SourceSupport) -> bool:
+    if source.identity_kind is not None:
+        return quote.strip() == source.text
     if " ".join(quote.split()) in " ".join(source.text.split()):
         return True
     if source.attribute != "cash_price" or source.state != "known" or source.qualifier != "exact":
@@ -604,10 +615,23 @@ def validate_grounded_draft(
             if re.fullmatch(r"car\d+", row_id):
                 cited_rows.add(row_id)
         supported_numbers = set().union(
-            *(_numbers(source.text) for source in supports if not source.buyer_owned)
+            *(_numbers(source.text) for source in supports
+              if not source.buyer_owned and source.identity_kind is None)
         )
         # Numbered Markdown list markers describe presentation rather than source facts.
         factual_text = re.sub(r"(?m)^\s*\d+[.)]\s+", "", text)
+        # Identifiers can support an explicit reference, never a price, year or
+        # mileage value with coincidentally equal digits.
+        for source in supports:
+            if source.identity_kind is None:
+                continue
+            prefix = r"listing(?:\s+(?:id|number))?\s*#?\s*" if (
+                source.identity_kind == "listing"
+            ) else ""
+            factual_text = re.sub(
+                rf"(?<!\w){prefix}{re.escape(source.text)}(?!\w|[.,]\d)",
+                "", factual_text, flags=re.IGNORECASE,
+            )
         factual_text, identity_supports = _identity_mentions(factual_text, cited_rows, corpus)
         factual_text = _buyer_budget_mentions(factual_text, corpus)
         if not _numbers(factual_text).issubset(supported_numbers):

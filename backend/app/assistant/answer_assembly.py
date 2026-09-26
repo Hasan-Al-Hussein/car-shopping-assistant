@@ -203,6 +203,12 @@ def assemble_search(result: SearchResult, *, request: SearchRequest) -> Grounded
         raise GroundingError("WRONG_SEARCH_CONTEXT")
     if wanted.snapshot_id is not None and checked.presentation.snapshot_id != wanted.snapshot_id:
         raise GroundingError("WRONG_SEARCH_SNAPSHOT")
+    budget = criteria.filters.budget
+    budget_note = (
+        [f"Budget currency: {budget.currency}. Prices in other currencies are not converted."]
+        if budget is not None
+        else []
+    )
     if checked.state == "no_supported_matches":
         reason = (
             "Some requested conditions cannot be checked from these listings, "
@@ -210,9 +216,10 @@ def assemble_search(result: SearchResult, *, request: SearchRequest) -> Grounded
             if checked.unsupported_constraints
             else "No matching cars found in the supplied listings."
         )
-        return _finish([reason, "Your search conditions have not been changed."], [])
+        return _finish([reason, *budget_note, "Your search conditions have not been changed."], [])
     noun = "car" if checked.supported_total == 1 else "cars"
     lines = [f"Found {checked.supported_total} matching {noun} in the supplied listings."]
+    lines.extend(budget_note)
     if checked.supported_total != len(checked.items):
         lines.append(f"This result page contains {len(checked.items)}.")
     bindings = EvidenceBindings()

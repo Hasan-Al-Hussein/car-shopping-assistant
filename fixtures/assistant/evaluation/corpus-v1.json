@@ -5517,7 +5517,9 @@
           "kind": "message",
           "text": "Only cars with a warranty",
           "intent": {
-            "operation": "search"
+            "operation": "search",
+            "problem": "unsupported_attribute",
+            "problem_target": "query"
           },
           "assertions": [
             {
@@ -5819,7 +5821,7 @@
     },
     {
       "id": "A11-026",
-      "title": "Omitted numeric bound cannot produce broad results",
+      "title": "Exclusive cash budget constrains actual source results",
       "category": "ambiguity",
       "historical_ids": [
         "A0-030"
@@ -5834,7 +5836,21 @@
           "kind": "message",
           "text": "Show cars under AED 50000",
           "intent": {
-            "operation": "search"
+            "operation": "search",
+            "patches": [
+              {
+                "kind": "range",
+                "field": "budget",
+                "operation": "refine",
+                "maximum": {
+                  "text": "50000",
+                  "inclusive": false
+                },
+                "currency": "AED",
+                "basis": "cash",
+                "quote": "Show cars under AED 50000"
+              }
+            ]
           },
           "assertions": [
             {
@@ -5869,14 +5885,19 @@
               "name": "state equals",
               "path": "state",
               "operator": "equals",
-              "expected": "clarification",
+              "expected": "answered",
               "critical": null
             },
             {
               "name": "search_ids equals",
               "path": "search_ids",
               "operator": "equals",
-              "expected": [],
+              "expected": [
+                "12",
+                "20",
+                "60",
+                "61"
+              ],
               "critical": "wrong_car"
             },
             {
@@ -5961,7 +5982,28 @@
               "name": "listing_refs equals",
               "operator": "equals",
               "critical": "wrong_car",
-              "expected": []
+              "expected": [
+                {
+                  "namespace": "provided-cars-cleaned",
+                  "source_id": "12",
+                  "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3"
+                },
+                {
+                  "namespace": "provided-cars-cleaned",
+                  "source_id": "20",
+                  "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3"
+                },
+                {
+                  "namespace": "provided-cars-cleaned",
+                  "source_id": "60",
+                  "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3"
+                },
+                {
+                  "namespace": "provided-cars-cleaned",
+                  "source_id": "61",
+                  "snapshot_id": "5fe31b5951317db6d77b6786596861e32ccd2442f2f5f98927d57e6b4a2092f3"
+                }
+              ]
             },
             {
               "path": "lead_values",
@@ -5969,10 +6011,35 @@
               "operator": "equals",
               "critical": "unauthorized_action",
               "expected": []
+            },
+            {
+              "name": "criteria.filters.budget equals",
+              "path": "criteria.filters.budget",
+              "operator": "equals",
+              "expected": {
+                "minimum": null,
+                "maximum": 4999999,
+                "currency": "AED",
+                "basis": "cash"
+              },
+              "critical": "wrong_car"
+            },
+            {
+              "name": "search_total equals",
+              "path": "search_total",
+              "operator": "equals",
+              "expected": 4,
+              "critical": "invented_fact"
+            },
+            {
+              "name": "search_has_next equals",
+              "path": "search_has_next",
+              "operator": "equals",
+              "expected": false,
+              "critical": null
             }
           ],
-          "prose_mode": "fixed",
-          "expected_text": "Which supported listing attribute should express this requirement, or is it a preference?"
+          "prose_mode": "grounded"
         }
       ]
     },

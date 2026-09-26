@@ -90,16 +90,14 @@ def test_candidate_retains_whole_original_quote_and_no_other_authority() -> None
     )
     assert candidate == TurnIntent.model_validate({
         "operation": "search", "scope": "session", "patches": [{
-            "kind": "text", "field": "models", "operation": "add",
+            "kind": "text", "field": "models", "operation": "replace",
             "values": ["Model 7"], "quote": text,
         }],
     })
 
 
-@pytest.mark.parametrize("existing,searches", [("7", True), ("9", False)])
-def test_existing_field_uses_unchanged_add_and_conflict_rules(
-    existing: str, searches: bool,
-) -> None:
+@pytest.mark.parametrize("existing", ["7", "9"])
+def test_explicit_field_selection_replaces_prior_value_without_broadening(existing: str) -> None:
     async def exercise() -> None:
         sessions = FakeSessions(session(criteria={"filters": {"models": [existing]}}))
         inventory = FakeInventory()
@@ -108,10 +106,11 @@ def test_existing_field_uses_unchanged_add_and_conflict_rules(
             ReadCoordinator(sessions, model, inventory), sessions,
             request(sessions.current, "Show model 7"),
         )
-        assert (result.search is not None) is searches
-        assert inventory.calls == (["search"] if searches else [])
-        assert sessions.current.criteria.filters.models == [existing]
-        assert result.state == ("answered" if searches else "clarification")
+        assert result.search is not None
+        assert inventory.calls == ["search"]
+        assert sessions.current.criteria.filters.models == ["7"]
+        assert inventory.searches[0].filters.models == ["7"]
+        assert result.state == "answered"
         assert_no_actions(result)
 
     asyncio.run(exercise())

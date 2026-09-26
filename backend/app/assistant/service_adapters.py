@@ -27,6 +27,7 @@ from app.api.schemas.inventory import (
 from app.api.schemas.memory import MembershipRequest, PreferencesUpdate
 from app.api.schemas.sessions import MessageRequest, MessageResult, SessionState, TranscriptTurn
 from app.core.errors import ApiFailure
+from app.database.store import StoreError
 from app.identity.authorization import AuthorizedOwnerContext
 from app.inventory.details_service import InventoryDetailsService
 from app.inventory.search_service import InventorySearchService
@@ -394,6 +395,16 @@ class InventoryServiceAdapter:
         worker: BoundedServiceWorker,
     ) -> None:
         self._search, self._details, self._worker = search, details, worker
+
+    async def catalog_vocabulary(self, *, deadline_at: float) -> dict[str, tuple[str, ...]]:
+        try:
+            return await self._worker.run(
+                lambda: self._search.catalog_vocabulary(deadline_at=deadline_at),
+                deadline_at=deadline_at,
+            )
+        except (ApiFailure, StoreError):
+            # Optional query-normalization context: unavailable never means no cars.
+            return {}
 
     async def search(self, request: SearchRequest, *, deadline_at: float) -> SearchResult:
         copied = SearchRequest.model_validate(request.model_dump(mode="json"))

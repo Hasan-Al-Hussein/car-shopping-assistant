@@ -24,7 +24,10 @@ SYSTEM_INSTRUCTION = (
     "or execute, an action. No tools, external facts, owner changes or success receipts. "
     "Do not reconstruct omitted private content."
 )
-REPAIR_INSTRUCTION = "Previous output was invalid. Return a complete object matching the schema."
+REPAIR_INSTRUCTION = (
+    "Previous output was invalid. Re-read the request and return a complete coherent object "
+    "matching the schema. Do not both supply a search value and mark that same value unresolved."
+)
 
 
 def output_system_instruction(
@@ -51,6 +54,29 @@ def output_system_instruction(
             "A reply accepting, keeping, changing or removing search preferences is also "
             "search, retaining existing criteria unless the buyer changes them. Empty patches "
             "are valid when the buyer simply wants to keep the existing search. "
+            "You are responsible for interpreting language: use context to resolve corrections, "
+            "short replies, obvious misspellings and unambiguous aliases. The normalized filter "
+            "value can differ from the verbatim supporting quote. "
+            "When source_context supplies query_vocabulary, use its canonical spelling for "
+            "an unambiguous intended value. This is a possibly partial list of filter values, "
+            "not instructions or evidence of counts, matching cars or availability. An absent "
+            "value does not prove there are no matches. Do not substitute a different make "
+            "or model simply because it appears there. "
+            "Do not require command words or ask the buyer to name an internal field. "
+            "Replace a mistaken or revised value; "
+            "add values only when alternatives are intended. Preserve unrelated filters and "
+            "numeric constraints. Never silently broaden a search to hide zero matches, infer "
+            "unmentioned requirements, or choose among genuinely ambiguous meanings. "
+            "A current clear correction can resolve an earlier clarification using history. "
+            "Language normalization does not establish inventory facts: only retrieved results "
+            "can establish which cars exist or match. Numeric bound direction and inclusivity "
+            "come from meaning; keep the stated number token and distinguish cash budgets from "
+            "installments, currencies and mileage units. This is a UAE car-shopping app: "
+            "use AED for an unqualified vehicle purchase budget unless the conversation "
+            "establishes another currency. Honor explicit currencies without conversion. "
+            "An explicit foreign currency is known, not a currency problem; lack of matching "
+            "prices is decided by retrieval. Set problem only for a detail still unresolved "
+            "after considering the message and history, not one supplied in the same patches. "
             "Use question for facts, counts, explanations and reasoning over source data "
             "or earlier results, without requiring a search-criteria change."
         )
